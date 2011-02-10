@@ -1,0 +1,24 @@
+#!/bin/bash
+# Created by Tomáš Chvátal <scarabeus@gentoo.org>
+# License WTFPL-2.0
+
+[[ -z $1 ]] && exit 1
+
+if [[ $1 == help || $1 == --help ]]; then
+	echo "Usage: $0 herd-to-checkup"
+	exit 0
+fi
+#-c pkgcore_checks.imlate \
+pushd "$(portageq portdir)" > /dev/null
+package=$(pquery --herd=$1 --repo=portdir --no-version | tr '\n' ' ')
+pcheck -c pkgcore_checks.deprecated \
+	-c pkgcore_checks.whitespace \
+	-c pkgcore_checks.pkgdir_checks \
+	-c pkgcore_checks.metadata_checks \
+	-c pkgcore_checks.codingstyle \
+	-c pkgcore_checks.visibility \
+	-c pkgcore_checks.cleanup \
+	${package} \
+	--repo=portdir \
+	--disable-arches=mips,x86-fbsd,m68k,ppc-macos
+popd > /dev/null

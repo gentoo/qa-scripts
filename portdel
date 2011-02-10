@@ -1,0 +1,7 @@
+#!/bin/bash
+# Created by Tomáš Chvátal <scarabeus@gentoo.org>
+# License WTFPL-2.0
+
+[[ -z $1 ]] || cvs delete -f $@ > /dev/null
+echangelog "rm old" > /dev/null
+repoman commit -m "rm old" > /dev/null

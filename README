@@ -1,0 +1,18 @@
+How to get a script added.
+==========================
+
+File a bug report assigned to the qa team. The qa team will add the script to
+the repo or give you access to the repo
+
+How to get output on the webpage added.
+=======================================
+
+Once your script is in the repo, infra needs to run the script and someone needs
+to add the appropriate link to the webpage.
+
+Important details:
+- How often to run your script, normally daily is good enough.
+- Any arguments needed for the script? (OR how to run it)
+- Output is normally text but can be html too, must be static.
+- Must not link outside of gentoo.org for integrity purposes. It is ideal to
+  maintain a closed system, output generated on the web host, etc.

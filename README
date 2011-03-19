@@ -2,7 +2,10 @@ How to get a script added.
 ==========================
 
 File a bug report assigned to the qa team. The qa team will add the script to
-the repo or give you access to the repo
+the repo or give you access to the repo.
+
+By default all Gentoo developers should have full write access so just ask if
+you can add your script in.
 
 How to get output on the webpage added.
 =======================================

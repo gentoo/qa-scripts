@@ -1,6 +1,6 @@
 #!/bin/sh
 OUTPUTDIR=/var/www/qa-reports.gentoo.org/htdocs/output/genrdeps
-[[ -d ${OUTPUTDIR} ]] || mkdir ${OUTPUTDIR}
+[[ -d ${OUTPUTDIR} ]] || mkdir -p ${OUTPUTDIR}
 
 rm -rf ${OUTPUTDIR}/rindex
 mkdir ${OUTPUTDIR}/rindex

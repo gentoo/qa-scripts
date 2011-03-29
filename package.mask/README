@@ -1,0 +1,1 @@
+5 0 * * * python ~/gentoo/mask_check.py $(find /usr/portage/profiles -type f -name '*.mask') > ~/public_html/gentoo/invalid-mask.txt

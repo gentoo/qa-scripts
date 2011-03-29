@@ -2,7 +2,12 @@
 # Created by Tomáš Chvátal <scarabeus@gentoo.org>
 # License WTFPL-2.0
 
-[[ -z ${1} ]] && DIR="${1}" || DIR=$(pwd)
+if [[ -z ${1} ]]; then
+	DIR="${1}"
+	[[ -d ${DIR} ]] || mkdir -p ${DIR}
+else
+	DIR=$(pwd)
+fi
 
 [[ $(type pquery 2> /dev/null) ]] || exit 1
 

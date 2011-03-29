@@ -1,6 +1,7 @@
 /* Gentoo bar */
 body {
         margin: 1em;
+        font-family: sans-serif;
 }
 
 div#gentoo-bar {

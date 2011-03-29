@@ -2,6 +2,10 @@
 # Created by Tomáš Chvátal <scarabeus@gentoo.org>
 # License WTFPL-2.0
 
+[[ -z ${1} ]] && DIR="${1}" || DIR=$(pwd)
+
+[[ $(type pquery 2> /dev/null) ]] || exit 1
+
 KNOWN_EAPIS="0 1 2 3 4"
 TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
 TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
@@ -10,6 +14,7 @@ ECLASSES=$(echo *.eclass)
 popd > /dev/null
 pquery --attr eapi --attr inherited --raw --all --repo portdir > "${TMPEAPIS}"
 
+pushd ${DIR} > /dev/null
 rm -rf *.eclass
 for x in ${ECLASSES}; do
 	echo "Processing eclass \"${x}\""
@@ -25,6 +30,7 @@ for x in ${ECLASSES}; do
 	done
 	popd > /dev/null
 done
+popd > /dev/null
 
 rm ${TMPEAPIS}
 rm ${TMPECLASS}

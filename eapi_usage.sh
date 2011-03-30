@@ -5,6 +5,6 @@
 
 [[ $(type pinspect 2> /dev/null) ]] || exit 1
 
-time pinspect eapi_usage /usr/portage
+pinspect eapi_usage /usr/portage
 echo
 echo "Date generated: $(date)"

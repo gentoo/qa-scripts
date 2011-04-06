@@ -1,0 +1,41 @@
+Cronjob:
+GDatabase.pm could go into e.g. /var/www/localhost/, wwwroot is not necessary.
+# 5 0 * * * cd /path/to/qa-scripts/invalid_files/; perl main.pl > /tmp/toparse; perl make_hash.pl /tmp/toparse > /path/to/your/GDatabase.pm
+
+Copy gentoo_unused_files.pl into your wwwroot.
+
+mod_perl:
+
+75_mod_perl.conf:
+<IfDefine PERL>
+	LoadModule perl_module modules/mod_perl.so
+	PerlRequire "/etc/apache2/modules.d/apache2-mod_perl-startup.pl"
+	PerlModule ModPerl::Registry
+
+	PerlSetEnv PATH "/bin:/usr/bin"
+	PerlSwitches -wT
+	PerlOptions None -Authen -Authz -Access +ParseHeaders
+
+	PerlModule strict
+</IfDefine PERL>
+
+Vhost conf:
+<Directory /path/to/your/wwwroot>
+	...
+
+	<IfDefine PERL>
+		<IfModule perl_module>
+			# Either FilesMatch or Files
+			<FilesMatch ^gentoo_unused_files\.pl$>
+				SetHandler perl-script
+				PerlResponseHandler ModPerl::PerlRun
+				PerlOptions None +ParseHeaders
+			</FilesMatch>
+		</IfModule>
+	</IfDefine>
+
+	...
+</Directory>
+
+mod_cgi(d):
+The usual way...

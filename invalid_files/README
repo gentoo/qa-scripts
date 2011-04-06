@@ -3,6 +3,7 @@ GDatabase.pm could go into e.g. /var/www/localhost/, wwwroot is not necessary.
 # 5 0 * * * cd /path/to/qa-scripts/invalid_files/; perl main.pl > /tmp/toparse; perl make_hash.pl /tmp/toparse > /path/to/your/GDatabase.pm
 
 Copy gentoo_unused_files.pl into your wwwroot.
+Replace the path at "use lib qw( /home/idl0r );" by /path/where/the/GDatabase.pm/is/
 
 mod_perl:
 

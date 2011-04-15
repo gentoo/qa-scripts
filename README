@@ -19,3 +19,14 @@ Important details:
 - Output is normally text but can be html too, must be static.
 - Must not link outside of gentoo.org for integrity purposes. It is ideal to
   maintain a closed system, output generated on the web host, etc.
+
+
+Current runtimes:
+================
+(As of 2011-04-15)
+
+- emerge --sync: hourly. Assume PORTDIR=/usr/portage (may change in future)
+- genrdeps, run-genrdeps-index.sh: hourly
+- eapi_usage.sh: 2x daily
+- check_eclasses_eapis.sh: 4x daily
+- mask_check.py: daily

@@ -33,6 +33,7 @@ for x in ${ECLASSES}; do
 		tmpval=$(wc -l "${y}.txt" |cut -d' ' -f1)
 		echo "EAPI=${y} count: ${tmpval}" >> "STATS.txt"
 	done
+	sed -e 's/$/<br>/' STATS.txt > README.html
 	popd > /dev/null
 done
 popd > /dev/null

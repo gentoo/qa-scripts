@@ -26,7 +26,8 @@ Current runtimes:
 (As of 2011-04-15)
 
 - emerge --sync: hourly. Assume PORTDIR=/usr/portage (may change in future)
-- genrdeps, run-genrdeps-index.sh: hourly
-- eapi_usage.sh: 2x daily
 - check_eclasses_eapis.sh: 4x daily
+- eapi_usage.sh: 2x daily
+- filesdir-usage.sh: daily
+- genrdeps, run-genrdeps-index.sh: hourly
 - mask_check.py: daily

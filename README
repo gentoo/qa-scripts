@@ -23,11 +23,12 @@ Important details:
 
 Current runtimes:
 ================
-(As of 2011-04-15)
+(As of 2011-06-14)
 
 - emerge --sync: hourly. Assume PORTDIR=/usr/portage (may change in future)
 - check_eclasses_eapis.sh: 4x daily
 - eapi_usage.sh: 2x daily
 - filesdir-usage.sh: daily
+- find-binary-files.pl: daily
 - genrdeps, run-genrdeps-index.sh: hourly
 - mask_check.py: daily

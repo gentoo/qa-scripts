@@ -44,7 +44,7 @@ def main(argv):
 
 		<ul>
 			%s
-			<li><a href="../">../ (go back)</a></li>
+			<li><a href="/">/ (go back)</a></li>
 		</ul>
 	</body>
 </html>''' % (max([len(e) for e in output]), '\n'.join(['<li><a href="%s.txt">%s.eclass</a> (%d packages),</li>' % (e, e, len(output[e])) for e in sorted(output)])))

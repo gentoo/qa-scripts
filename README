@@ -32,3 +32,4 @@ Current runtimes:
 - find-binary-files.pl: daily
 - genrdeps, run-genrdeps-index.sh: hourly
 - mask_check.py: daily
+- packages-inheriting-eclasses.py: daily

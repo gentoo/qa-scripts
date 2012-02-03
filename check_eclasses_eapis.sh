@@ -25,11 +25,11 @@ for x in ${ECLASSES}; do
 	echo "Processing eclass \"${x}\""
 	rm -rf "${x}"
 	mkdir "${x}"
-	awk -F'=' '$3 ~ /'"${x%.eclass}"'[ "]/ {print $1" "$2}' "${TMPEAPIS}" > "${TMPECLASS}"
+	awk -F'=' '$3 ~ /[ "]'"${x%.eclass}"'[ "]/ {print $1" "$2}' "${TMPEAPIS}" > "${TMPECLASS}"
 	pushd "${x}" > /dev/null
 	echo "Overall statistic for eclass \"${x}\":" > "STATS.txt"
 	for y in ${KNOWN_EAPIS}; do
-		awk -F ' ' '$3 ~ /'"${y}"'/ {print $1}' "${TMPECLASS}" > "${y}.txt"
+		awk -F ' ' '$3 ~ /"'"${y}"'"/ {print $1}' "${TMPECLASS}" > "${y}.txt"
 		tmpval=$(wc -l "${y}.txt" |cut -d' ' -f1)
 		echo "EAPI=${y} count: ${tmpval}" >> "STATS.txt"
 	done

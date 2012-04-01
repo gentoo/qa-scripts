@@ -18,21 +18,13 @@ from portage.versions import pkgsplit, vercmp
 OPERATORS = (">", "=", "<", "~")
 
 def strip_atoms(pkg):
-	while pkg.startswith( OPERATORS ) and len(pkg) > 1:
-		pkg = pkg[1:]
-	while pkg.endswith( ("*", ".") ):
-		pkg = pkg[0:-1]
-
 	# strip slots
 	if pkg.find(":") != -1:
 		pkg = pkg[0:pkg.find(":")]
-	return pkg
 
-# Deprecated
-def strip_atoms2(pkg):
 	while pkg.startswith( OPERATORS ) and len(pkg) > 1:
 		pkg = pkg[1:]
-	while pkg.endswith( "*" ):
+	while pkg.endswith( ("*", ".") ):
 		pkg = pkg[0:-1]
 
 	return pkg
@@ -45,12 +37,6 @@ def pkgcmp_atom(pkgdir, pkg):
 			ebuilds.append(ent)
 
 	ppkg = basename(strip_atoms(pkg))
-
-	# test
-	ppkg2 = basename(strip_atoms2(pkg))
-	if ppkg != ppkg2:
-		print >> stderr, "PPKG: %s" % ppkg
-		print >> stderr, "PPKG2: %s" % ppkg2
 
 	revre = re.compile( ("^" + re.escape(ppkg) + "(-r\d+)?.ebuild$") )
 

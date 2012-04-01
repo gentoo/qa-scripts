@@ -1,21 +1,31 @@
 #!/bin/sh
 OUTPUTDIR=/var/www/qa-reports.gentoo.org/htdocs/output/genrdeps
-[[ -d ${OUTPUTDIR} ]] || mkdir -p ${OUTPUTDIR}
+[ -d "${OUTPUTDIR}" ] || mkdir -p ${OUTPUTDIR}
+cd ${OUTPUTDIR}
 
-rm -rf ${OUTPUTDIR}/rindex
-mkdir ${OUTPUTDIR}/rindex
-cd ${OUTPUTDIR}/rindex
+mkdir .rindex_new
+pushd .rindex_new > /dev/null
 /var/www/qa-reports.gentoo.org/qa-scripts/genrdeps/genrdeps.py RDEPEND
 find | cut -c 3- > .rindex
+popd > /dev/null
+mv rindex rindex_old
+mv .rindex_new rindex
+rm -rf rindex_old
 
-rm -rf ${OUTPUTDIR}/dindex
-mkdir ${OUTPUTDIR}/dindex
-cd ${OUTPUTDIR}/dindex
+mkdir .dindex_new
+pushd .dindex_new > /dev/null
 /var/www/qa-reports.gentoo.org/qa-scripts/genrdeps/genrdeps.py DEPEND
 find | cut -c 3- > .dindex
+popd > /dev/null
+mv dindex dindex_old
+mv .dindex_new dindex
+rm -rf dindex_old
 
-rm -rf ${OUTPUTDIR}/pindex
-mkdir ${OUTPUTDIR}/pindex
-cd ${OUTPUTDIR}/pindex
+mkdir .pindex_new
+pushd .pindex_new > /dev/null
 /var/www/qa-reports.gentoo.org/qa-scripts/genrdeps/genrdeps.py PDEPEND
 find | cut -c 3- > .pindex
+popd > /dev/null
+mv pindex pindex_old
+mv .pindex_new pindex
+rm -rf pindex_old

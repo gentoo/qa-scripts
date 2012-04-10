@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import collections, datetime, os, os.path, sys
-import pkgcore.config # tested with pkgcore-0.6.4
+import pkgcore.config # tested with pkgcore-0.7.7.8
 
 def main(argv):
 	try:
@@ -49,7 +49,7 @@ def main(argv):
 			<li><a href="/">/ (go back)</a></li>
 		</ul>
 	</body>
-</html>''' % (max([len(e) for e in output]), datetime.datetime.fromtimestamp(c.syncer['%s syncer' % portdir.location].current_timestamp()), '\n'.join(['<li><a href="%s.txt">%s.eclass</a> (%d packages),</li>' % (e, e, len(output[e])) for e in sorted(output)])))
+</html>''' % (max([len(e) for e in output]), datetime.datetime.fromtimestamp(c.syncer['sync:%s' % portdir.location].current_timestamp()), '\n'.join(['<li><a href="%s.txt">%s.eclass</a> (%d packages),</li>' % (e, e, len(output[e])) for e in sorted(output)])))
 	f.close()
 
 	return 0

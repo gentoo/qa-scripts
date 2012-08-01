@@ -5,12 +5,19 @@
 [[ -z $1 ]] && exit 1
 
 if [[ $1 == help || $1 == --help ]]; then
-	echo "Usage: $0 herd-to-checkup"
+	echo "Usage: $0 herd-or-maintainer-to-checkup"
 	exit 0
 fi
+
+if [[ $1 = *@* ]]; then
+	target="--maintainer=$1"
+else
+	target="--herd=$1"
+fi
+
 #-c pkgcore_checks.imlate \
 pushd "$(portageq portdir)" > /dev/null
-package=$(pquery --herd=$1 --repo=portdir --no-version | tr '\n' ' ')
+package=$(pquery ${target} --repo=portdir --no-version | tr '\n' ' ')
 pcheck -c pkgcore_checks.deprecated \
 	-c pkgcore_checks.whitespace \
 	-c pkgcore_checks.pkgdir_checks \

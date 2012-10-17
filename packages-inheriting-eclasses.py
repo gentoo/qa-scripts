@@ -16,7 +16,7 @@ def main(argv):
 	output = collections.defaultdict(set)
 
 	for p in portdir:
-		for eclass in p.data['_eclasses_']:
+		for eclass in p.data.get('_eclasses_', ()):
 			output[eclass].add('%s/%s\n' % (p.category, p.PN))
 
 	try:

@@ -23,7 +23,7 @@ Important details:
 
 Current runtimes:
 ================
-(As of 2011-06-14)
+(As of 201-11-28)
 
 - emerge --sync: hourly. Assume PORTDIR=/usr/portage (may change in future)
 - check_eclasses_eapis.sh: 4x daily
@@ -33,3 +33,4 @@ Current runtimes:
 - genrdeps, run-genrdeps-index.sh: hourly
 - mask_check.py: daily
 - packages-inheriting-eclasses.py: daily
+- gen-dev-wot.sh: weekly

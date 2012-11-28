@@ -17,7 +17,7 @@ export GNUPGHOME=$(mktemp -d --suffix=$(basename $0))
 cd $GNUPGHOME || exit 1
 
 wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
-	egrep -o 0x[A-Z0-9]\{8\} | egrep [A-Z0-9]\{8\} > keys.txt
+	egrep -o 0x[A-Z0-9]\{8\} > keys.txt
 
 /usr/bin/gpg -q --keyserver hkp://pool.sks-keyservers.net --recv-keys \
 	`cat keys.txt` &> /dev/null

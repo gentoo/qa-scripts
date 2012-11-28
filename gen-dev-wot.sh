@@ -25,8 +25,8 @@ wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
 /usr/bin/gpg -q --export `cat keys.txt` > keys.gpg
 
 /usr/bin/gpg -q --no-default-keyring  --keyring ./keys.gpg --list-sigs | \
-	/usr/bin/sig2dot -q -a -t "Gentoo Dev WoT" -s stats.html 2> /dev/null | \
-	/usr/bin/neato -Gcharset=latin1 -Tpng > "${1}/graph.png"
+	/usr/bin/sig2dot -q -a -t "Gentoo Dev WoT" -s wot-stats.html 2> /dev/null | \
+	/usr/bin/neato -Gcharset=latin1 -Tpng > "${1}/wot-graph.png"
 
-mv stats.html "${1}"
+mv wot-stats.html "${1}"
 rm -rf $GNUPGHOME

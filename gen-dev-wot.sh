@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# intentionally quiet script
+# silence the script by '&> /dev/null'
 
 if [[ -z "$1" ]]; then
 	echo "Usage: $0 </path/to/output/>"
@@ -20,13 +20,13 @@ wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
 	egrep -o 0x[A-Z0-9]\{8\} > keys.txt
 
 /usr/bin/gpg -q --keyserver hkp://pool.sks-keyservers.net --recv-keys \
-	`cat keys.txt` &> /dev/null
+	`cat keys.txt`
 
-/usr/bin/gpg -q --export `cat keys.txt` > keys.gpg
+/usr/bin/gpg -q --no-default-keyring --list-sigs | \
+	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
+	> keys.dot
 
-/usr/bin/gpg -q --no-default-keyring  --keyring ./keys.gpg --list-sigs | \
-	/usr/bin/sig2dot -q -a -t "Gentoo Dev WoT" -s wot-stats.html 2> /dev/null | \
-	/usr/bin/neato -Gcharset=latin1 -Tpng > "${1}/wot-graph.png"
+/usr/bin/dot -Gcharset=latin1 -Tpng keys.dot > "${1}/wot-graph.png"
 
 mv wot-stats.html "${1}"
 rm -rf $GNUPGHOME

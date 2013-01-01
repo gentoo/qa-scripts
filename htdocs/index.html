@@ -1,70 +1,64 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<title>
-		QA-Reports - Output from various QA scripts
-	</title>
+	<title>QA-Reports - Output from various QA scripts</title>
 	<meta name="author" content="Gentoo QA Team" />
-	<meta name="copyright" content="Gentoo Foundation 2011" />
+	<meta name="copyright" content="Gentoo Foundation 2012" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-	<link href="screen.css" type="text/css" rel="stylesheet" />
+	<link type="image/x-icon" href="http://www.gentoo.org/favicon.ico" rel="shortcut icon" />
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 <!-- gentoo header, stolen from bugzilla -->
-<div id="gentoo-bar">
-	<a href="http://qa-reports.gentoo.org/" title="Go to the QA Reports homepage" class="home-link">
-		<img src=./gentoo_org.png alt="Gentoo Websites Logo" />
-	</a>
-
-	<div>
-		Go to: 
-		<a href="http://www.gentoo.org/">Gentoo Home</a>
-		<a href="http://www.gentoo.org/doc/en/index.xml">Documentation</a>
-		<a href="http://forums.gentoo.org/">Forums</a>
-		<a href="http://www.gentoo.org/main/en/lists.xml">Lists</a>
-		<a href="http://bugs.gentoo.org/">Bugs</a>
-		<a href="http://planet.gentoo.org">Planet</a>
-		<a href="http://store.gentoo.org">Store</a>
-		<strong><a href="http://www.gentoo.org/main/en/where.xml">Get Gentoo!</a></strong>
+ <div id="gentoo-bar">
+            <a class="home-link" title="Go to the Gentoo Linux homepage" href="http://gentoo.org">
+                <img alt="Gentoo Websites Logo" src="https://www.bugs.gentoo.org/extensions/Gentoo/web/gentoo_org.png"></a>
+            <div>
+                Go to:
+                <a href="http://www.gentoo.org/">Gentoo Home</a>
+                <a href="http://www.gentoo.org/doc/en/index.xml">Documentation</a>
+                <a href="http://forums.gentoo.org/">Forums</a>
+                <a href="http://www.gentoo.org/main/en/lists.xml">Lists</a>
+                <a href="http://bugs.gentoo.org">Bugs</a>
+                <a href="http://planet.gentoo.org">Planet</a>
+                <a href="http://store.gentoo.org">Store</a>
+                <a href="http://wiki.gentoo.org">Wiki</a>
+                <a class="active" href="http://qa-reports.gentoo.org">QA-Reports</a>
+                <strong><a href="http://www.gentoo.org/main/en/where.xml">Get Gentoo!</a></strong>
+            </div>
+        </div>
+	<div id="gentoo-main">
+	  <div id="header">
+	    <h1>QA-Reports</h1>
+	    <span>Output from various QA scripts</span>
 	</div>
-</div>
-
-	<h1>Central Place for script output</h1>
-	<!-- Add more headings here -->
-	<h2>
-		Ebuild Problems:
-	</h2>
-	<a href=http://dev.gentoo.org/distfile-mirroring/>Non-fetchable distfiles</a>
-	<h2>
-		Tree Wide Scanning:
-	</h2>
-	<a href=/output/genrdeps/rindex/>Reverse runtime dependencies</a>
-	<br />
-	<a href=/output/genrdeps/dindex/>Reverse buildtime dependencies</a>
-	<br />
-	<a href=/output/genrdeps/pindex/>Reverse post dependencies</a>
-	<br />
-	<a href=/output/eapi_usage.txt>EAPI Usage</a>&nbsp;|&nbsp;
-	<a href=/output/eapi-per-eclass/>EAPI Usage per eclass</a>
-	<br />
-	<a href=/output/invalid-mask.txt>Invalid package.mask entries</a>
-	<br />
-	<a href=/output/filesdir-usage.txt>Top 100 largest FILESDIRs</a>
-	<br />
-	<a href=/output/find-binary-files.txt>Binary files in gentoo-x86</a>
-	<br />
-	<a href=/output/eclass-usage/>Listing of packages that inherit an eclass</a>
-	<h2>
-		Rsync Usage:
-	</h2>
-	<a href=http://mirrorstats.gentoo.org/rsync/rsync-usage.png>Full Graph</a>
-	<br />
-	<a href=http://mirrorstats.gentoo.org/rsync/rsync-usage-last4weeks.png>Past Month Graph</a>
-	<h2>
-		Misc:
-	</h2>
-	<a href=/output/wot-graph.png>Gentoo Dev WoT</a> (Updated Weekly)&nbsp;|&nbsp;<a href=/output/wot-stats.html>Node Stats</a>
-
+	<hr width="350" />
+	<h2>Ebuild Problems:</h2>
+	<ul>
+	<li><a href=http://dev.gentoo.org/distfile-mirroring/>Non-fetchable distfiles</a></li>
+	</ul>
+	<h2>Tree Wide Scanning:</h2>
+	<ul>
+	<li><a href=/output/genrdeps/rindex/>Reverse runtime dependencies</a></li>
+	<li><a href=/output/genrdeps/dindex/>Reverse buildtime dependencies</a></li>
+	<li><a href=/output/genrdeps/pindex/>Reverse post dependencies</a></li>
+	<li><a href=/output/eapi_usage.txt>EAPI Usage</a>&nbsp;|&nbsp;<a href=/output/eapi-per-eclass/>EAPI Usage per eclass</a></li>
+	<li><a href=/output/invalid-mask.txt>Invalid package.mask entries</a></li>
+	<li><a href=/output/filesdir-usage.txt>Top 100 largest FILESDIRs</a></li>
+	<li><a href=/output/find-binary-files.txt>Binary files in gentoo-x86</a></li>
+	<li><a href=/output/eclass-usage/>Listing of packages that inherit an eclass</a></li>
+	</ul>
+	<h2>Rsync Usage:</h2>
+	<ul>
+	<li><a href=http://mirrorstats.gentoo.org/rsync/rsync-usage.png>Full Graph</a></li>
+	<li><a href=http://mirrorstats.gentoo.org/rsync/rsync-usage-last4weeks.png>Past Month Graph</a></li>
+	</ul>
+	<h2>Misc:</h2>
+	<ul>
+	<li><a href=/output/wot-graph.png>Gentoo Dev Web of Trust (WoT)</a> (Updated Weekly)&nbsp;|&nbsp;<a href=/output/wot-stats.html>Node Stats</a></li>
+	</ul>
+	<div align="center"> © Gentoo Foundation, Inc.</div>
+  </div>
 </body>
 </html>

@@ -11,7 +11,7 @@ fi
 
 [[ $(type pquery 2> /dev/null) ]] || exit 1
 
-KNOWN_EAPIS="0 1 2 3 4 5"
+KNOWN_EAPIS="unsupported 0 1 2 3 4 5"
 TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
 TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
 pushd "$(portageq portdir)/eclass" > /dev/null

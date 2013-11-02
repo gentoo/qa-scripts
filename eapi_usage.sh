@@ -15,6 +15,7 @@ find /usr/portage/metadata/md5-cache -type f -exec awk '
   ' '{}' '+' | awk '
     { eapi[$1]+=$2; total+=$2 }
     END {
+      PROCINFO["sorted_in"]="@val_num_desc"
       for (i in eapi) {
         s=""; for (j=1; j<eapi[i]*50./total+0.5; j++) s=s"#"
         printf "EAPI %s: %7d ebuilds (%5.02f%%)  %s\n",

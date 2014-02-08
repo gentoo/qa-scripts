@@ -8,7 +8,8 @@ shopt -s extglob
 portdir=$(portageq get_repo_path / gentoo)
 cd "${portdir}" || exit 1
 
-find . \( -path ./distfiles -o -path ./local -o -path ./metadata \) -prune \
+find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
+    -o -path ./packages \) -prune \
     -o ! -type d -exec file -ih '{}' + \
 | while read line; do
     path=${line%:*}

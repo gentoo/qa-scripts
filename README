@@ -29,7 +29,7 @@ Current runtimes:
 - check_eclasses_eapis.sh: 4x daily
 - eapi_usage.sh: 2x daily
 - filesdir-usage.sh: daily
-- find-binary-files.pl: daily
+- find-binary-files.sh: daily
 - genrdeps, run-genrdeps-index.sh: hourly
 - mask_check.py: daily
 - packages-inheriting-eclasses.py: daily

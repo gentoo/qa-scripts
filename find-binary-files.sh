@@ -32,7 +32,10 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
         application/*"; charset=utf-8") ;;
         "image/svg+xml; charset=us-ascii") ;; # SVG image
         "image/x-xpmi; charset=us-ascii") ;;  # XPM image
-        *) echo "${path#./}: ${type}" ;;
+        *)
+            size=$(stat -c "%s" "${path}")
+            echo "${path#./}: ${type} (size=${size})"
+            ;;
     esac
 done \
 | sort 

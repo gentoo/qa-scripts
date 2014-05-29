@@ -1,0 +1,258 @@
+# Copyright (c) 2014 Michael Palimaka <kensington@gentoo.org>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+# bashrc for portage to provide QA data for the Gentoo tinderbox frontend.
+# Original concept and Tinderbox-provided QA checks by Diego Elio Pettenò
+# <flameeyes@gentoo.org>.
+#
+# Setup instructions:
+#	- Copy this file to /etc/portage/bashrc
+#	- Configure portage:
+#		- {CFLAGS,CXXFLAGS.FFLAGS,FCFLAGS}+="-frecord-gcc-switches"
+#		- LDFLAGS+="-Wl,--hash-style=gnu"
+#		- FEATURES+="test-fail-continue"
+#		- PORTAGE_ELOG_CLASSES+="qa"
+#	- Ensure TINDERBOX_DIR is writeable by the portage user
+#	- Install desktop-file-utils (strongly recommended)
+#	- Install pax-utils (strongly recommended)
+#	- Install depcheck (optional)
+#	- Install pkgcore-checks (optional)
+#
+# CURRENT QA CHECKS
+# Portage provided:
+#	- Ignored CFLAGS/LDFLAGS
+#	- Missing NEEDED/SONAE
+#	- EXECSTACK
+#	- TEXTRELS
+#	- Certain logged eqawarns
+#
+# Tinderbox provided:
+#	- Binaries in /usr/share
+#	- Bundled libraries
+#	- .desktop file validation
+#	- Illegal directories
+#	- Insecure functions
+#	- Misplaced documentation
+#	- OS X fork files
+#	- Pointless .la files
+#	- setXid
+#	- site_dir perl files
+#
+# External provided:
+#	- depcheck
+#	- pcheck
+#	- repoman
+#
+# Todo:
+#	- am_maintainer_mode
+#	- bash_command_not_found
+#	- configure_opts_warn
+#	- has_lafile_headers
+#	- helper_missing_file
+#	- make_jobserver
+#	- unicode_errors
+
+: ${TINDERBOX_DIR:="/var/cache/tinderbox"}
+
+PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
+BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"
+
+tinderbox_setup_common() {
+	SANDBOX_ON=0 mkdir -p "${BUILD_DATA_DIR}" > /dev/null
+	write_data arch ${ARCH}
+	write_data description ${DESCRIPTION}
+	write_data profile $(eselect profile show | tail -1)
+	write_data timestamp $(date --utc "+%F %T %Z")
+}
+
+tinderbox_teardown_common() {
+	SANDBOX_ON=0 cp "${T}"/build.log "${BUILD_DATA_DIR}"
+}
+
+tinderbox_success() {
+	tinderbox_setup_common
+	tinderbox_postinst_checks
+	write_data success true
+	tinderbox_teardown_common
+}
+
+tinderbox_failure() {
+	if [[ ${EBUILD_PHASE} == test ]] ; then
+		touch "${T}"/testsfailed
+		return 0
+	fi
+	tinderbox_setup_common
+	tinderbox_teardown_common
+}
+
+tinderbox_postinst_checks() {
+	# QA logs created by portage:
+	#	- scanelf-execstack.log
+	# 	- scanelf-ignored-CFLAGS.log
+	#	- scanelf-ignored-LDFLAGS.log
+	#	- scanelf-missing-NEEDED.log
+	#	- scanelf-missing-SONAME.log
+	#	- scanelf-textrel.log
+	SANDBOX_ON=0 cp "${T}"/scanelf-*.log "${BUILD_DATA_DIR}" 2> /dev/null
+
+	SANDBOX_ON=0 cp "${T}"/testsfailed "${BUILD_DATA_DIR}" 2> /dev/null
+	SANDBOX_ON=0 find "${T}" -name "tinderbox-*.log" -not -empty -execdir mv '{}' "${BUILD_DATA_DIR}" \;
+	SANDBOX_ON=0 grep --no-filename QA "${T}"/logging/* > "${BUILD_DATA_DIR}"/portageqa
+
+	if [[ ! -s "${BUILD_DATA_DIR}"/portageqa ]] ; then
+		SANDBOX_ON=0 rm "${BUILD_DATA_DIR}"/portageqa
+	fi
+
+	if type -P depcheck > /dev/null ; then
+		SANDBOX_ON=0 depcheck ${PF} > "${BUILD_DATA_DIR}"/depcheck
+	fi
+
+	#pushd "$(dirname ${FILESDIR})" > /dev/null
+	#SANDBOX_ON=0 repoman > "${PACKAGE_DATA_DIR}"/repoman
+	#SANDBOX_ON=0 pcheck --license-dir "${PORTDIR}"/licenses > "${PACKAGE_DATA_DIR}"/pchecks
+	#popd > /dev/null
+}
+
+write_data() {
+	local file=$1
+	shift
+
+	SANDBOX_ON=0 echo $@ >> "${BUILD_DATA_DIR}/${file}"
+}
+
+tinderbox_log() {
+	cat - > "${T}"/${1}
+}
+
+#
+# Function overrides to catch QA issues
+#
+
+make() {
+	if [[ "${FUNCNAME[1]}" == "einstall" ]] ; then
+		emake -j1 "$@"
+	else
+		emake "$@"
+
+		if [[ "${FUNCNAME[1]}" == "__eapi0_src_test" ]] ; then
+			return
+		fi
+
+		eqawarn QA Notice: direct 'make' call by ${FUNCNAME[1]}
+	fi
+}
+
+#
+# QA functions
+#
+
+# Checks for symbols commonly exported by well-known libraries such eg. libpng
+bundled_symbols() {
+	for symbol in adler32 BZ2_decompress jpeg_mem_init XML_Parse avcodec_init png_get_libpng_ver lt_dlopen GC_stdout; do
+		scanelf -qRs +$symbol "${D}" | tinderbox_log tinderbox-scanelf-bundled.log
+	done
+}
+
+# Checks for usage of functions that may pose a potential security issue.
+insecure_functions() {
+#	for symbol in tmpnam tmpnam_r tempnam gets sigstack getpw getwd mktemp exit; do
+	for symbol in tmpnam tmpnam_r tempnam gets sigstack getpw getwd mktemp; do
+		scanelf -qRs -$symbol "${D}" | tinderbox_log tinderbox-scanelf-insecure.log
+	done
+}
+
+# Finds ELF files in /usr/share. These should be installed to some other location.
+share_elfs() {
+	scanelf -R "${D}"/usr/share | tinderbox_log tinderbox-share-elfs.log
+}
+
+# Locate OS X fork files. These should not be installed at all.
+osx_forkfile() {
+	find "${D}" -name '._*' -printf "/%P\n" | tinderbox_log tinderbox-osx-forkfile.log
+}
+
+# Locate setXid files which may pose a security issue.
+setXid() {
+	find "${D}" -perm /6000 -printf "%#m %u:%g /%P\n" | tinderbox_log tinderbox-setXid-binaries.log
+}
+
+# Locate la files that serve no purpose.
+pointless_la() {
+	find "${D}" \
+		\( -path "${D}"usr/lib\*/python\*/site-packages/\* -or \
+		-path "${D}"usr/lib\*/ruby\*/site_ruby/\* -or \
+		-path "${D}"usr/lib\*/perl5/\* -or \
+		-path "${D}"lib\*/security/\* \) -name '*.la' \
+		-printf "/%P\n" | tinderbox_log tinderbox-pointless-la.log
+}
+
+# Find directories that are not permitted to be used by ebuilds.
+invalid_directory() {
+	find "${D}" \
+		\( -path "${D}"usr/man\* -or \
+		-path "${D}"usr/man/\* -or \
+		-path "${D}"usr/info/\* -or \
+		-path "${D}"usr/X11R6/\* -or \
+		-path "${D}"usr/locale/\* -or \
+		-path "${D}"usr/local/\* -or \
+		-path "${D}"var/lock\* -or \
+		-path "${D}"var/run/\* -or \
+		-path "${D}"dev/\* \
+		\) -printf "/%P\n" | tinderbox_log tinderbox-invalid-directory.log
+}
+
+# Perl files should be installed into vendor_perl, not site_perl.
+site_perl() {
+	find "${D}" \
+		-path "${D}"usr/lib*/perl5/site_perl/\* \
+		-printf "/%P\n" | tinderbox_log tinderbox-site-perl.log
+}
+
+# Most documentation should be installed to /usr/share/doc/${PF}
+misplaced_doc() {
+	find "${D}" \
+		-path "${D}"usr/doc/\* -or \
+		\( -path "${D}"usr/share/doc/\* -type d \
+			-prune -not \( -name "${PF}" -or -name 'KDE4' -or -name 'HTML' \) \
+		\) -printf "/%P\n" | tinderbox_log tinderbox-misplaced-doc.log
+}
+
+# Locate .desktop files that do not pass validation
+invalid_desktop_files() {
+	find "${D}" -maxdepth 4 -path "${D}"usr/share/applications/\* \
+		-name '*.desktop' -exec desktop-file-validate '{}' + | \
+		tinderbox_log tinderbox-invalid-desktop-file.log
+}
+
+#
+# Portage hooks
+#
+
+pre_pkg_setup() {
+	register_success_hook tinderbox_success
+	register_die_hook tinderbox_failure
+}
+
+post_src_install() {
+	bundled_symbols
+	insecure_functions
+	share_elfs
+	osx_forkfile
+	setXid
+	pointless_la
+	invalid_directory
+	site_perl
+	misplaced_doc
+	invalid_desktop_files
+}

@@ -140,17 +140,16 @@ tinderbox_log() {
 #
 
 make() {
-	if [[ "${FUNCNAME[1]}" == "einstall" ]] ; then
-		emake -j1 "$@"
+	if [[ "${FUNCNAME[1]}" == "einstall" || "${FUNCNAME[1]}" == "__eapi0_src_test" ]] ; then
+		/usr/bin/make -j1 "$@"
+		ret=$?
 	else
 		emake "$@"
-
-		if [[ "${FUNCNAME[1]}" == "__eapi0_src_test" ]] ; then
-			return
-		fi
-
+		ret=$?
 		eqawarn QA Notice: direct 'make' call by ${FUNCNAME[1]}
 	fi
+
+	return ${ret}
 }
 
 #

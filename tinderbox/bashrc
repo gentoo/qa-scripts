@@ -27,7 +27,6 @@
 #	- Install desktop-file-utils (strongly recommended)
 #	- Install pax-utils (strongly recommended)
 #	- Install depcheck (optional)
-#	- Install pkgcore-checks (optional)
 #
 # CURRENT QA CHECKS
 # Portage provided:
@@ -51,8 +50,6 @@
 #
 # External provided:
 #	- depcheck
-#	- pcheck
-#	- repoman
 #
 # Todo:
 #	- am_maintainer_mode
@@ -71,7 +68,6 @@ BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"
 tinderbox_setup_common() {
 	SANDBOX_ON=0 mkdir -p "${BUILD_DATA_DIR}" > /dev/null
 	write_data arch ${ARCH}
-	write_data description ${DESCRIPTION}
 	write_data profile $(eselect profile show | tail -1)
 	write_data timestamp $(date --utc "+%F %T %Z")
 }
@@ -117,11 +113,6 @@ tinderbox_postinst_checks() {
 	if type -P depcheck > /dev/null ; then
 		SANDBOX_ON=0 depcheck ${PF} > "${BUILD_DATA_DIR}"/depcheck
 	fi
-
-	#pushd "$(dirname ${FILESDIR})" > /dev/null
-	#SANDBOX_ON=0 repoman > "${PACKAGE_DATA_DIR}"/repoman
-	#SANDBOX_ON=0 pcheck --license-dir "${PORTDIR}"/licenses > "${PACKAGE_DATA_DIR}"/pchecks
-	#popd > /dev/null
 }
 
 write_data() {

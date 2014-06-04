@@ -19,13 +19,13 @@
 # Setup instructions:
 #	- Copy this file to /etc/portage/bashrc
 #	- Configure portage:
-#		- {CFLAGS,CXXFLAGS.FFLAGS,FCFLAGS}+="-frecord-gcc-switches"
-#		- LDFLAGS+="-Wl,--hash-style=gnu"
-#		- FEATURES+="test-fail-continue"
-#		- PORTAGE_ELOG_CLASSES+="qa"
+#		- {CFLAGS,CXXFLAGS.FFLAGS,FCFLAGS}="-frecord-gcc-switches"
+#		- LDFLAGS="-Wl,--hash-style=gnu ${LDFLAGS}"
+#		- FEATURES="test-fail-continue"
+#		- PORTAGE_ELOG_CLASSES="qa"
 #	- Ensure TINDERBOX_DIR is writeable by the portage user
-#	- Install desktop-file-utils (strongly recommended)
-#	- Install pax-utils (strongly recommended)
+#	- Install desktop-file-utils (recommended)
+#	- Install pax-utils (recommended)
 #	- Install depcheck (optional)
 #
 # CURRENT QA CHECKS
@@ -92,6 +92,8 @@ tinderbox_failure() {
 	tinderbox_teardown_common
 }
 
+# These checks cannot be performed until after post_src_install because
+# the required data is not yet available.
 tinderbox_postinst_checks() {
 	# QA logs created by portage:
 	#	- scanelf-execstack.log

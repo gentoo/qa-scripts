@@ -60,7 +60,7 @@
 #	- make_jobserver
 #	- unicode_errors
 
-: ${TINDERBOX_DIR:="/var/cache/tinderbox"}
+: ${TINDERBOX_DIR:="/var/lib/tinderbox"}
 
 PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
 BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"

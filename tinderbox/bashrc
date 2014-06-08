@@ -69,7 +69,7 @@ BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"
 tinderbox_setup_common() {
 	SANDBOX_ON=0 mkdir -p "${BUILD_DATA_DIR}" > /dev/null
 	write_data arch ${ARCH}
-	write_data profile $(eselect profile show | tail -1)
+	write_data profile $(eselect profile show | grep -v "^[[:space:]]*$" | tail -1)
 	write_data timestamp $(date --utc "+%F %T %Z")
 }
 

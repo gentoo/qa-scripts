@@ -60,6 +60,7 @@
 #	- make_jobserver
 #	- unicode_errors
 
+: ${DEPCHECK_BIN:="/usr/bin/depcheck"}
 : ${TINDERBOX_DIR:="/var/lib/tinderbox"}
 
 PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
@@ -112,8 +113,8 @@ tinderbox_postinst_checks() {
 		SANDBOX_ON=0 rm "${BUILD_DATA_DIR}"/portageqa
 	fi
 
-	if type -P depcheck > /dev/null ; then
-		SANDBOX_ON=0 depcheck ${PF} > "${BUILD_DATA_DIR}"/depcheck
+	if type -P "${DEPCHECK_BIN}" > /dev/null ; then
+		SANDBOX_ON=0 "${DEPCHECK_BIN}" ${PF} > "${BUILD_DATA_DIR}"/depcheck
 	fi
 }
 

@@ -161,6 +161,10 @@ check_atom() {
 	local ebuild_rdepends=()
 	for rdepend in $(qdepends --nocolor --quiet --rdepend ${atom} | sed -e "s/\[[^]]*\]//g" | cut -d : -f 2-)
 	do
+		if [[ ${rdepend} = !* ]] ; then
+			debug Skipping blocker: ${rdepend}
+			continue
+		fi
 		ebuild_rdepends+=( $(remove_atom_version $rdepend) )
 	done
 

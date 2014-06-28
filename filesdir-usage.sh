@@ -3,7 +3,7 @@
 # $1 is a number, N. The top N directories that are consuming space. Defaults to
 # all.
 
-pushd $(portageq portdir) >/dev/null
+pushd $(portageq get_repo_path / gentoo) >/dev/null
 if [[ -z $1 ]]; then
 	du -h */*/files | sort -nr
 else

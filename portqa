@@ -16,7 +16,7 @@ else
 fi
 
 #-c pkgcore_checks.imlate \
-pushd "$(portageq portdir)" > /dev/null
+pushd "$(portageq get_repo_path / gentoo)" > /dev/null
 package=$(pquery ${target} --repo=portdir --no-version | tr '\n' ' ')
 pcheck -c pkgcore_checks.deprecated \
 	-c pkgcore_checks.whitespace \

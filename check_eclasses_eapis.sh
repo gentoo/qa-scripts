@@ -14,7 +14,7 @@ fi
 KNOWN_EAPIS="unsupported 0 1 2 3 4 5"
 TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
 TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
-pushd "$(portageq portdir)/eclass" > /dev/null
+pushd "$(portageq get_repo_path / gentoo)/eclass" > /dev/null
 ECLASSES=$(echo *.eclass)
 popd > /dev/null
 pquery --attr eapi --attr inherited --raw --all --repo portdir > "${TMPEAPIS}"

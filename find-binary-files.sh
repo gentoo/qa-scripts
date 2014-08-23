@@ -15,7 +15,8 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
     path=${line%:*}
     type=${line##*:*( )}
     case ${type} in
-        "application/octet-stream; charset=unknown" \
+        "application/octet-stream; charset=binary" \
+        | "application/octet-stream; charset=unknown" \
         | "binary; charset=binary")
             # GNU Info files (or patches to them) can contain the following
             # control characters that produce false positives:

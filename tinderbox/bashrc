@@ -115,9 +115,12 @@ tinderbox_postinst_checks() {
 	fi
 
 	if type -P "${DEPCHECK_BIN}" > /dev/null ; then
-		SANDBOX_ON=0 "${DEPCHECK_BIN}" ${PF} > "${BUILD_DATA_DIR}"/depcheck
+		SANDBOX_ON=0 INSIDE_PORTAGE=1 "${DEPCHECK_BIN}" ${PF} > "${BUILD_DATA_DIR}"/depcheck
 		if [[ "${TINDERBOX_VERBOSE}" == true ]] ; then
-			cat "${BUILD_DATA_DIR}"/depcheck
+			if [ -f "${BUILD_DATA_DIR}"/depcheck ] && [ -n "$(cat "${BUILD_DATA_DIR}"/depcheck)" ] ; then
+				eqawarn "QA Notice:"
+				eqawarn "$(cat "${BUILD_DATA_DIR}"/depcheck)"
+			fi
 		fi
 	fi
 }

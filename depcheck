@@ -69,8 +69,10 @@ check_atom() {
 		return
 	fi
 
-	einfo Checking ${atom} for undeclared dependencies
-	eindent
+	if [ -z "${INSIDE_PORTAGE}" ]; then
+		einfo Checking ${atom} for undeclared dependencies
+		eindent
+	fi
 
 	local obj
 	for obj in $objects
@@ -198,8 +200,10 @@ check_atom() {
 		ewarn "Suspect RDEPEND: $(bold ${suspect_rdepends})"
 	fi
 
-	echo
-	eoutdent
+	if [ -n "${CAT}" ]; then
+		eoutdent
+		echo
+	fi
 
 	return $errors
 
@@ -277,8 +281,10 @@ else
 	check_package $1
 fi
 
-if [ $? -eq 0 ]; then
-	einfo Checking complete, no errors found
-else
-	eerror Checking complete, errors found
+if [ $DEBUG = TRUE ]; then
+	if [ $? -eq 0 ]; then
+		einfo Checking complete, no errors found
+	else
+		eerror Checking complete, errors found
+	fi
 fi

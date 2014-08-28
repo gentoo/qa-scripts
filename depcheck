@@ -59,6 +59,7 @@ check_atom() {
 	local atom=$1
 	local checked=()
 	local rdepends=()
+	local used_virtuals=()
 
 	local objects=`qlist -qo ${atom}`
 
@@ -154,6 +155,7 @@ check_atom() {
 					local isvirtualdep=$(qdepends -r ${atom} | grep ${virtual})
 
 					if [ $? -eq 0 ]; then
+						used_virtuals+=( ${virtual} )
 						continue 2
 					fi
 				done
@@ -176,6 +178,14 @@ check_atom() {
 		if [[ ${rdepend} = !* ]] ; then
 			debug Skipping blocker: ${rdepend}
 			continue
+		elif [[ ${rdepend} = virtual/* ]] ; then
+			for virtual in "${used_virtuals[@]}"
+			do
+				if [[ ${virtual} == $(remove_atom_version ${rdepend}) ]]; then
+					debug Skipping virtual: ${rdepend}
+					continue 2
+				fi
+			done
 		fi
 		ebuild_rdepends+=( $(remove_atom_version $rdepend) )
 	done

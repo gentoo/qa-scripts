@@ -61,7 +61,7 @@
 #	- unicode_errors
 
 : ${DEPCHECK_BIN:="/usr/bin/depcheck"}
-: ${TINDERBOX_DIR:="/var/lib/tinderbox"}
+: ${TINDERBOX_DIR:="/var/log/tinderbox"}
 
 PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
 BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"

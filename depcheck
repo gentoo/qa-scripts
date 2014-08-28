@@ -226,19 +226,19 @@ check_package() {
 check_category() {
 
 	local errors=0
-	
+
 	for package in `ls "${PKG_DIR}/${1}"`; do
-	
+
 		check_package "${1}/${package}"
-		
+
 		if [ $? -ne 0 ]; then
 			errors=1
 		fi
-		
+
 	done;
-	
+
 	return $errors
-	
+
 }
 
 BINNAME=`basename ${0}`

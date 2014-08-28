@@ -108,9 +108,11 @@ tinderbox_postinst_checks() {
 
 	SANDBOX_ON=0 cp "${T}"/testsfailed "${BUILD_DATA_DIR}" 2> /dev/null
 	SANDBOX_ON=0 find "${T}" -name "tinderbox-*.log" -not -empty -execdir mv '{}' "${BUILD_DATA_DIR}" \;
-	SANDBOX_ON=0 grep --no-filename QA "${T}"/logging/* > "${BUILD_DATA_DIR}"/portageqa
+	if [ ls "${T}"/logging/* > /dev/null 2>&1 ] ; then
+		SANDBOX_ON=0 grep --no-filename QA "${T}"/logging/* > "${BUILD_DATA_DIR}"/portageqa
+	fi
 
-	if [[ ! -s "${BUILD_DATA_DIR}"/portageqa ]] ; then
+	if [[ ! -s "${BUILD_DATA_DIR}"/portageqa ]] && [ -f "${BUILD_DATA_DIR}"/portageqa ] ; then
 		SANDBOX_ON=0 rm "${BUILD_DATA_DIR}"/portageqa
 	fi
 

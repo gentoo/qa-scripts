@@ -64,7 +64,7 @@
 : ${TINDERBOX_DIR:="/var/log/tinderbox"}
 
 PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
-BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(uuidgen)"
+BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(cat /proc/sys/kernel/random/uuid)"
 
 tinderbox_setup_common() {
 	SANDBOX_ON=0 mkdir -p "${BUILD_DATA_DIR}" > /dev/null

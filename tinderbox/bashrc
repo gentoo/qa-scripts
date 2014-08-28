@@ -62,6 +62,7 @@
 
 : ${DEPCHECK_BIN:="/usr/bin/depcheck"}
 : ${TINDERBOX_DIR:="/var/log/tinderbox"}
+: ${TINDERBOX_VERBOSE:=true}
 
 PACKAGE_DATA_DIR="${TINDERBOX_DIR}/${CATEGORY}/${PN}"
 BUILD_DATA_DIR="${PACKAGE_DATA_DIR}/${PF}/$(cat /proc/sys/kernel/random/uuid)"
@@ -115,6 +116,9 @@ tinderbox_postinst_checks() {
 
 	if type -P "${DEPCHECK_BIN}" > /dev/null ; then
 		SANDBOX_ON=0 "${DEPCHECK_BIN}" ${PF} > "${BUILD_DATA_DIR}"/depcheck
+		if [[ "${TINDERBOX_VERBOSE}" == true ]] ; then
+			cat "${BUILD_DATA_DIR}"/depcheck
+		fi
 	fi
 }
 

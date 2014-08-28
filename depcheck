@@ -200,9 +200,11 @@ check_atom() {
 		ewarn "Suspect RDEPEND: $(bold ${suspect_rdepends})"
 	fi
 
-	if [ -n "${CAT}" ]; then
+	if [ -z "${INSIDE_PORTAGE}" ]; then
 		eoutdent
-		echo
+		if [ -n "${CAT}" ]; then
+			echo
+		fi
 	fi
 
 	return $errors

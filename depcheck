@@ -146,6 +146,18 @@ check_atom() {
 			isdep=`qdepends -r ${atom} | grep ${libowner_pn}`
 
 			if [ $? -ne 0 ]; then
+
+				debug Checking if ${libowner_pn} is provided by a virtual
+				for virtual in $(qdepends --nocolor --name-only --rdepend --query ${libowner_pn} | grep ^virtual/)
+				do
+					debug Checking if ${virtual} is in dependencies
+					local isvirtualdep=$(qdepends -r ${atom} | grep ${virtual})
+
+					if [ $? -eq 0 ]; then
+						continue 2
+					fi
+				done
+
 				eerror "${obj} links to ${link}"
 				eindent
 				eerror Missing dependency on $(bold ${libowner_pn})

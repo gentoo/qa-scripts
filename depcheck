@@ -118,7 +118,7 @@ check_atom() {
 			local libowner=`qfile -vqC ${link} | uniq`
 
 			if [ ! "${libowner}" ]; then
-				ewarn "No package claims ${link} (${obj})"
+				ewarn "Warning: installed file ${obj} is linked to ${link} which is not owned by any installed atom."
 				continue
 			fi
 

@@ -164,7 +164,7 @@ check_atom() {
 
 				eerror "${obj} links to ${link}"
 				eindent
-				eerror Missing dependency on $(bold ${libowner_pn})
+				eerror Missing RDEPEND on $(bold ${libowner_pn})
 				eoutdent
 				errors=1
 			fi

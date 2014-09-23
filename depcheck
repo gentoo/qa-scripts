@@ -53,6 +53,28 @@ remove_atom_version() {
 	echo $atom
 }
 
+virtualcheck() {
+	debug Checking if ${libowner_pn} is provided by a virtual
+	for virtual in $(qdepends --nocolor --name-only --${1} --query ${libowner_pn} | grep ^virtual/)
+	do
+		debug Checking if ${virtual} is in dependencies
+		local isvirtualdep=$(qdepends --${1} ${atom} | grep ${virtual})
+
+		if [ $? -eq 0 ]; then
+			used_virtuals+=( ${virtual} )
+			continue 2
+		fi
+	done
+
+	if [ "${1}" = "depend" ]; then
+		eerror "${obj} links to ${link}"
+	fi
+	eindent
+	eerror Missing ${1^^} on $(bold ${libowner_pn})
+	eoutdent
+	errors=1
+}
+
 check_atom() {
 
 	local errors=0
@@ -143,30 +165,18 @@ check_atom() {
 				fi
 			done
 
-			debug "Checking if ${libowner_pn} is in the RDEPEND list of ${atom}"
+			debug "Checking if ${libowner_pn} is in the [R]DEPEND list of ${atom}"
 
 			local isdep
-			isdep=`qdepends -r ${atom} | grep ${libowner_pn}`
-
+			isdep=`qdepends -d ${atom} | grep ${libowner_pn}`
 			if [ $? -ne 0 ]; then
+				virtualcheck depend
+			fi
 
-				debug Checking if ${libowner_pn} is provided by a virtual
-				for virtual in $(qdepends --nocolor --name-only --rdepend --query ${libowner_pn} | grep ^virtual/)
-				do
-					debug Checking if ${virtual} is in dependencies
-					local isvirtualdep=$(qdepends -r ${atom} | grep ${virtual})
-
-					if [ $? -eq 0 ]; then
-						used_virtuals+=( ${virtual} )
-						continue 2
-					fi
-				done
-
-				eerror "${obj} links to ${link}"
-				eindent
-				eerror Missing RDEPEND on $(bold ${libowner_pn})
-				eoutdent
-				errors=1
+			local isrdep
+			isrdep=`qdepends -r ${atom} | grep ${libowner_pn}`
+			if [ $? -ne 0 ]; then
+				virtualcheck rdepend
 			fi
 
 

@@ -58,7 +58,8 @@ virtualcheck() {
 	for virtual in $(qdepends --nocolor --name-only --${1} --query ${libowner_pn} | grep ^virtual/)
 	do
 		debug Checking if ${virtual} is in dependencies
-		local isvirtualdep=$(qdepends --${1} ${atom} | grep ${virtual})
+		local isvirtualdep
+		isvirtualdep=$(qdepends --${1} ${atom} | grep ${virtual})
 
 		if [ $? -eq 0 ]; then
 			used_virtuals+=( ${virtual} )

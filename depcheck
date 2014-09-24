@@ -55,7 +55,7 @@ remove_atom_version() {
 
 virtualcheck() {
 	debug Checking if ${libowner_pn} is provided by a virtual
-	for virtual in $(qdepends --nocolor --name-only --${1} --query ${libowner_pn} | grep ^virtual/)
+	for virtual in $(qdepends --nocolor --name-only --rdepend --query ${libowner_pn} | grep ^virtual/)
 	do
 		debug Checking if ${virtual} is in dependencies
 		local isvirtualdep
@@ -63,16 +63,20 @@ virtualcheck() {
 
 		if [ $? -eq 0 ]; then
 			used_virtuals+=( ${virtual} )
-			continue 2
+			local resolved=true
+			break
 		fi
 	done
 
-	if [ "${1}" = "depend" ]; then
-		eerror "${obj} links to ${link}"
+	if [[ ! ${resolved} ]]; then
+		if [ "${1}" = "depend" ]; then
+			eerror "${obj} links to ${link}"
+		fi
+		eindent
+		eerror Missing ${1^^} on $(bold ${libowner_pn})
+		eoutdent
 	fi
-	eindent
-	eerror Missing ${1^^} on $(bold ${libowner_pn})
-	eoutdent
+
 	errors=1
 }
 

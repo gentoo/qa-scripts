@@ -145,8 +145,14 @@ check_atom() {
 			local libowner=`qfile -vqC ${link} | uniq`
 
 			if [ ! "${libowner}" ]; then
-				ewarn "Warning: installed file ${obj} is linked to ${link} which is not owned by any installed atom."
-				continue
+				local dereferenced=`qfile -vqC $(readlink -f ${link}) | uniq`
+				if [ "${dereferenced}" ]; then
+					debug "Deferenced symlink and found real lib owner"
+					libowner=${dereferenced}
+				else
+					ewarn "Warning: installed file ${obj} is linked to ${link} which is not owned by any installed atom."
+					continue
+				fi
 			fi
 
 			debug "Owning package for ${link} is ${libowner}"

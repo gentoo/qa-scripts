@@ -11,7 +11,6 @@ fi
 
 #[[ $(type pquery 2> /dev/null) ]] || exit 1
 
-KNOWN_EAPIS="0 1 2 3 4 5"
 TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
 TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
 REPO_PATH=$(portageq get_repo_path / gentoo)
@@ -38,6 +37,11 @@ find "${REPO_PATH}/metadata/md5-cache" -type f -exec awk -F= '
 		printf "\"\n"
 	}
 	' '{}' \+ > "${TMPEAPIS}"
+
+KNOWN_EAPIS=$(awk '
+	{ e = gensub(/eapi="(.*)"/, "\\1", "", $2); eapi[e] = e }
+	END { PROCINFO["sorted_in"]="@ind_num_asc"; for (e in eapi) print e }
+	' "${TMPEAPIS}")
 
 pushd ${DIR} > /dev/null
 rm -rf *.eclass

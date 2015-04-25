@@ -32,7 +32,7 @@ while read pkg; do
 	echo """
 			<tr>
 				<td>${pkg}</td>
-				<td>$(pquery --one-attr description ${pkg} | tail -n 1)</td>
+				<td>$(pquery --no-version --one-attr description ${pkg})</td>
 				<td><a href=\"https://bugs.gentoo.org/buglist.cgi?quicksearch=${pkg}\">Open Bugs</a></td>
 			</tr>
 	"""

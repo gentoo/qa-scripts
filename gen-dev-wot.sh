@@ -19,7 +19,8 @@ cd $GNUPGHOME || exit 1
 wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
 	egrep -o '0x([A-Z0-9]{8}){1,2}' > keys.txt
 
-/usr/bin/gpg -q --keyserver hkp://pool.sks-keyservers.net --recv-keys \
+# Looks like all the outgoing connections to port 11371 are blocked from scrubfowl
+/usr/bin/gpg -q --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
 	`cat keys.txt`
 
 /usr/bin/gpg -q --no-default-keyring --list-sigs | \

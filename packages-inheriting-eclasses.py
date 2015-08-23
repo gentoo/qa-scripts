@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import collections, datetime, os, os.path, sys
-import pkgcore.config # tested with pkgcore-0.7.7.8
+import pkgcore.config # tested with pkgcore-0.9.1
 
 def main(argv):
 	try:
@@ -11,7 +11,7 @@ def main(argv):
 		return 1
 
 	c = pkgcore.config.load_config()
-	portdir = c.repo['portdir']
+	portdir = c.repo['/usr/portage']
 
 	output = collections.defaultdict(set)
 

@@ -24,7 +24,7 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
             # - 0x7f (DEL), preceded by "Node:" or "Ref:" in the same line
             # Filter such characters and reiterate
             line=$(sed -e 's/\x1f\f\?$//;/\(Node\|Ref\):/s/\x7f//' "${path}" \
-			| file -i -)
+                | file -i -)
             type=${line##*:*( )}
             ;;
     esac

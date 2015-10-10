@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014 Gentoo Foundation
+# Copyright 2014-2015 Gentoo Foundation
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -21,9 +21,10 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
             # GNU Info files (or patches to them) can contain the following
             # control characters that produce false positives:
             # - 0x1f, followed by LF or FF
-            # - 0x7f (DEL), preceded by "Node:" in the same line
+            # - 0x7f (DEL), preceded by "Node:" or "Ref:" in the same line
             # Filter such characters and reiterate
-            line=$(sed -e 's/\x1f\f\?$//;/Node:/s/\x7f//' "${path}" | file -i -)
+            line=$(sed -e 's/\x1f\f\?$//;/\(Node\|Ref\):/s/\x7f//' "${path}" \
+			| file -i -)
             type=${line##*:*( )}
             ;;
     esac

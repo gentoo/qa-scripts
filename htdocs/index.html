@@ -1,149 +1,160 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Gentoo QA Reports</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/tyrian.min.css" rel="stylesheet" media="screen">
-  <link rel="icon" href="http://www.gentoo.org/favicon.ico" type="image/x-icon">
-</head>
-<body>
-<header>
-  <div class="site-title">
-    <div class="container">
-      <div class="row">
-        <div class="site-title-buttons">
-          <div class="btn-group btn-group-sm">
-            <a href="http://get.gentoo.org/" type="button" class="btn get-gentoo"><span class="fa fa-download"></span> <strong>Get Gentoo!</strong></a>
-            <div class="btn-group btn-group-sm">
-              <button type="button" class="gentoo-org-sites btn" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-globe"></span> gentoo.org sites <span class="caret"></span>
+  <head>
+    <title>Gentoo QA Reports</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#54487a">
+    <link href="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/tyrian.min.css" rel="stylesheet" media="screen">
+    <link rel="icon" href="https://www.gentoo.org/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <header>
+      <div class="site-title">
+        <div class="container">
+          <div class="row">
+            <div class="site-title-buttons">
+              <div class="btn-group btn-group-sm">
+                <a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span> <strong>Get Gentoo!</strong></a>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    <span class="fa fa-fw fa-map-o"></span> <span class="hidden-xs">gentoo.org sites</span> <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+                    <li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+                    <li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+                    <li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+                    <li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+                    <li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+                    <li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="logo">
+              <a href="/" title="Back to the homepage" class="site-logo">
+                <object data="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/site-logo.svg" type="image/svg+xml">
+                  <img src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/site-logo.png" alt="Gentoo Linux Logo">
+                </object>
+              </a>
+              <span class="site-label">QA Reports</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="tyrian-navbar" role="navigation">
+        <div class="container">
+          <div class="row">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
               </button>
-              <ul class="dropdown-menu">
-                <li><a href="http://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
-                <li><a href="http://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text fa-fw"></span> Wiki</a></li>
-                <li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
-                <li><a href="http://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
-                <li><a href="http://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
-                <li class="divider"></li>
-                <li><a href="http://overlays.gentoo.org/" title="Collaborate on maintaining packages"><span class="fa fa-code-fork fa-fw"></span> Overlays</a></li>
-                <li><a href="http://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
-                <li><a href="http://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
-                <li><a href="http://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
-                <li class="divider"></li>
-                <li><a href="http://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-tasks fa-fw"></span> Infra Status</a></li>
+            </div>
+            <div class="collapse navbar-collapse navbar-main-collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="logo">
-          <img src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/site-logo.png" alt="Gentoo Linux Logo"/>
-          <span class="site-label">QA Reports</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <nav class="tyrian-navbar" role="navigation">
+      </nav>
+    </header>
+
     <div class="container">
       <div class="row">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        <div class="collapse navbar-collapse navbar-main-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
-</header>
+        <div class="col-lg-12">
+          <h1 class="first-header">Gentoo QA Reports</h1>
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="first-header">Gentoo QA Reports</h1>
+          <div class="row">
+            <div class="col-lg-4">
+              <h3>Ebuild Problems</h3>
+              <div class="list-group">
+                <a href="http://dev.gentoo.org/distfile-mirroring/" class="list-group-item">Non-fetchable distfiles</a>
+              </div>
 
-      <div class="row">
-      	<div class="col-lg-4">
-      	  <h3>Ebuild Problems</h3>
-          <div class="list-group">
-            <a href="http://dev.gentoo.org/distfile-mirroring/" class="list-group-item">Non-fetchable distfiles</a>
-          </div>
-
-          <h3>Misc</h3>
-          <div class="list-group">
-            <a href="/output/wot-graph.png" class="list-group-item">Gentoo Dev Web of Trust (WoT)</a>
-            <a href="/output/wot-stats.html" class="list-group-item">WoT Node Stats</a>
-            <a href="/output/maintainer-needed.html" class="list-group-item">&quot;Maintainer Needed&quot; Packages</a>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <h3>Tree-wide Scanning</h3>
-          <div class="list-group">
-            <a href="/output/genrdeps/rindex/" class="list-group-item">Reverse runtime dependencies</a>
-            <a href="/output/genrdeps/dindex/" class="list-group-item">Reverse buildtime dependencies</a>
-            <a href="/output/genrdeps/pindex/" class="list-group-item">Reverse post dependencies</a>
-            <a href="/output/eapi_usage.txt" class="list-group-item">EAPI Usage</a>
-            <a href="/output/eapi-per-eclass" class="list-group-item">EAPI Usage per eclass</a>
-            <a href="/output/invalid-mask.txt" class="list-group-item">Invalid package.mask entries</a>
-            <a href="/output/filesdir-usage.txt" class="list-group-item">Top 100 largest FILESDIRs</a>
-            <a href="/output/find-binary-files.txt" class="list-group-item">Binary files in gentoo-x86</a>
-            <a href="/output/eclass-usage/" class="list-group-item">Listing of packages that inherit an eclass</a>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <h3>Bugs last touched by year</h3>
-          <div class="list-group">
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2007-01-01&v2=2006-01-01" class="list-group-item">2006</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2008-01-01&v2=2007-01-01" class="list-group-item">2007</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2009-01-01&v2=2008-01-01" class="list-group-item">2008</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2010-01-01&v2=2009-01-01" class="list-group-item">2009</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2011-01-01&v2=2010-01-01" class="list-group-item">2010</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2012-01-01&v2=2011-01-01" class="list-group-item">2011</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2013-01-01&v2=2012-01-01" class="list-group-item">2012</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2014-01-01&v2=2013-01-01" class="list-group-item">2013</a>
-            <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2015-01-01&v2=2014-01-01" class="list-group-item">2014</a>
+              <h3>Misc</h3>
+              <div class="list-group">
+                <a href="/output/wot-graph.png" class="list-group-item">Gentoo Dev Web of Trust (WoT)</a>
+                <a href="/output/wot-stats.html" class="list-group-item">WoT Node Stats</a>
+                <a href="/output/maintainer-needed.html" class="list-group-item">&quot;Maintainer Needed&quot; Packages</a>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <h3>Tree-wide Scanning</h3>
+              <div class="list-group">
+                <a href="/output/genrdeps/rindex/" class="list-group-item">Reverse runtime dependencies</a>
+                <a href="/output/genrdeps/dindex/" class="list-group-item">Reverse buildtime dependencies</a>
+                <a href="/output/genrdeps/pindex/" class="list-group-item">Reverse post dependencies</a>
+                <a href="/output/eapi_usage.txt" class="list-group-item">EAPI Usage</a>
+                <a href="/output/eapi-per-eclass" class="list-group-item">EAPI Usage per eclass</a>
+                <a href="/output/invalid-mask.txt" class="list-group-item">Invalid package.mask entries</a>
+                <a href="/output/filesdir-usage.txt" class="list-group-item">Top 100 largest FILESDIRs</a>
+                <a href="/output/find-binary-files.txt" class="list-group-item">Binary files in gentoo-x86</a>
+                <a href="/output/eclass-usage/" class="list-group-item">Listing of packages that inherit an eclass</a>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <h3>Bugs last touched by year</h3>
+              <div class="list-group">
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2007-01-01&v2=2006-01-01" class="list-group-item">2006</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2008-01-01&v2=2007-01-01" class="list-group-item">2007</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2009-01-01&v2=2008-01-01" class="list-group-item">2008</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2010-01-01&v2=2009-01-01" class="list-group-item">2009</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2011-01-01&v2=2010-01-01" class="list-group-item">2010</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2012-01-01&v2=2011-01-01" class="list-group-item">2011</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2013-01-01&v2=2012-01-01" class="list-group-item">2012</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2014-01-01&v2=2013-01-01" class="list-group-item">2013</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2015-01-01&v2=2014-01-01" class="list-group-item">2014</a>
+                <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2016-01-01&v2=2015-01-01" class="list-group-item">2015</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
-  </div>
-</div>
 
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8">
-        &nbsp;
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 col-md-offset-2 col-md-7">
+            &nbsp;
+          </div>
+          <div class="col-xs-12 col-md-3">
+            <h3 class="footerhead">Questions or comments?</h3>
+            Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2 col-sm-3 col-md-2">
+            <ul class="footerlinks three-icons">
+              <li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+              <li><a href="https://plus.google.com/+Gentoo" title="+Gentoo on Google+"><span class="fa fa-google-plus fa-fw"></span></a></li>
+              <li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+            </ul>
+          </div>
+          <div class="col-xs-10 col-sm-9 col-md-10">
+            <strong>&copy; 2001&ndash;2016 Gentoo Foundation, Inc.</strong><br>
+            <small>
+              Gentoo is a trademark of the Gentoo Foundation, Inc.
+              The contents of this document, unless otherwise expressly stated, are licensed under the
+              <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="license">CC-BY-SA-3.0</a> license.
+              The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+            </small>
+          </div>
+        </div>
       </div>
-      <div class="col-md-4">
-        <strong>Questions or comments?</strong><br/>
-        Please feel free to <a href="mailto:qa@gentoo.org">contact us</a>.
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <strong>&copy; 2001-2014 Gentoo Foundation, Inc.</strong><br/>
-        <small>
-          Gentoo is a trademark of the Gentoo Foundation, Inc.
-          The contents of this document, unless otherwise expressly stated, are licensed under the
-          <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="license">CC-BY-SA-3.0</a> license.
-          The <a href="#">Gentoo Name and Logo Usage Guidelines</a> apply.
-        </small>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
-<script src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/jquery.min.js"></script>
-<script src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/bootstrap.min.js"></script>
-</body>
+    <script src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/jquery.min.js"></script>
+    <script src="https://1b9a50f4f9de4348cd9f-e703bc50ba0aa66772a874f8c7698be7.ssl.cf5.rackcdn.com/bootstrap.min.js"></script>
+  </body>
 </html>

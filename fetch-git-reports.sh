@@ -13,6 +13,8 @@ for repo in gentoo-ci gpyutils repos; do
 	[[ -d ${repo} ]] || git clone --depth=1 "git://anongit.gentoo.org/report/${repo}.git"
 
 	cd "${repo}"
+	git reset --hard
+	git clean -df
 	git fetch origin '+refs/heads/*:refs/remotes/origin/*'
 	git pull
 	cd - >/dev/null

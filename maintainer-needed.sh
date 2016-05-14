@@ -9,7 +9,7 @@ cleanup () {
 	[[ -e ${tmpfile} ]] && rm ${tmpfile}
 }
 
-portageq --no-filters --maintainer-email=maintainer-needed@gentoo.org -n > ${tmpfile} || { cleanup; exit 1; }
+portageq --no-filters --orphaned -n > ${tmpfile} || { cleanup; exit 1; }
 
 echo """
 <html>

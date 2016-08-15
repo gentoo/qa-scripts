@@ -42,14 +42,12 @@ def main(argv):
 	<body>
 		<h1>Packages inheriting eclasses</h1>
 
-		<p>(tree synced at %s UTC)</p>
-
 		<ul>
 			%s
 			<li><a href="/">/ (go back)</a></li>
 		</ul>
 	</body>
-</html>''' % (max([len(e) for e in output]), datetime.datetime.fromtimestamp(os.path.getmtime(portdir.location)).strftime("%a %b %d %Y %H:%M:%S"), '\n'.join(['<li><a href="%s.txt">%s.eclass</a> (%d packages),</li>' % (e, e, len(output[e])) for e in sorted(output)])))
+</html>''' % (max([len(e) for e in output]), '\n'.join(['<li><a href="%s.txt">%s.eclass</a> (%d packages),</li>' % (e, e, len(output[e])) for e in sorted(output)])))
 	f.close()
 
 	return 0

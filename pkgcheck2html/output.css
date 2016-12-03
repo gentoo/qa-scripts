@@ -1,0 +1,184 @@
+/* (c) 2016 Michał Górny, Patrice Clement */
+/* 2-clause BSD license */
+
+*
+{
+	box-sizing: border-box;
+}
+
+body
+{
+	margin: 0;
+	background-color: #463C65;
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+address
+{
+	color: white;
+	text-align: center;
+	margin: 1em;
+}
+
+.nav
+{
+	width: 20%;
+	position: absolute;
+	top: 0;
+}
+
+.nav ul
+{
+	list-style: none;
+	margin: 0;
+	padding: 1%;
+}
+
+.nav li
+{
+	padding: 0 1em;
+	border-radius: 4px;
+	margin-bottom: .3em;
+	background-color: #62548F;
+}
+
+.nav li a
+{
+	display: block;
+	width: 100%;
+}
+
+.nav h2
+{
+	color: white;
+	text-align: center;
+	font-size: 300%;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-family: serif;
+}
+
+ul.nav li.header
+{
+	background-color: #463C65;
+}
+
+.content, h1
+{
+	padding: 2%;
+	margin: 0 0 0 20%;
+	background-color: #DDDAEC;
+}
+
+h1 {
+	font-family: serif;
+	color: #23457F;
+	font-size: 400%;
+	line-height: 2em;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-align: center;
+	letter-spacing: .15em;
+}
+
+th
+{
+	text-align: left;
+	padding: 1em 0;
+	color: #23457F;
+}
+
+th.h2
+{
+	font-size: 120%;
+}
+
+th.h3
+{
+	padding-left: 1em;
+	font-size: 110%;
+}
+
+th:target
+{
+	background-color: #dfd;
+}
+
+th small
+{
+	padding-left: .5em;
+	visibility: hidden;
+}
+
+th:hover small
+{
+	visibility: visible;
+}
+
+td
+{
+	background-color: white;
+	line-height: 2em;
+	font-size: 120%;
+	padding-left: .5em;
+	white-space: pre-wrap;
+}
+
+td:hover
+{
+	background-color: #eee;
+}
+
+tr.err td
+{
+	background-color: #7E0202;
+	color: white;
+}
+
+tr.err td:hover
+{
+	background-color: #DA0404;
+}
+
+tr.warn td
+{
+	background-color: orange;
+}
+
+tr.warn td:hover
+{
+	background-color: #FFBB3E;
+}
+
+.nav a
+{
+	font-size: 150%;
+	line-height: 1.5em;
+	text-decoration: none;
+	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.warn a
+{
+	color: orange;
+}
+
+.err a
+{
+	color: #F06F74;
+}
+
+.nav li:hover
+{
+	min-width: 100%;
+	width: -moz-max-content;
+	width: max-content;
+}
+
+.nav a:hover
+{
+	color: white;
+}

@@ -20,7 +20,7 @@ echo """
 	<body>
 		List generated on $(date)<br/>
 		Total packages: <b>$(wc -l ${tmpfile} | cut -d ' '  -f1)</b><br/><br/>
-		<table>
+		<table frame="box" rules="all">
 			<tr>
 				<th>Package Name</th>
 				<th>Description</th>

@@ -22,7 +22,10 @@ def main(argv):
 	try:
 		os.mkdir(outputdir)
 	except OSError:
-		pass # XXX: removing old eclasses?
+		# remove stale output files
+		for f in os.listdir(outputdir):
+			if f.endswith('.txt') and f[:-4] not in output:
+				os.remove(os.path.join(outputdir, f))
 
 	os.chdir(outputdir)
 	for eclass in output:

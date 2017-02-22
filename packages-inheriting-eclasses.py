@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import collections, datetime, os, os.path, sys
+import datetime, os, os.path, sys
 import pkgcore.config # tested with pkgcore-0.9.2
 
 def main(argv):
@@ -13,7 +13,11 @@ def main(argv):
 	c = pkgcore.config.load_config()
 	portdir = c.repo['gentoo']
 
-	output = collections.defaultdict(set)
+	output = {}
+	# initiate with all eclasses
+	# (this also ensures we know eclasses that have no packages)
+	for k in portdir.eclass_cache.eclasses:
+		output[k] = set()
 
 	for p in portdir:
 		for eclass in p.data.get('_eclasses_', ()):

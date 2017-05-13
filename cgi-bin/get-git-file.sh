@@ -39,7 +39,7 @@ main() {
 		if [[ ! ${tree[*]} ]]; then
 			echo "Status: 404 Not Found"
 			echo
-			echo "404 Not Found"
+			echo "404 Not Found (if the report was just published, you may need to wait a minute or two for sync)"
 			exit 0
 		fi
 	fi

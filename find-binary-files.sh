@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014-2015 Gentoo Foundation
+# Copyright 2014-2017 Gentoo Foundation
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -34,6 +34,7 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
         application/*"; charset=utf-8") ;;
         "image/svg+xml; charset=us-ascii") ;; # SVG image
         "image/x-xpmi; charset=us-ascii") ;;  # XPM image
+        "message/rfc822; charset=us-ascii") ;;
         *)
             size=$(stat -c "%s" "${path}")
             echo "${path#./}: ${type} (size=${size})"

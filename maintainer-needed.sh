@@ -4,6 +4,7 @@
 # Author: Markos Chandras <hwoarang@gentoo.org>
 
 tmpfile="/tmp/mn-pkglist$$.tmp"
+rdepdir=$1
 
 cleanup () {
 	[[ -e ${tmpfile} ]] && rm ${tmpfile}
@@ -25,6 +26,9 @@ echo """
 				<th>Package Name</th>
 				<th>Description</th>
 				<th>Open bugs</th>
+				<th>R-revdeps</th>
+				<th>D-revdeps</th>
+				<th>P-revdeps</th>
 			</tr>
 """
 
@@ -34,6 +38,9 @@ while read pkg; do
 				<td>${pkg}</td>
 				<td>$(pquery --no-version --one-attr description ${pkg})</td>
 				<td><a href=\"https://bugs.gentoo.org/buglist.cgi?quicksearch=${pkg}\">Open Bugs</a></td>
+				<td><a href=\"genrdeps/rindex/${pkg}\">$(cat ${rdepdir}/rindex/${pkg} 2>/dev/null | wc -l)</a></td>
+				<td><a href=\"genrdeps/dindex/${pkg}\">$(cat ${rdepdir}/dindex/${pkg} 2>/dev/null | wc -l)</a></td>
+				<td><a href=\"genrdeps/pindex/${pkg}\">$(cat ${rdepdir}/pindex/${pkg} 2>/dev/null | wc -l)</a></td>
 			</tr>
 	"""
 done < ${tmpfile}

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014-2017 Gentoo Foundation
+# Copyright 2014-2018 Gentoo Foundation
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -10,7 +10,7 @@ cd "${portdir}" || exit 1
 
 find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
     -o -path ./packages \) -prune \
-    -o ! -type d -exec file -ih '{}' + \
+    -o ! -type d ! \( -type f -name 'Manifest*.gz' \) -exec file -ih '{}' + \
 | while read line; do
     path=${line%:*}
     type=${line##*:*( )}

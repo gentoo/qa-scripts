@@ -7,10 +7,10 @@
 #
 #pinspect eapi_usage /usr/portage
 
-find /usr/portage/metadata/md5-cache -type f -exec awk '
+find /usr/portage/metadata/md5-cache -type f \
+  ! -name '*.gz' ! -name 'Manifest*' -exec awk '
     BEGINFILE { found=0 }
     /^EAPI=/ { sub("EAPI=",""); eapi[$1]++; found=1; nextfile }
-    ENDFILE { if (!found) eapi[0]++ }
     END { for (i in eapi) print i,eapi[i] }
   ' '{}' '+' | awk '
     { eapi[$1]+=$2; total+=$2 }

@@ -9,8 +9,7 @@
 
 find /usr/portage/metadata/md5-cache -type f \
   ! -name '*.gz' ! -name 'Manifest*' -exec awk '
-    BEGINFILE { found=0 }
-    /^EAPI=/ { sub("EAPI=",""); eapi[$1]++; found=1; nextfile }
+    /^EAPI=/ { sub("EAPI=",""); eapi[$1]++; nextfile }
     END { for (i in eapi) print i,eapi[i] }
   ' '{}' '+' | awk '
     { eapi[$1]+=$2; total+=$2 }

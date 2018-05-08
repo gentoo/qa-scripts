@@ -9,7 +9,7 @@ outputdir=${1}
 [[ ${outputdir} ]]
 cd "${outputdir}"
 
-for repo in gentoo-ci gpyutils repos; do
+for repo in gentoo-ci repos; do
 	[[ -d ${repo} ]] || git clone --depth=1 "git://anongit.gentoo.org/report/${repo}.git"
 
 	cd "${repo}"

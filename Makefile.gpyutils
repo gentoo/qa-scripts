@@ -1,0 +1,80 @@
+export PACKAGE_MANAGER = pkgcore
+
+PORTDIR ?= $(shell pinspect query get_repo_path gentoo)
+timestamp = $(PORTDIR)/metadata/timestamp.commit
+# pass via make!
+outdir = /dev/null
+
+# upgrades for stable impls
+upgr_base = $(outdir)/34-to-35.txt $(outdir)/35-to-36.txt
+# related stabilizations
+upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
+# all upgrade stuff
+upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/pypy3-to-35.txt
+upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
+upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
+upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
+
+all = $(upgr_all) $(outdir)/cands.txt $(outdir)/missing-meta.txt
+
+all: $(all)
+
+$(outdir)/cands.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-cands > $@.new
+	mv $@.new $@
+
+$(outdir)/depcands.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-depcands > $@.new
+	mv $@.new $@
+
+$(outdir)/depcands-all.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-depcands --all > $@.new
+	mv $@.new $@
+
+$(outdir)/depcheck.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-depcheck > $@.new
+	mv $@.new $@
+
+$(outdir)/34-to-35.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl python3_4 python3_5 > $@.new
+	mv $@.new $@
+
+$(outdir)/34-to-35-stablereq.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -s python3_4 python3_5 > $@.new
+	mv $@.new $@
+
+$(outdir)/35-to-36.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl python3_5 python3_6 > $@.new
+	mv $@.new $@
+
+$(outdir)/35-to-36-stablereq.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -s python3_5 python3_6 > $@.new
+	mv $@.new $@
+
+$(outdir)/pypy3-to-35.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl pypy3 python3_5 > $@.new
+	mv $@.new $@
+
+$(outdir)/missing-meta.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-find-missing-meta > $@.new
+	mv $@.new $@
+
+%.dot: %.txt
+	gpy-depgraph -m python@gentoo.org $< > $@.new
+	mv $@.new $@
+
+%.svg: %.dot
+	dot -Tsvg $< > $@.new
+	mv $@.new $@
+
+.PHONY: all

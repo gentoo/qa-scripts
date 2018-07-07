@@ -1,6 +1,0 @@
-#!/bin/sh
-# Created by Tomáš Chvátal <scarabeus@gentoo.org>
-# License WTFPL-2.0
-
-echangelog $@
-repoman commit -m "$@"

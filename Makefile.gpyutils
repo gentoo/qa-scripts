@@ -79,6 +79,10 @@ $(outdir)/missing-meta.txt: $(timestamp)
 	gpy-find-missing-meta > $@.new
 	mv $@.new $@
 
+# temporarily disable it; the graph is too big
+$(outdir)/36-to-37.svg:
+	touch $@
+
 %.dot: %.txt
 	gpy-depgraph -m python@gentoo.org $< > $@.new
 	mv $@.new $@

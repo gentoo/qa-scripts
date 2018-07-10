@@ -6,7 +6,7 @@ timestamp = $(PORTDIR)/metadata/timestamp.commit
 outdir = /dev/null
 
 # upgrades for stable impls
-upgr_base = $(outdir)/34-to-35.txt $(outdir)/35-to-36.txt
+upgr_base = $(outdir)/34-to-35.txt $(outdir)/35-to-36.txt $(outdir)/36-to-37.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
@@ -57,6 +57,16 @@ $(outdir)/35-to-36.txt: $(timestamp)
 $(outdir)/35-to-36-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -s python3_5 python3_6 > $@.new
+	mv $@.new $@
+
+$(outdir)/36-to-37.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl python3_6 python3_7 > $@.new
+	mv $@.new $@
+
+$(outdir)/36-to-37-stablereq.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -s python3_6 python3_7 > $@.new
 	mv $@.new $@
 
 $(outdir)/pypy3-to-35.txt: $(timestamp)

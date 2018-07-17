@@ -265,7 +265,10 @@ def check_pkg(portdir, line):
 
 def get_timestamp():
 	timestamp_f = join(settings["PORTDIR"],	"metadata/timestamp.chk")
-	timestamp = open(timestamp_f).readline().rstrip()
+	try:
+		timestamp = open(timestamp_f).readline().rstrip()
+	except:
+		return "Unknown"
 	if len(timestamp) < 1:
 		return "Unknown"
 

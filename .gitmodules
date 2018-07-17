@@ -1,0 +1,3 @@
+[submodule "pkgcheck2html"]
+	path = pkgcheck2html
+	url = https://github.com/mgorny/pkgcheck-result-parser

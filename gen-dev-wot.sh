@@ -13,7 +13,7 @@ if ! type -P dot &>/dev/null; then
 	echo "install graphviz"; exit 1
 fi
 
-gpg -q --keyring "${1}/active-devs.gpg" --list-sigs | \
+gpg -q --keyid-format=long --keyring "${1}/active-devs.gpg" --list-sigs | \
 	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
 	> keys.dot
 

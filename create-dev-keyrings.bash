@@ -52,10 +52,9 @@ NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints "${NONCOMMIT_RULE}") )
 export GNUPGHOME=$(mktemp -d)
 trap 'rm -rf "${GNUPGHOME}"' EXIT
 
-grab_keys "${COMMITTING_DEVS[@]}"
-gpg --export > "${OUTPUT_DIR}"/committing-devs.gpg
-grab_keys "${NONCOMMITTING_DEVS[@]}"
-gpg --export > "${OUTPUT_DIR}"/active-devs.gpg
+grab_keys "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}"
+gpg --export "${COMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/committing-devs.gpg
+gpg --export "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/active-devs.gpg
 # -- not all are on keyservers
 #grab_keys "${RETIRED_DEVS[@]}"
 #gpg --export > "${OUTPUT_DIR}"/all-devs.gpg

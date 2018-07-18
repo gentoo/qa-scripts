@@ -13,21 +13,10 @@ if ! type -P dot &>/dev/null; then
 	echo "install graphviz"; exit 1
 fi
 
-export GNUPGHOME=$(mktemp -d --suffix=$(basename $0))
-cd $GNUPGHOME || exit 1
-
-wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
-	egrep -o '0x([A-Z0-9]{8}){1,2}' > keys.txt
-
-# Looks like all the outgoing connections to port 11371 are blocked from scrubfowl
-gpg -q --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
-	`cat keys.txt`
-
-gpg -q --no-default-keyring --list-sigs | \
+gpg -q --keyring "${1}/active-devs.gpg" --list-sigs | \
 	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
 	> keys.dot
 
 dot -Gcharset=latin1 -Tpng keys.dot > "${1}/wot-graph.png"
 
 mv wot-stats.html "${1}"
-rm -rf $GNUPGHOME

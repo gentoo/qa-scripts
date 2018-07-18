@@ -6,10 +6,10 @@ if [[ -z "$1" ]]; then
 	echo "Usage: $0 </path/to/output/>"
 	exit 1
 fi
-if [[ ! -e /usr/bin/sig2dot ]]; then
+if ! type -P sig2dot &>/dev/null; then
 	echo "install signing-party"; exit 1
 fi
-if [[ ! -e /usr/bin/neato ]]; then
+if ! type -P dot &>/dev/null; then
 	echo "install graphviz"; exit 1
 fi
 
@@ -20,14 +20,14 @@ wget -q -O -  http://www.gentoo.org/proj/en/devrel/roll-call/userinfo.xml | \
 	egrep -o '0x([A-Z0-9]{8}){1,2}' > keys.txt
 
 # Looks like all the outgoing connections to port 11371 are blocked from scrubfowl
-/usr/bin/gpg -q --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
+gpg -q --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
 	`cat keys.txt`
 
-/usr/bin/gpg -q --no-default-keyring --list-sigs | \
+gpg -q --no-default-keyring --list-sigs | \
 	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
 	> keys.dot
 
-/usr/bin/dot -Gcharset=latin1 -Tpng keys.dot > "${1}/wot-graph.png"
+dot -Gcharset=latin1 -Tpng keys.dot > "${1}/wot-graph.png"
 
 mv wot-stats.html "${1}"
 rm -rf $GNUPGHOME

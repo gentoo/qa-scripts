@@ -2,13 +2,16 @@
 
 OUTPUT_DIR=${1:-.}
 
+DEV_BASE='ou=devs,dc=gentoo,dc=org'
+SYSTEM_BASE='ou=system,dc=gentoo,dc=org'
+
 COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active))'
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
 
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
-	ldapsearch "${1}" -Z gpgfingerprint -LLL |
+	ldapsearch "${@}" -Z gpgfingerprint -LLL |
 		sed -n -e '/^gpgfingerprint: /{s/^.*://;s/ //g;p}' |
 		sort -u |
 		grep -v undefined
@@ -45,13 +48,15 @@ grab_keys() {
 
 set -e
 
-COMMITTING_DEVS=( $(grab_ldap_fingerprints "${COMMIT_RULE}") )
-NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints "${NONCOMMIT_RULE}") )
-#RETIRED_DEVS=( $(grab_ldap_fingerprints "${RETIRED_RULE}") )
+COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
+NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
+#RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
+SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
-grab_keys "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}"
+grab_keys "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" "${SYSTEM_KEYS[@]}"
 gpg --export "${COMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/committing-devs.gpg
 gpg --export "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/active-devs.gpg
+gpg --export "${SYSTEM_KEYS[@]}" > "${OUTPUT_DIR}"/release-keys.gpg
 # -- not all are on keyservers
 #grab_keys "${RETIRED_DEVS[@]}"
 #gpg --export > "${OUTPUT_DIR}"/all-devs.gpg

@@ -56,7 +56,7 @@ SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") 
 grab_keys "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" "${SYSTEM_KEYS[@]}"
 gpg --export "${COMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/committing-devs.gpg
 gpg --export "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/active-devs.gpg
-gpg --export "${SYSTEM_KEYS[@]}" > "${OUTPUT_DIR}"/release-keys.gpg
+gpg --export "${SYSTEM_KEYS[@]}" > "${OUTPUT_DIR}"/service-keys.gpg
 # -- not all are on keyservers
 #grab_keys "${RETIRED_DEVS[@]}"
 #gpg --export > "${OUTPUT_DIR}"/all-devs.gpg

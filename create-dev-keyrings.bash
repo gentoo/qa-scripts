@@ -24,7 +24,7 @@ grab_keys() {
 	local remaining=( "${@}" )
 
 	while :; do
-		timeout 5m gpg -q --recv-keys "${remaining[@]}" || :
+		timeout 20m gpg -q --recv-keys "${remaining[@]}" || :
 		missing=()
 		for key in "${remaining[@]}"; do
 			gpg --list-public "${key}" &>/dev/null || missing+=( "${key}" )

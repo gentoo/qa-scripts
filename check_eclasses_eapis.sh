@@ -66,5 +66,7 @@ for x in ${ECLASSES}; do
 done
 popd > /dev/null
 
+"${0}"/eclass-eapi-matrix.py "${DIR}"
+
 rm ${TMPEAPIS}
 rm ${TMPECLASS}

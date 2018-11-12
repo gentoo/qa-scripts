@@ -37,7 +37,7 @@ grab_keys() {
 			if [[ $(( retries++ )) -gt 3 ]]; then
 				echo "Unable to fetch the following keys:"
 				printf '%s\n' "${missing[@]}"
-				exit 1
+				exit 0 # if we exit non-zero, the entire export will fail
 			fi
 			sleep 5
 		fi

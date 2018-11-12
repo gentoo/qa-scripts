@@ -60,7 +60,7 @@ export_keys() {
 	# If there are no keys in the export set, then it ALSO does not write the destination file
 	# and prints 'gpg: WARNING: nothing exported' to stderr
 	if gpg --output "$TMP" --export "${@}" && test -s "${TMP}"; then
-		chmod a+r "${DST}"
+		chmod a+r "${TMP}"
 		mv "${TMP}" "${DST}"
 	else
 		echo "Unable to export keys to $DST"

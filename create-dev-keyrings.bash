@@ -9,6 +9,11 @@ COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
 
+GPG_TMPDIR=$(mktemp -d)
+clean_tmp() {
+	rm -rf "$GPG_TMPDIR"
+}
+
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
 	ldapsearch "${@}" -Z gpgfingerprint -LLL |
@@ -37,7 +42,7 @@ grab_keys() {
 			if [[ $(( retries++ )) -gt 3 ]]; then
 				echo "Unable to fetch the following keys:"
 				printf '%s\n' "${missing[@]}"
-				exit 0 # if we exit non-zero, the entire export will fail
+				break # if we hard-exit, the entire export will fail
 			fi
 			sleep 5
 		fi
@@ -46,17 +51,53 @@ grab_keys() {
 	done
 }
 
+export_keys() {
+	DST="$1"
+	TMP="${GPG_TMPDIR}"/$(basename "${DST}")
+	# Must not exist, otherwise GPG will give error
+	[[ -f "${TMP}" ]] && rm -f "${TMP}"
+	# 'gpg --export' returns zero if there was no error with the command itself
+	# If there are no keys in the export set, then it ALSO does not write the destination file
+	# and prints 'gpg: WARNING: nothing exported' to stderr
+	if gpg --output "$TMP" --export "${@}" && test -s "${TMP}"; then
+		chmod a+r "${DST}"
+		mv "${TMP}" "${DST}"
+	else
+		echo "Unable to export keys to $DST"
+		exit 1
+	fi
+}
+
 set -e
 
 COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
 NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
-#RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
+RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
-grab_keys "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" "${SYSTEM_KEYS[@]}"
-gpg --export "${COMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/committing-devs.gpg
-gpg --export "${COMMITTING_DEVS[@]}" "${NONCOMMITTING_DEVS[@]}" > "${OUTPUT_DIR}"/active-devs.gpg
-gpg --export "${SYSTEM_KEYS[@]}" > "${OUTPUT_DIR}"/service-keys.gpg
+grab_keys "${SYSTEM_KEYS[@]}"
+export_keys "${OUTPUT_DIR}"/service_keys.gpg \
+	"${SYSTEM_KEYS[@]}"
+
+grab_keys "${COMMITTING_DEVS[@]}"
+export_keys "${OUTPUT_DIR}"/committing-devs.gpg \
+	"${COMMITTING_DEVS[@]}"
+
+grab_keys "${NONCOMMITTING_DEVS[@]}"
+export_keys "${OUTPUT_DIR}"/active-devs.gpg \
+	"${COMMITTING_DEVS[@]}" \
+	"${NONCOMMITTING_DEVS[@]}"
+
 # -- not all are on keyservers
+# -- and are unlikely to turn up now
+# -- this needs to fetch from some archive instead
 #grab_keys "${RETIRED_DEVS[@]}"
-#gpg --export > "${OUTPUT_DIR}"/all-devs.gpg
+export_keys "${OUTPUT_DIR}"/retired-devs.gpg \
+	"${RETIRED_DEVS[@]}"
+
+# Everybody together now
+export_keys "${OUTPUT_DIR}"/all-devs.gpg \
+	"${SYSTEM_KEYS[@]}" \
+	"${COMMITTING_DEVS[@]}" \
+	"${NONCOMMITTING_DEVS[@]}" \
+	"${RETIRED_DEVS[@]}"

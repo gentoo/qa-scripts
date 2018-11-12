@@ -76,7 +76,7 @@ RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
 grab_keys "${SYSTEM_KEYS[@]}"
-export_keys "${OUTPUT_DIR}"/service_keys.gpg \
+export_keys "${OUTPUT_DIR}"/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"
 
 grab_keys "${COMMITTING_DEVS[@]}"

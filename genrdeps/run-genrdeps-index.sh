@@ -29,3 +29,12 @@ popd > /dev/null
 mv pindex pindex_old
 mv .pindex_new pindex
 rm -rf pindex_old
+
+mkdir .bindex_new
+pushd .bindex_new > /dev/null
+/var/www/qa-reports.gentoo.org/qa-scripts/genrdeps/genrdeps.py BDEPEND
+find | cut -c 3- > .bindex
+popd > /dev/null
+mv bindex bindex_old
+mv .bindex_new bindex
+rm -rf bindex_old

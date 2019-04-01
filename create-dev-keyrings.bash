@@ -28,8 +28,12 @@ grab_keys() {
 	local missing=()
 	local remaining=( "${@}" )
 
+	# this needs to move to HKPS as well, but that part is not yet deployed.
+	KS1=hkp://keys.gentoo.org/
+	KS2=hkps://hkps.pool.sks-keyservers.net/
 	while :; do
-		timeout 20m gpg -q --recv-keys "${remaining[@]}" || :
+		timeout 5m  gpg --keyserver $KS1 -q --recv-keys "${remaining[@]}" || :
+		timeout 20m gpg --keyserver $KS2 -q --recv-keys "${remaining[@]}" || :
 		missing=()
 		for key in "${remaining[@]}"; do
 			gpg --list-public "${key}" &>/dev/null || missing+=( "${key}" )

@@ -58,7 +58,8 @@ grab_keys() {
 
 # push_keys <fingerprint>...
 push_keys() {
-	local remaining=( "${@}" )
+	# Only send keys that we have
+	local remaining=( $(gpg --with-colon --list-public "${@}" | sed -n '/^pub/{n; /fpr/p }' |cut -d: -f10) )
 	timeout 5m  gpg --keyserver $KS_GENTOO -q --send-keys "${remaining[@]}" || :
 	#timeout 5m  gpg --keyserver $KS_SKS -q --send-keys "${remaining[@]}" || :
 }

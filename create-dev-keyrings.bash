@@ -9,6 +9,10 @@ COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
 
+# this needs to move to HKPS as well, but that part is not yet deployed.
+KS_GENTOO=hkp://keys.gentoo.org/
+KS_SKS=hkps://hkps.pool.sks-keyservers.net/
+
 GPG_TMPDIR=$(mktemp -d)
 clean_tmp() {
 	rm -rf "$GPG_TMPDIR"
@@ -28,12 +32,9 @@ grab_keys() {
 	local missing=()
 	local remaining=( "${@}" )
 
-	# this needs to move to HKPS as well, but that part is not yet deployed.
-	KS1=hkp://keys.gentoo.org/
-	KS2=hkps://hkps.pool.sks-keyservers.net/
 	while :; do
-		timeout 5m  gpg --keyserver $KS1 -q --recv-keys "${remaining[@]}" || :
-		timeout 20m gpg --keyserver $KS2 -q --recv-keys "${remaining[@]}" || :
+		timeout 5m  gpg --keyserver $KS_GENTOO -q --recv-keys "${remaining[@]}" || :
+		timeout 20m gpg --keyserver $KS_SKS -q --recv-keys "${remaining[@]}" || :
 		missing=()
 		for key in "${remaining[@]}"; do
 			gpg --list-public "${key}" &>/dev/null || missing+=( "${key}" )
@@ -53,6 +54,12 @@ grab_keys() {
 
 		remaining=( "${missing[@]}" )
 	done
+}
+
+# push_keys <fingerprint>...
+push_keys() {
+	timeout 5m  gpg --keyserver $KS_GENTOO -q --send-keys "${remaining[@]}" || :
+	#timeout 5m  gpg --keyserver $KS_SKS -q --send-keys "${remaining[@]}" || :
 }
 
 export_keys() {
@@ -105,3 +112,9 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
 	"${RETIRED_DEVS[@]}"
+
+# Populate keys.gentoo.org with the keys we have, since they might have come from SKS
+push_keys "${SYSTEM_KEYS[@]}"
+push_keys "${COMMITTING_DEVS[@]}"
+push_keys "${NONCOMMITTING_DEVS[@]}"
+push_keys "${RETIRED_DEVS[@]}"

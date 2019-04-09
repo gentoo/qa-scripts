@@ -58,6 +58,7 @@ grab_keys() {
 
 # push_keys <fingerprint>...
 push_keys() {
+	local remaining=( "${@}" )
 	timeout 5m  gpg --keyserver $KS_GENTOO -q --send-keys "${remaining[@]}" || :
 	#timeout 5m  gpg --keyserver $KS_SKS -q --send-keys "${remaining[@]}" || :
 }

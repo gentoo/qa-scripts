@@ -9,8 +9,7 @@ COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
 
-# this needs to move to HKPS as well, but that part is not yet deployed.
-KS_GENTOO=hkp://keys.gentoo.org/
+KS_GENTOO=hkps://keys.gentoo.org/
 KS_SKS=hkps://hkps.pool.sks-keyservers.net/
 
 GPG_TMPDIR=$(mktemp -d)

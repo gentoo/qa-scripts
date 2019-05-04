@@ -61,7 +61,7 @@ push_keys() {
 	local remaining=( $(gpg --with-colon --list-public "${@}" | sed -n '/^pub/{n; /fpr/p }' |cut -d: -f10) )
 	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}
 	for ks in "${KEYSERVERS[@]}" ; do
-		timeout ${KEYSERVER_TIMEOUT} g --keyserver "$ks" -q --send-keys "${remaining[@]}" || :
+		timeout ${KEYSERVER_TIMEOUT} gpg --keyserver "$ks" -q --send-keys "${remaining[@]}" || :
 	done
 }
 

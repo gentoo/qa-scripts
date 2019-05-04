@@ -9,12 +9,7 @@ RETIRED_RULE='(!(gentooStatus=active))'
 
 KS_GENTOO=hkps://keys.gentoo.org/
 KS_SKS=hkps://hkps.pool.sks-keyservers.net/
-
-GPG_TMPDIR=$(mktemp -d)
-clean_tmp() {
-	rm -rf "$GPG_TMPDIR"
-}
-trap clean_tmp EXIT
+KEYSERVERS=( ) # empty by default
 
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
@@ -30,9 +25,11 @@ grab_keys() {
 	local missing=()
 	local remaining=( "${@}" )
 
+	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}
 	while :; do
-		timeout 5m  gpg --keyserver $KS_GENTOO -q --recv-keys "${remaining[@]}" || :
-		timeout 20m gpg --keyserver $KS_SKS -q --recv-keys "${remaining[@]}" || :
+		for ks in "${KEYSERVERS[@]}" ; do
+			timeout ${KEYSERVER_TIMEOUT}  gpg --keyserver "$ks" -q --recv-keys "${remaining[@]}" || :
+		done
 		missing=()
 		for key in "${remaining[@]}"; do
 			gpg --list-public "${key}" &>/dev/null || missing+=( "${key}" )
@@ -58,12 +55,24 @@ grab_keys() {
 push_keys() {
 	# Only send keys that we have
 	local remaining=( $(gpg --with-colon --list-public "${@}" | sed -n '/^pub/{n; /fpr/p }' |cut -d: -f10) )
-	timeout 5m  gpg --keyserver $KS_GENTOO -q --send-keys "${remaining[@]}" || :
-	#timeout 5m  gpg --keyserver $KS_SKS -q --send-keys "${remaining[@]}" || :
+	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}
+	for ks in "${KEYSERVERS[@]}" ; do
+		timeout 5m  ${KEYSERVER_TIMEOUT} g --keyserver "$ks" -q --send-keys "${remaining[@]}" || :
+	done
+}
+
+
+clean_tmp() {
+	[ -n "$GPG_TMPDIR" ] && [ -d "$GPG_TMPDIR" ] && rm -rf "$GPG_TMPDIR"
+}
+setup_tmp() {
+	export GPG_TMPDIR=$(mktemp -d)
+	trap clean_tmp EXIT
 }
 
 export_keys() {
 	DST="$1"
+	setup_tmp
 	TMP="${GPG_TMPDIR}"/$(basename "${DST}")
 	# Must not exist, otherwise GPG will give error
 	[[ -f "${TMP}" ]] && rm -f "${TMP}"

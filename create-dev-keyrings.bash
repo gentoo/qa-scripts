@@ -11,6 +11,9 @@ source "${BASEDIR}"/keyrings.inc.bash
 set -e
 export_ldap_data_to_env
 
+export KEYSERVERS=( "${KS_SKS}" "${KS_GENTOO}" )
+export KEYSERVER_TIMEOUT=20m
+
 grab_keys "${SYSTEM_KEYS[@]}"
 export_keys "${OUTPUT_DIR}"/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"
@@ -39,6 +42,8 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
 # Populate keys.gentoo.org with the keys we have, since they might have come from SKS
+export KEYSERVERS=( "${KS_GENTOO}" )
+export KEYSERVER_TIMEOUT=20m
 push_keys "${SYSTEM_KEYS[@]}"
 push_keys "${COMMITTING_DEVS[@]}"
 push_keys "${NONCOMMITTING_DEVS[@]}"

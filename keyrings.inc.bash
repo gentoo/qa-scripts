@@ -75,6 +75,7 @@ setup_tmp() {
 
 export_keys() {
 	DST="$1"
+	shift
 	setup_tmp
 	TMP="${GPG_TMPDIR}"/$(basename "${DST}")
 	# Must not exist, otherwise GPG will give error

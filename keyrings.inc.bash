@@ -7,9 +7,13 @@ COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
 
-KS_GENTOO=hkps://keys.gentoo.org/
-KS_SKS=hkps://hkps.pool.sks-keyservers.net/
-KEYSERVERS=( ) # empty by default
+export KS_GENTOO=hkps://keys.gentoo.org/
+export KS_SKS=hkps://hkps.pool.sks-keyservers.net/
+export KEYSERVERS=( ) # empty by default
+export COMMITTING_DEVS=( )
+export NONCOMMITTING_DEVS=( )
+export RETIRED_DEVS=( )
+export SYSTEM_KEYS=( )
 
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
@@ -61,12 +65,12 @@ push_keys() {
 	done
 }
 
-
+export GPG_TMPDIR=''
 clean_tmp() {
 	[ -n "$GPG_TMPDIR" ] && [ -d "$GPG_TMPDIR" ] && rm -rf "$GPG_TMPDIR"
 }
 setup_tmp() {
-	export GPG_TMPDIR=$(mktemp -d)
+	GPG_TMPDIR=$(mktemp -d)
 	trap clean_tmp EXIT
 }
 
@@ -90,8 +94,8 @@ export_keys() {
 
 # populate common variables
 export_ldap_data_to_env() {
-	export COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
-	export NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
-	export RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
-	export SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
+	export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
+	export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
+	export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
+	export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 }

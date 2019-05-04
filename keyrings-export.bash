@@ -7,6 +7,7 @@
 
 OUTPUT_DIR=${1:-.}
 BASEDIR="$(dirname "$0")"
+# shellcheck source=./keyrings.inc.bash
 source "${BASEDIR}"/keyrings.inc.bash
 
 set -e

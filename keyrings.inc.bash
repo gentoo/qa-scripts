@@ -83,12 +83,26 @@ export_keys() {
 	# 'gpg --export' returns zero if there was no error with the command itself
 	# If there are no keys in the export set, then it ALSO does not write the destination file
 	# and prints 'gpg: WARNING: nothing exported' to stderr
-	if gpg --output "$TMP" --export "${@}" && test -s "${TMP}"; then
-		chmod a+r "${TMP}"
-		mv "${TMP}" "${DST}"
-	else
-		echo "Unable to export keys to $DST"
+	if ! gpg --output "$TMP" --export "${@}"; then
+		echo "Unable to export keys to $DST: GPG returned non-zero"
 		exit 1
+	fi
+	if ! test -s "${TMP}"; then
+		echo "Unable to export keys to $DST: GPG returned zero but generated empty file"
+		exit 1
+	fi
+	# We have a non-empty output now!
+	# Capture it in a textual format that can be compared for changes, but make sure it exports correctly
+	if ! gpg --list-packets "${TMP}" >"${TMP}.packets.txt"; then
+		echo "Unable to export keys to $DST: GPG failed to list packets"
+		exit 1
+	fi
+	# Check if the textual format has changed at all, and emit the new version
+	# if there are ANY changes at all.
+	if ! cmp -s "${DST}.packets.txt" "${TMP}.packets.txt"; then
+		chmod a+r "${TMP}"
+		mv -f "${TMP}" "${DST}"
+		mv -f "${TMP}.packets.txt" "${DST}.packets.txt"
 	fi
 }
 

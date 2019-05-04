@@ -24,4 +24,4 @@ grab_keys "${NONCOMMITTING_DEVS[@]}"
 # -- not all are on keyservers
 # -- and are unlikely to turn up now
 # -- this needs to fetch from some archive instead
-grab_keys "${RETIRED_DEVS[@]}"
+#grab_keys "${RETIRED_DEVS[@]}"

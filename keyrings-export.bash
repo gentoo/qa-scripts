@@ -12,6 +12,10 @@ source "${BASEDIR}"/keyrings.inc.bash
 
 set -e
 export_ldap_data_to_env
+export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
+export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
+export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
+export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
 export_keys "${OUTPUT_DIR}"/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"

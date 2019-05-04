@@ -93,6 +93,7 @@ export_keys() {
 }
 
 # populate common variables
+# TODO: for unclear reason this does not populate correctly inside a function
 export_ldap_data_to_env() {
 	export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
 	export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )

@@ -69,8 +69,11 @@ clean_tmp() {
 	[ -n "$GPG_TMPDIR" ] && [ -d "$GPG_TMPDIR" ] && rm -rf "$GPG_TMPDIR"
 }
 setup_tmp() {
-	GPG_TMPDIR=$(mktemp -d)
-	trap clean_tmp EXIT
+	if [ -z "${GPG_TMPDIR}" ]; then
+		GPG_TMPDIR=$(mktemp -d)
+		export GPG_TMPDIR
+		trap clean_tmp EXIT
+	fi
 }
 
 export_keys() {
@@ -104,6 +107,8 @@ export_keys() {
 		mv -f "${TMP}" "${DST}"
 		mv -f "${TMP}.packets.txt" "${DST}.packets.txt"
 	fi
+	# Cleanup anyway
+	rm -f "${TMP}.packets.txt" "${TMP}"
 }
 
 # populate common variables

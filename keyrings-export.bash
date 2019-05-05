@@ -36,3 +36,5 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
 	"${RETIRED_DEVS[@]}"
+
+clean_tmp

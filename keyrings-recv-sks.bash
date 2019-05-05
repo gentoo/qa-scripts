@@ -25,3 +25,5 @@ grab_keys "${NONCOMMITTING_DEVS[@]}"
 # -- and are unlikely to turn up now
 # -- this needs to fetch from some archive instead
 #grab_keys "${RETIRED_DEVS[@]}"
+
+clean_tmp

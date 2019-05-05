@@ -20,3 +20,5 @@ push_keys "${SYSTEM_KEYS[@]}"
 push_keys "${COMMITTING_DEVS[@]}"
 push_keys "${NONCOMMITTING_DEVS[@]}"
 push_keys "${RETIRED_DEVS[@]}"
+
+clean_tmp

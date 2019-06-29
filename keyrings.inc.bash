@@ -8,7 +8,7 @@ NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=
 RETIRED_RULE='(!(gentooStatus=active))'
 
 export KS_GENTOO=hkps://keys.gentoo.org/
-export KS_SKS=hkps://hkps.pool.sks-keyservers.net/
+#export KS_SKS=hkps://hkps.pool.sks-keyservers.net/ # Disabled pending security announcement
 export KEYSERVERS=( ) # empty by default
 export COMMITTING_DEVS=( )
 export NONCOMMITTING_DEVS=( )

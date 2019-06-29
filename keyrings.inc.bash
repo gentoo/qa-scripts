@@ -29,6 +29,8 @@ grab_keys() {
 	local remaining=( "${@}" )
 
 	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}
+	# quickly handle empty keyservers set
+	[ "${#KEYSERVERS[@]}" -eq 0 ] && return
 	while :; do
 		for ks in "${KEYSERVERS[@]}" ; do
 			timeout ${KEYSERVER_TIMEOUT} gpg --keyserver "$ks" -q --recv-keys "${remaining[@]}" || :
@@ -56,6 +58,8 @@ grab_keys() {
 
 # push_keys <fingerprint>...
 push_keys() {
+	# quickly handle empty keyservers set
+	[ "${#KEYSERVERS[@]}" -eq 0 ] && return
 	# Only send keys that we have
 	local remaining=( $(gpg --with-colon --list-public "${@}" | sed -n '/^pub/{n; /fpr/p }' |cut -d: -f10) )
 	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}

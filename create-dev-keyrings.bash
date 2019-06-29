@@ -11,7 +11,7 @@ source "${BASEDIR}"/keyrings.inc.bash
 set -e
 export_ldap_data_to_env
 
-export KEYSERVERS=( "${KS_SKS}" "${KS_GENTOO}" )
+export KEYSERVERS=( "${KS_SKS}" "${KS_OPENPGP}" "${KS_GENTOO}" )
 export KEYSERVER_TIMEOUT=20m
 
 grab_keys "${SYSTEM_KEYS[@]}"

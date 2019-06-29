@@ -15,7 +15,7 @@ export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONC
 export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
-export KEYSERVERS=( "${KS_SKS}" )
+export KEYSERVERS=( "${KS_SKS}" "${KS_OPENPGP}" )
 export KEYSERVER_TIMEOUT=20m
 
 grab_keys "${SYSTEM_KEYS[@]}"

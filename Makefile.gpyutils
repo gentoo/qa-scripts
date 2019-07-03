@@ -10,7 +10,7 @@ upgr_base = $(outdir)/35-to-36.txt $(outdir)/36-to-37.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
-upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/pypy3-to-35.txt
+upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/pypy3-to-36.txt
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
@@ -59,9 +59,9 @@ $(outdir)/36-to-37-stablereq.txt: $(timestamp)
 	gpy-upgrade-impl -s python3_6 python3_7 > $@.new
 	mv $@.new $@
 
-$(outdir)/pypy3-to-35.txt: $(timestamp)
+$(outdir)/pypy3-to-36.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl pypy3 python3_5 > $@.new
+	gpy-upgrade-impl pypy3 python3_6 > $@.new
 	mv $@.new $@
 
 $(outdir)/missing-meta.txt: $(timestamp)

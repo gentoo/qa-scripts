@@ -84,7 +84,7 @@ def format_table(data):
         for eapi in all_eapis:
             if supp_eapis is not None and eapi not in supp_eapis:
                 if eapis.get(eapi, 0) > 0:
-                    line['eapi_'+eapi] = eapis[eapi] + '?!'
+                    line['eapi_'+eapi] = '%d?!' % eapis[eapi]
                 else:
                     line['eapi_'+eapi] = 'xx'
             else:

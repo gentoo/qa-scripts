@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014-2018 Gentoo Foundation
+# Copyright 2014-2019 Ulrich Müller
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -32,6 +32,7 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
         text/*) ;;                            # text file
         application/*"; charset=us-ascii") ;;
         application/*"; charset=utf-8") ;;
+        "image/svg; charset=us-ascii") ;;     # SVG image
         "image/svg+xml; charset=us-ascii") ;; # SVG image
         "image/x-xpmi; charset=us-ascii") ;;  # XPM image
         "message/rfc822; charset=us-ascii") ;;

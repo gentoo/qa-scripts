@@ -83,8 +83,10 @@ def format_table(data):
         supp_eapis, eapis = ecl_data
         for eapi in all_eapis:
             if supp_eapis is not None and eapi not in supp_eapis:
-                assert eapis.get(eapi, 0) == 0
-                line['eapi_'+eapi] = 'xx'
+                if eapis.get(eapi, 0) > 0:
+                    line['eapi_'+eapi] = eapis[eapi] + '?!'
+                else:
+                    line['eapi_'+eapi] = 'xx'
             else:
                 line['eapi_'+eapi] = eapis.get(eapi, 0)
         ret += format_str.format(**line)

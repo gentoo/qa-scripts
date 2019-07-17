@@ -28,7 +28,12 @@ main() {
 	fi
 
 	# generate HTML from XML
+	local verbose=
 	local lfile=${file}
+	if [[ ${file} == *.verbose.html ]]; then
+		file=${file%.verbose.html}.html
+		verbose=--verbose
+	fi
 	[[ ${file} == *.html ]] && lfile=${file%.html}.xml
 
 	local tree=( $(git ls-tree "${commit}" "${lfile}" 2>/dev/null) )
@@ -58,7 +63,7 @@ main() {
 		local ts=$(TZ=UTC git log --format='%cd' --date=iso-local -1 | cut -d' ' -f1-2)
 
 		git cat-file -p "${tree[2]}" \
-			| PYTHONIOENCODING=utf8 python "${topdir}"/pkgcheck2html/pkgcheck2html.py -t "${ts}" -
+			| PYTHONIOENCODING=utf8 python "${topdir}"/pkgcheck2html/pkgcheck2html.py ${verbose} -t "${ts}" -
 	else
 		git cat-file -p "${tree[2]}"
 	fi

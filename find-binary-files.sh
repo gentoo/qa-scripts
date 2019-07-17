@@ -8,10 +8,8 @@ shopt -s extglob
 portdir=$(portageq get_repo_path / gentoo)
 cd "${portdir}" || exit 1
 
-find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
-    -o -path ./packages \) -prune \
-    -o ! -type d ! \( -type f -name 'Manifest*.gz' \) -exec file -ih '{}' + \
-| while read line; do
+count=0
+while read line; do
     path=${line%:*}
     type=${line##*:*( )}
     case ${type} in
@@ -39,7 +37,11 @@ find . \( -path ./distfiles -o -path ./local -o -path ./metadata \
         *)
             size=$(stat -c "%s" "${path}")
             echo "${path#./}: ${type} (size=${size})"
+            (( count++ ))
             ;;
     esac
-done \
-| sort 
+done < <(find \( -path ./distfiles -o -path ./local -o -path ./metadata \
+        -o -path ./packages \) -prune -o ! -type d ! -name 'Manifest*.gz' \
+        -exec file -ih '{}' + | sort)
+
+[[ ${count} -gt 0 ]] || echo "No binary files found. :-)"

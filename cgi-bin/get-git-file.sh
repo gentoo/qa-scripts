@@ -12,6 +12,21 @@ main() {
 	local commit=${qs%%;*}
 	qs=${qs#*;}
 	local file=${qs%%;*}
+	[[ ${qs} == *\;* ]] && qs=${qs#*;} || qs=
+
+	local filter_maint= projects=
+	while [[ -n ${qs} ]]; do
+		local q=${qs%%;*}
+		case ${q} in
+			maintainer=*)
+				filter_maint="--maintainer ${q#maintainer=}"
+				;;
+			include-projects)
+				projects=--projects
+				;;
+		esac
+		[[ ${qs} == *\;* ]] && qs=${qs#*;} || qs=
+	done
 
 	if [[ ${repo} == */* ]]; then
 		echo "DANGER! SOMEONE TRIES TO ABUSE ME!" >&2
@@ -63,7 +78,9 @@ main() {
 		local ts=$(TZ=UTC git log --format='%cd' --date=iso-local -1 | cut -d' ' -f1-2)
 
 		git cat-file -p "${tree[2]}" \
-			| PYTHONIOENCODING=utf8 python "${topdir}"/pkgcheck2html/pkgcheck2html.py ${verbose} -t "${ts}" -
+			| PYTHONIOENCODING=utf8 python \
+			"${topdir}"/pkgcheck2html/pkgcheck2html.py ${verbose} \
+			${filter_maint} ${projects} -t "${ts}" -
 	else
 		git cat-file -p "${tree[2]}"
 	fi

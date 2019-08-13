@@ -34,7 +34,9 @@ grab_keys() {
 	[ "${#KEYSERVERS[@]}" -eq 0 ] && return
 	while :; do
 		for ks in "${KEYSERVERS[@]}" ; do
-			timeout ${KEYSERVER_TIMEOUT} gpg --keyserver "$ks" -q --recv-keys "${remaining[@]}" || :
+			timeout ${KEYSERVER_TIMEOUT} gpg \
+				--keyserver-options no-import-clean,no-self-sigs-only \
+				--keyserver "$ks" -q --recv-keys "${remaining[@]}" || :
 		done
 		missing=()
 		for key in "${remaining[@]}"; do

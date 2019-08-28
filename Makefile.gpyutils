@@ -15,7 +15,7 @@ upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
 
-all = $(upgr_all) $(outdir)/cands.txt $(outdir)/missing-meta.txt
+all = $(upgr_all) $(outdir)/cands.txt
 
 all: $(all)
 
@@ -62,11 +62,6 @@ $(outdir)/36-to-37-stablereq.txt: $(timestamp)
 $(outdir)/pypy3-to-36.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl pypy3 python3_6 > $@.new
-	mv $@.new $@
-
-$(outdir)/missing-meta.txt: $(timestamp)
-	mkdir -p $(outdir)
-	gpy-find-missing-meta > $@.new
 	mv $@.new $@
 
 %.dot: %.txt

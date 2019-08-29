@@ -15,7 +15,7 @@ upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
 
-all = $(upgr_all) $(outdir)/cands.txt
+all = $(upgr_all)
 
 all: $(all)
 

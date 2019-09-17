@@ -3,22 +3,29 @@
 import argparse
 import glob
 import os
+import os.path
 import subprocess
 import sys
 
 
 def main(argv):
     argp = argparse.ArgumentParser(prog=argv[0])
+    argp.add_argument('--git-dir', default='.',
+                      help='Path to repo git clone (used for git log)')
+    argp.add_argument('--work-dir', default='.',
+                      help='Path to repo working directory (used to grab '
+                           'package list when no packages specified)')
     argp.add_argument('package', nargs='*',
                       help='List of packages to find (defaults to all)')
     args = argp.parse_args(argv[1:])
 
     packages = set(args.package)
     if not packages:
-        with open('profiles/categories') as f:
+        with open(os.path.join(args.work_dir, 'profiles/categories')) as f:
             for cat in f:
-                packages.update(x.rstrip('/')
-                        for x in glob.glob('{}/*/'.format(cat.strip())))
+                packages.update('/'.join(x.rsplit('/', 3)[-3:-1])
+                                for x in glob.glob(os.path.join(
+                                    args.work_dir, cat.strip(), '*/')))
 
     excludes = frozenset([
         # specify EAPI=0 explicitly
@@ -33,6 +40,7 @@ def main(argv):
     s = subprocess.Popen(['git', 'log', '--date=iso-local', '--name-only',
                           '--diff-filter=AM', '--no-renames',
                           '--pretty=COMMIT|%H|%cd', '**.ebuild'],
+                         cwd=args.git_dir,
                          stdout=subprocess.PIPE)
     for l in s.stdout:
         l = l.decode('utf8').strip()

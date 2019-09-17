@@ -26,6 +26,11 @@ def main(argv):
                 packages.update('/'.join(x.rsplit('/', 3)[-3:-1])
                                 for x in glob.glob(os.path.join(
                                     args.work_dir, cat.strip(), '*/')))
+    if not packages:
+        print('No packages specified or found', file=sys.stderr)
+        return 1
+    pkg_max_len = max(len(x) for x in packages)
+    pkg_format = '{{:.<{}}} {{}} {{}}'.format(pkg_max_len+1)
 
     excludes = frozenset([
         # specify EAPI=0 explicitly
@@ -52,7 +57,7 @@ def main(argv):
                 commit, date = commit_data.split('|')
                 if commit in excludes:
                     continue
-                print('{:.<65} {} {}'.format(pkg + ' ', date, commit))
+                print(pkg_format.format(pkg + ' ', date, commit))
                 packages.remove(pkg)
                 if not packages:
                     break

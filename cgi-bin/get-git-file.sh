@@ -80,6 +80,7 @@ main() {
 		git cat-file -p "${tree[2]}" \
 			| PYTHONIOENCODING=utf8 python \
 			"${topdir}"/pkgcheck2html/pkgcheck2html.py ${verbose} \
+			-x "${topdir}"/pkgcheck2html/excludes.json \
 			${filter_maint} ${projects} -t "${ts}" -
 	else
 		git cat-file -p "${tree[2]}"

@@ -22,4 +22,4 @@ find /usr/portage/metadata/md5-cache -type f ! -name '*.gz' \
     }'
 
 echo
-echo "Date generated: $(date)"
+echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')"

@@ -19,7 +19,7 @@ ECLASSES=$(echo *.eclass)
 popd > /dev/null
 
 #pquery --attr eapi --attr inherited --raw --all --repo portdir > "${TMPEAPIS}"
-find "${REPO_PATH}/metadata/md5-cache" -type f -exec awk -F= '
+find "${REPO_PATH}/metadata/md5-cache" -type f -name '*-[0-9]' -exec awk -F= '
 	BEGINFILE {
 		n = split(FILENAME, f, "/")
 		file = f[n-1] "/" f[n]

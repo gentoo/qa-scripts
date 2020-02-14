@@ -17,6 +17,6 @@ gpg -q --keyid-format=long --keyring "${1}/active-devs.gpg" --list-sigs | \
 	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
 	> keys.dot
 
-dot -Gcharset=utf8 -Tsvg keys.dot > "${1}/wot-graph.svg"
+dot -Gcharset=UTF-8 -Tsvg keys.dot > "${1}/wot-graph.svg"
 
 mv wot-stats.html "${1}"

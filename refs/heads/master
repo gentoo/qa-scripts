@@ -1,17 +1,17 @@
 certificate version 0.1
-pusher Mikle Kolyada <zlogene@gentoo.org> 1581671218 +0300
-pushee git.gentoo.org:proj/qa-scripts
-nonce 1581671218-0827f9b6d74be5153741db56c461393a17f9d437
+pusher Ulrich Müller <ulm@gentoo.org> 1581671866 +0100
+pushee git+ssh://git.gentoo.org/proj/qa-scripts.git
+nonce 1581671866-62f1e23545d7f9adb3945ad93c1ba323d02f4db7
 
-baa5838bf6667c9ddbdc3eb27219d7bfa163d8a0 db7d5fb95c0435ed431923dbcd7bafe778c574f3 refs/heads/master
+db7d5fb95c0435ed431923dbcd7bafe778c574f3 da3e09b2bcb85bbfec0dc6c37235c7139c41c74a refs/heads/master
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAABCAAxFiEEWmyBGnI+Eihw6dN8HICQJIqVl8cFAl5GYzITHHpsb2dlbmVA
-Z2VudG9vLm9yZwAKCRAcgJAkipWXx4C+B/4hEAt0w9OfgoTHiyUDMof3br1DRIXJ
-TlUpH4KfucLC0Nl+g1w6cD9LaFFevgmfSJdFClszX/DebXJ4XnhkwAviVZaOyrR7
-pxDDnwmtt8Jp77Ko2BLI6Zpr8NyMJinIU6hhsjf7uoLJLtydMcPB0MI7KaOQtoH6
-xmSqs2rTt8djxnnmWIr2fj8me8bKcQ/H9bSzGnj8mzRmUD3xaktSKDqJp9QprXpV
-fud5f9/H6ggwwGag8RdjjIXlDoeJj/ELWRewz/6WnrMP0Hub8KCSA/g+rcavye4P
-+dlBVDwo1stBj5nqctFRWpXGcjEnRL57OTBDRpG2K8AVGaagBfgDzdFn
-=mAe3
+iQFDBAABCAAtFiEEtDnZ1O9xIP68rzDbUYgzUIhBXi4FAl5GZboPHHVsbUBnZW50
+b28ub3JnAAoJEFGIM1CIQV4ubHEH/ioTJK2r4kv81BwThCVbRHk5oo2BSS9ZwQ/H
+liZH7kDh/IdqBRYdzy49KG8qNATxrCojc/qz2e+cSoIYHsLkysnAzv7sYbGY76cl
+9npa2CW0oyVsNpcNBMv2MhdEyEz/LVsvFHgXjv39MtjJYx8TdLH4SPyk39tOGR+v
+/4usWk1mJgwpvmoFnNh82oJPGTgL0acIIV1Vu5FG9UH0DIQLXct41JMn7rgVqPsP
+wm0WVoc5wyhwbRfuBSDby56pehhUb/ViVffhAI2MxYhx6SWbAQVV+4pBoUlAGmh8
+17xOmzDOHFvF3S0GrzEwfnUzWMTNI/MXeC2ubHcTd/NxwZUHUYM=
+=lbFR
 -----END PGP SIGNATURE-----

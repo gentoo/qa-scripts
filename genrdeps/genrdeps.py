@@ -10,7 +10,7 @@ def processDeps(deps,use=""):
 	returnMe=[]
 	for (index,x) in enumerate(deps):
 		if type(x)==types.ListType:
-			continue
+			returnMe.extend(processDeps(x,use))
 		elif x=="||":
 			returnMe.extend(processDeps(deps[index+1],use))
 		elif x[-1]=="?":

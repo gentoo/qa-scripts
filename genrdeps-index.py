@@ -28,7 +28,7 @@ GROUPS = (
 )
 
 
-def process_deps(deps, useflags=()):
+def process_deps(deps, useflags=frozenset()):
     for d in deps:
         if isinstance(d, atom):
             yield DepTuple(d.key, d.blocks, useflags)
@@ -43,7 +43,7 @@ def process_deps(deps, useflags=()):
             r = next(iter(d.restriction.vals))
             if d.restriction.negate:
                 r = '!' + r
-            for sd in process_deps(d, useflags + (r,)):
+            for sd in process_deps(d, useflags | frozenset((r,))):
                 yield sd
         else:
             raise AssertionError("Unknown dep type: " + d.__class__)
@@ -85,7 +85,7 @@ def main():
                     if blocks:
                         dep = '[B]' + dep
                     if flags:
-                        dep += ':' + '+'.join(flags)
+                        dep += ':' + '+'.join(sorted(flags))
                     f.write(dep + '\n')
 
     for g, gi in GROUPS:

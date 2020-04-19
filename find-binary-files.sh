@@ -34,6 +34,7 @@ while read line; do
         "image/svg+xml; charset=us-ascii") ;; # SVG image
         "image/x-xpmi; charset=us-ascii") ;;  # XPM image
         "message/rfc822; charset=us-ascii") ;;
+        "message/rfc822; charset=utf-8") ;;
         *)
             size=$(stat -c "%s" "${path}")
             echo "${path#./}: ${type} (size=${size})"

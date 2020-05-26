@@ -18,7 +18,7 @@ export SYSTEM_KEYS=( )
 
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
-	ldapsearch "${@}" -Z gpgfingerprint -LLL |
+	ldapsearch "${@}" -x -Z gpgfingerprint -LLL |
 		sed -n -e '/: undefined/d' -e '/^gpgfingerprint: /{s/^.*://;s/ //g;p}' |
 		sort -u
 }

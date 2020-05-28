@@ -9,6 +9,7 @@ import errno
 import os
 import os.path
 import shutil
+import subprocess
 import sys
 
 import pkgcore.config
@@ -100,6 +101,13 @@ def main():
             pass
         os.rename(newdir, outdir)
         shutil.rmtree(olddir, onerror=rmtree_ignore_enoent)
+
+    subprocess.check_call(
+        ['tar', '-cf', 'rdeps.tar'] + [gi for g, gi in GROUPS],
+        cwd=args.outputdir)
+    subprocess.check_call(
+        ['xz', '-9', 'rdeps.tar'],
+        cwd=args.outputdir)
 
     return 0
 

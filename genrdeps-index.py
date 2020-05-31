@@ -11,6 +11,7 @@ import os.path
 import shutil
 import subprocess
 import sys
+import tempfile
 
 import pkgcore.config
 from pkgcore.ebuild.atom import atom
@@ -102,12 +103,24 @@ def main():
         os.rename(newdir, outdir)
         shutil.rmtree(olddir, onerror=rmtree_ignore_enoent)
 
-    subprocess.check_call(
-        ['tar', '-cf', 'rdeps.tar'] + [gi for g, gi in GROUPS],
-        cwd=args.outputdir)
-    subprocess.check_call(
-        ['xz', '-9', 'rdeps.tar'],
-        cwd=args.outputdir)
+    with tempfile.NamedTemporaryFile(prefix='.tmp.rdeps-', suffix='.tar', dir=args.outputdir, delete=False) as tmpf:
+        try:
+            subprocess.check_call(
+                ['tar', '-cf', tmpf.name] + [gi for g, gi in GROUPS],
+                cwd=args.outputdir)
+            subprocess.check_call(
+                ['xz', '-9', tmpf.name],
+                cwd=args.outputdir)
+            os.rename(tmpf.name + '.xz', os.path.join(args.outputdir, 'rdeps.tar.xz'))
+        except Exception as e:
+            raise e
+        finally:
+            # Cleanup:
+            for f in [tmpf.name, (tmpf.name + '.xz')]:
+                try:
+                    os.unlink(f)
+                except FileNotFoundError as e:
+                    pass
 
     return 0
 

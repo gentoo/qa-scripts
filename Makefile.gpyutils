@@ -10,7 +10,7 @@ upgr_base = $(outdir)/36-to-37.txt $(outdir)/37-to-38.txt $(outdir)/38-to-39.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
-upgr_txt = $(upgr_base) $(upgr_streq)
+upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/py2.txt $(outdir)/py23.txt
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
@@ -67,6 +67,16 @@ $(outdir)/38-to-39.txt: $(timestamp)
 $(outdir)/38-to-39-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -s python3_8 python3_9 > $@.new
+	mv $@.new $@
+
+$(outdir)/py2.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-py2 > $@.new
+	mv $@.new $@
+
+$(outdir)/py23.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-py2 -3 > $@.new
 	mv $@.new $@
 
 %.dot: %.txt

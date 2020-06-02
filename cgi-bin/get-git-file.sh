@@ -24,6 +24,9 @@ main() {
 			include-projects)
 				projects=--projects
 				;;
+			pkg=*)
+				filter_pkg="--pkg ${pkg}"
+				;;
 		esac
 		[[ ${qs} == *\;* ]] && qs=${qs#*;} || qs=
 	done
@@ -64,6 +67,9 @@ main() {
 		fi
 	fi
 
+	local revarg=
+	[[ ${commit} != HEAD ]] && revarg="--revision ${commit}"
+
 	local ct
 	case "${file}" in
 		*.css) ct=text/css;;
@@ -81,7 +87,7 @@ main() {
 			| PYTHONIOENCODING=utf8 python \
 			"${topdir}"/pkgcheck2html/pkgcheck2html.py ${verbose} \
 			-x "${topdir}"/pkgcheck2html/excludes.json \
-			${filter_maint} ${projects} -t "${ts}" -
+			${filter_maint} ${projects} ${filter_pkg} -t "${ts}" -
 	else
 		git cat-file -p "${tree[2]}"
 	fi

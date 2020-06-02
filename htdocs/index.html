@@ -96,17 +96,20 @@
                 <a href="/output/repos/" class="list-group-item list-group-item-action">Repository status reports</a>
               </div>
 
-              <h3>Reverse dependencies</h3>
-              <div class="list-group">
-                <a href="/output/genrdeps/rindex/" class="list-group-item list-group-item-action">Reverse runtime dependencies (RDEPEND)</a>
-                <a href="/output/genrdeps/dindex/" class="list-group-item list-group-item-action">Reverse buildtime dependencies (DEPEND)</a>
-                <a href="/output/genrdeps/pindex/" class="list-group-item list-group-item-action">Reverse post dependencies (PDEPEND)</a>
-                <a href="/output/genrdeps/bindex/" class="list-group-item list-group-item-action">Reverse buildtime dependencies (BDEPEND)</a>
+              <h3>Python reports</h3>
+              <div class="list-group mb-3">
+                <a href="/output/gpyutils/36-to-37.txt" class="list-group-item list-group-item-action">Py3.6 → 3.7 testing</a>
+                <a href="/output/gpyutils/36-to-37-stablereq.txt" class="list-group-item list-group-item-action">Py3.6 → 3.7 stabilizations</a>
+                <a href="/output/gpyutils/37-to-38.txt" class="list-group-item list-group-item-action">Py3.7 → 3.8 testing</a>
+                <a href="/output/gpyutils/37-to-38-stablereq.txt" class="list-group-item list-group-item-action">Py3.7 → 3.8 stabilization</a>
+                <a href="/output/gpyutils/38-to-39.txt" class="list-group-item list-group-item-action">Py3.8 → 3.9 testing</a>
+                <a href="/output/gpyutils/py2.txt" class="list-group-item list-group-item-action">Py2-only packages</a>
+                <a href="/output/gpyutils/py23.txt" class="list-group-item list-group-item-action">Py2+3 packages</a>
               </div>
             </div>
             <div class="col-lg-4">
               <h3>Tree-wide Scanning</h3>
-              <div class="list-group">
+              <div class="list-group mb-3">
                 <a href="/output/eapi_usage.txt" class="list-group-item list-group-item-action">EAPI Usage</a>
                 <a href="/output/eapi-per-eclass" class="list-group-item list-group-item-action">EAPI Usage per eclass</a>
                 <a href="/output/eapi-per-eclass/matrix.txt" class="list-group-item list-group-item-action">Eclass-EAPI usage matrix</a>
@@ -116,16 +119,19 @@
                 <a href="/output/eclass-usage/" class="list-group-item list-group-item-action">Listing of packages that inherit an eclass</a>
                 <a href="/output/gentoo-ci/output.html" class="list-group-item list-group-item-action">Gentoo CI – QA check results</a>
                 <a href="/output/gentoo-ci/output.verbose.html" class="list-group-item list-group-item-action">Gentoo CI – QA check results (verbose)</a>
-                <a href="/output/gpyutils/36-to-37.txt" class="list-group-item list-group-item-action">Py3.6 → 3.7 testing</a>
-                <a href="/output/gpyutils/36-to-37-stablereq.txt" class="list-group-item list-group-item-action">Py3.6 → 3.7 stabilizations</a>
-                <a href="/output/gpyutils/37-to-38.txt" class="list-group-item list-group-item-action">Py3.7 → 3.8 testing</a>
-                <a href="/output/gpyutils/37-to-38-stablereq.txt" class="list-group-item list-group-item-action">Py3.7 → 3.8 stabilization</a>
-                <a href="/output/gpyutils/38-to-39.txt" class="list-group-item list-group-item-action">Py3.8 → 3.9 testing</a>
+              </div>
+
+              <h3>Reverse dependencies</h3>
+              <div class="list-group mb-3">
+                <a href="/output/genrdeps/rindex/" class="list-group-item list-group-item-action">Reverse RDEPEND</a>
+                <a href="/output/genrdeps/dindex/" class="list-group-item list-group-item-action">Reverse DEPEND</a>
+                <a href="/output/genrdeps/pindex/" class="list-group-item list-group-item-action">Reverse PDEPEND</a>
+                <a href="/output/genrdeps/bindex/" class="list-group-item list-group-item-action">Reverse BDEPEND</a>
               </div>
             </div>
             <div class="col-lg-4">
               <h3>Bugs last touched by year</h3>
-              <div class="list-group">
+              <div class="list-group mb-3">
                 <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2008-01-01&v2=2007-01-01" class="list-group-item list-group-item-action">2007</a>
                 <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2009-01-01&v2=2008-01-01" class="list-group-item list-group-item-action">2008</a>
                 <a href="https://bugs.gentoo.org/buglist.cgi?f1=delta_ts&list_id=1554870&o1=lessthaneq&resolution=---&o2=greaterthaneq&query_format=advanced&f2=delta_ts&v1=2010-01-01&v2=2009-01-01" class="list-group-item list-group-item-action">2009</a>

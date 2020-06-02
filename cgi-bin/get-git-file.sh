@@ -25,7 +25,7 @@ main() {
 				projects=--projects
 				;;
 			pkg=*)
-				filter_pkg="--pkg ${pkg}"
+				filter_pkg="--pkg ${q#pkg=}"
 				;;
 		esac
 		[[ ${qs} == *\;* ]] && qs=${qs#*;} || qs=

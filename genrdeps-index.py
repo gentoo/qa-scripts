@@ -112,6 +112,7 @@ def main():
                 ['xz', '-9', tmpf.name],
                 cwd=args.outputdir)
             os.rename(tmpf.name + '.xz', os.path.join(args.outputdir, 'rdeps.tar.xz'))
+            os.chmod(os.path.join(args.outputdir, 'rdeps.tar.xz'), 0o644)
         except Exception as e:
             raise e
         finally:

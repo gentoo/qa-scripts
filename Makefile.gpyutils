@@ -41,32 +41,32 @@ $(outdir)/depcheck.txt: $(timestamp)
 
 $(outdir)/36-to-37.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl python3_6 python3_7 > $@.new
+	gpy-upgrade-impl -m python3_6 python3_7 > $@.new
 	mv $@.new $@
 
 $(outdir)/36-to-37-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl -s python3_6 python3_7 > $@.new
+	gpy-upgrade-impl -m -s python3_6 python3_7 > $@.new
 	mv $@.new $@
 
 $(outdir)/37-to-38.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl python3_7 python3_8 > $@.new
+	gpy-upgrade-impl -m python3_7 python3_8 > $@.new
 	mv $@.new $@
 
 $(outdir)/37-to-38-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl -s python3_7 python3_8 > $@.new
+	gpy-upgrade-impl -m -s python3_7 python3_8 > $@.new
 	mv $@.new $@
 
 $(outdir)/38-to-39.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl python3_8 python3_9 > $@.new
+	gpy-upgrade-impl -m python3_8 python3_9 > $@.new
 	mv $@.new $@
 
 $(outdir)/38-to-39-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
-	gpy-upgrade-impl -s python3_8 python3_9 > $@.new
+	gpy-upgrade-impl -m -s python3_8 python3_9 > $@.new
 	mv $@.new $@
 
 $(outdir)/py2.txt: $(timestamp)

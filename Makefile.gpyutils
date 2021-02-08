@@ -64,11 +64,6 @@ $(outdir)/py2.txt: $(timestamp)
 	gpy-py2 > $@.new
 	mv $@.new $@
 
-$(outdir)/py23.txt: $(timestamp)
-	mkdir -p $(outdir)
-	gpy-py2 -3 > $@.new
-	mv $@.new $@
-
 %.dot: %.txt
 	gpy-depgraph -m python@gentoo.org $< > $@.new
 	mv $@.new $@

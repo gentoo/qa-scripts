@@ -7,7 +7,7 @@ if [[ -z ${OUTDIR} ]]; then
 	exit 1
 fi
 
-IRC='ircs://irc.libera.chat/#gentoo-python'
+IRC='ircs://irc.libera.chat/#gentoo-python-notices'
 
 irk "${IRC}" - <<<$'\0'
 gpy-list-pkg-impls > "${OUTDIR}"/python-pkg-impls.txt.new

@@ -13,5 +13,5 @@ irk "${IRC}" - <<<$'\0'
 gpy-list-pkg-impls > "${OUTDIR}"/python-pkg-impls.txt.new
 while read -r x; do
 	irk "${IRC}" "${x}"
-done < <(git diff -s --word-diff -U0 "${OUTDIR}"/python-pkg-impls.txt{,.new} | tail -n +5 | grep -v '^@@')
+done < <(git diff --no-index -s --word-diff -U0 "${OUTDIR}"/python-pkg-impls.txt{,.new} | tail -n +5 | grep -v '^@@')
 mv "${OUTDIR}"/python-pkg-impls.txt{.new,}

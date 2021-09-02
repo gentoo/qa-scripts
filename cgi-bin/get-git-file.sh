@@ -61,7 +61,8 @@ main() {
 		lfile=${file}
 		tree=( $(git ls-tree "${commit}" "${lfile}" 2>/dev/null) )
 		if [[ ! ${tree[*]} ]]; then
-			echo "Status: 404 Not Found"
+			echo "Status: 503 Service Unavailable"
+			echo "Retry-After: 30"
 			echo
 			echo "404 Not Found (if the report was just published, you may need to wait a minute or two for sync)"
 			exit 0

@@ -25,6 +25,7 @@ DepTuple = collections.namedtuple('DepTuple', ('cpv', 'blocks', 'use'))
 GROUPS = (
     ('bdepend', 'bindex'),
     ('depend', 'dindex'),
+    ('idepend', 'iindex'),
     ('pdepend', 'pindex'),
     ('rdepend', 'rindex'),
 )

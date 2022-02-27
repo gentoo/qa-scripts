@@ -27,6 +27,10 @@ export_keys "${OUTPUT_DIR}"/active-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}"
 
+grab_keys "${INFRA_DEVS[@]}"
+export_keys "${OUTPUT_DIR}"/infra-devs.gpg \
+	"${INFRA_DEVS[@]}"
+
 # -- not all are on keyservers
 # -- and are unlikely to turn up now
 # -- this needs to fetch from some archive instead
@@ -39,6 +43,7 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${SYSTEM_KEYS[@]}" \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
+	"${INFRA_DEVS[@]}" \
 	"${RETIRED_DEVS[@]}"
 
 # Populate keys.gentoo.org with the keys we have, since they might have come from SKS
@@ -47,4 +52,5 @@ export KEYSERVER_TIMEOUT=20m
 push_keys "${SYSTEM_KEYS[@]}"
 push_keys "${COMMITTING_DEVS[@]}"
 push_keys "${NONCOMMITTING_DEVS[@]}"
+push_keys "${INFRA_DEVS[@]}"
 push_keys "${RETIRED_DEVS[@]}"

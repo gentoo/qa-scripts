@@ -6,6 +6,7 @@ SYSTEM_BASE='ou=system,dc=gentoo,dc=org'
 COMMIT_RULE='(&(gentooAccess=git.gentoo.org/repo/gentoo.git)(gentooStatus=active))'
 NONCOMMIT_RULE='(&(!(gentooAccess=git.gentoo.org/repo/gentoo.git))(gentooStatus=active))'
 RETIRED_RULE='(!(gentooStatus=active))'
+INFRA_RULE='(&(gentooAccess=infra.group)(gentooStatus=active))'
 
 export KS_GENTOO=hkps://keys.gentoo.org/
 # Use local keyserver for speedup
@@ -18,6 +19,7 @@ export KEYSERVERS=( ) # empty by default
 export COMMITTING_DEVS=( )
 export NONCOMMITTING_DEVS=( )
 export RETIRED_DEVS=( )
+export INFRA_DEVS=( )
 export SYSTEM_KEYS=( )
 
 # grab_ldap_fingerprints <ldap-rule>
@@ -128,5 +130,6 @@ export_ldap_data_to_env() {
 	export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
 	export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
 	export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
+	export -a INFRA_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${INFRA_RULE}") )
 	export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 }

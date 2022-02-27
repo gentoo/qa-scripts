@@ -27,6 +27,9 @@ export_keys "${OUTPUT_DIR}"/active-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}"
 
+export_keys "${OUTPUT_DIR}"/infra-devs.gpg \
+	"${INFRA_DEVS[@]}"
+
 export_keys "${OUTPUT_DIR}"/retired-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
@@ -35,6 +38,7 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${SYSTEM_KEYS[@]}" \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
+	"${INFRA_DEVS[@]}" \
 	"${RETIRED_DEVS[@]}"
 
 clean_tmp

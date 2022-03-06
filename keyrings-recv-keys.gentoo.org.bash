@@ -5,6 +5,7 @@
 # - Turn off export in this script
 
 BASEDIR="$(dirname "$0")"
+DEBUG=${DEBUG:=0}
 # shellcheck source=./keyrings.inc.bash
 source "${BASEDIR}"/keyrings.inc.bash
 
@@ -19,9 +20,13 @@ export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMI
 export KEYSERVERS=( "${KS_GENTOO}" )
 export KEYSERVER_TIMEOUT=5m
 
+[[ $DEBUG -ne 0 ]] && echo SYSTEM_KEYS
 grab_keys "${SYSTEM_KEYS[@]}"
+[[ $DEBUG -ne 0 ]] && echo COMITTING_DEVS
 grab_keys "${COMMITTING_DEVS[@]}"
+[[ $DEBUG -ne 0 ]] && echo NONCOMITTING_DEVS
 grab_keys "${NONCOMMITTING_DEVS[@]}"
+[[ $DEBUG -ne 0 ]] && echo INFRA_DEVS
 grab_keys "${INFRA_DEVS[@]}"
 # -- not all are on keyservers
 # -- and are unlikely to turn up now

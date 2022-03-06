@@ -35,7 +35,7 @@ grab_keys() {
 	local missing=()
 	local remaining=( "${@}" )
 
-	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=1m}
+	KEYSERVER_TIMEOUT=${KEYSERVER_TIMEOUT:=2m}
 	# quickly handle empty keyservers set
 	[ "${#KEYSERVERS[@]}" -eq 0 ] && return
 	while :; do

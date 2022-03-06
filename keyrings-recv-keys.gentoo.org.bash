@@ -1,8 +1,5 @@
 #!/bin/bash
 # Import key updates from Keyservers: keys.gentoo.org
-#
-# TODO:
-# - Turn off export in this script
 
 BASEDIR="$(dirname "$0")"
 DEBUG=${DEBUG:=0}

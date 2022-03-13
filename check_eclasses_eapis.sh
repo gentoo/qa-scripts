@@ -51,7 +51,7 @@ for x in ${ECLASSES}; do
 	mkdir "${x}"
 	awk -F'=' '$3 ~ /[ "]'"${x%.eclass}"'[ "]/ {print $1" "$2}' "${TMPEAPIS}" > "${TMPECLASS}"
 	pushd "${x}" > /dev/null
-	echo "Overall statistic for eclass \"${x}\":" > "STATS.txt"
+	echo "Overall statistics for eclass \"${x}\":" > "STATS.txt"
 	for y in ${KNOWN_EAPIS}; do
 		awk -F ' ' '$3 ~ /"'"${y}"'"/ {print $1}' "${TMPECLASS}" > "${y}.txt"
 		tmpval=$(wc -l "${y}.txt" |cut -d' ' -f1)

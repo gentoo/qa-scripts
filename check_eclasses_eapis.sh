@@ -10,6 +10,7 @@ else
 fi
 
 #[[ $(type pquery 2> /dev/null) ]] || exit 1
+[[ $(type gawk 2> /dev/null) ]] || exit 1
 
 TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
 TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
@@ -19,7 +20,7 @@ ECLASSES=$(echo *.eclass)
 popd > /dev/null
 
 #pquery --attr eapi --attr inherited --raw --all --repo portdir > "${TMPEAPIS}"
-find "${REPO_PATH}/metadata/md5-cache" -type f -name '*-[0-9]*' -exec awk -F= '
+find "${REPO_PATH}/metadata/md5-cache" -type f -name '*-[0-9]*' -exec gawk -F= '
 	BEGINFILE {
 		n = split(FILENAME, f, "/")
 		file = f[n-1] "/" f[n]
@@ -38,7 +39,7 @@ find "${REPO_PATH}/metadata/md5-cache" -type f -name '*-[0-9]*' -exec awk -F= '
 	}
 	' '{}' \+ > "${TMPEAPIS}"
 
-KNOWN_EAPIS=$(awk '
+KNOWN_EAPIS=$(gawk '
 	{ e = gensub(/eapi="(.*)"/, "\\1", "", $2); eapi[e] = e }
 	END { PROCINFO["sorted_in"]="@ind_num_asc"; for (e in eapi) print e }
 	' "${TMPEAPIS}")
@@ -49,11 +50,11 @@ for x in ${ECLASSES}; do
 	echo "Processing eclass \"${x}\""
 	rm -rf "${x}"
 	mkdir "${x}"
-	awk -F'=' '$3 ~ /[ "]'"${x%.eclass}"'[ "]/ {print $1" "$2}' "${TMPEAPIS}" > "${TMPECLASS}"
+	gawk -F'=' '$3 ~ /[ "]'"${x%.eclass}"'[ "]/ {print $1" "$2}' "${TMPEAPIS}" > "${TMPECLASS}"
 	pushd "${x}" > /dev/null
 	echo "Overall statistics for eclass \"${x}\":" > "STATS.txt"
 	for y in ${KNOWN_EAPIS}; do
-		awk -F ' ' '$3 ~ /"'"${y}"'"/ {print $1}' "${TMPECLASS}" > "${y}.txt"
+		gawk -F ' ' '$3 ~ /"'"${y}"'"/ {print $1}' "${TMPECLASS}" > "${y}.txt"
 		tmpval=$(wc -l "${y}.txt" |cut -d' ' -f1)
 		echo "EAPI=${y} count: ${tmpval}" >> "STATS.txt"
 	done

@@ -14,7 +14,7 @@ fi
 
 TMPEAPIS="$(mktemp -t $(basename $0).global.tmp.XXXXXX)"
 TMPECLASS="$(mktemp -t $(basename $0).eclass.tmp.XXXXXX)"
-REPO_PATH=$(portageq get_repo_path / gentoo)
+REPO_PATH=$(portageq get_repo_path ${EROOT:-/} gentoo)
 pushd "${REPO_PATH}/eclass" > /dev/null
 ECLASSES=$(echo *.eclass)
 popd > /dev/null

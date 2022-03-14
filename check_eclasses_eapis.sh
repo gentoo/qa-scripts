@@ -12,8 +12,8 @@ fi
 #[[ $(type pquery 2> /dev/null) ]] || exit 1
 [[ $(type gawk 2> /dev/null) ]] || exit 1
 
-TMPEAPIS="/tmp/$(basename $0).global.$$.tmp"
-TMPECLASS="/tmp/$(basename $0).eclass.$$.tmp"
+TMPEAPIS="$(mktemp -t $(basename $0).global.tmp.XXXXXX)"
+TMPECLASS="$(mktemp -t $(basename $0).eclass.tmp.XXXXXX)"
 REPO_PATH=$(portageq get_repo_path / gentoo)
 pushd "${REPO_PATH}/eclass" > /dev/null
 ECLASSES=$(echo *.eclass)

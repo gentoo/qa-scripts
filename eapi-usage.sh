@@ -45,6 +45,7 @@ done || { eend $? || exit 1; }
 eend $?
 
 popd &>/dev/null || exit 1
+rm ${dir}/*.txt || exit 1
 mv ${TMPDIR}/eapi-usage/*.txt ${dir}/ || exit 1
 
 rm -r "${TMPDIR}" || exit 1

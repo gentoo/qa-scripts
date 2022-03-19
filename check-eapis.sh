@@ -4,7 +4,7 @@
 
 . /lib/gentoo/functions.sh
 dir=${1}
-if [[ -n ${1} && ! -d ${dir} ]] ; then
+if [[ -n ${1} && -e ${dir} && ! -d ${dir} ]] ; then
 	eerror "Output directory given (${dir}) is not a directory! Exiting."
 	exit 1
 elif [[ -z ${dir} ]] ; then

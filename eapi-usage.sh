@@ -76,9 +76,9 @@ find "${REPO_PATH}"/metadata/md5-cache -type f ! -name '*.gz' \
        printf "total:  %7d ebuilds\n", NR
     }' > ${stats}
 
-echo > ${stats}
-echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')" > ${stats}
-echo "</pre>" > ${stats}
+echo >> ${stats}
+echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')" >> ${stats}
+echo "</pre>" >> ${stats}
 
 echo "<pre>" > ${dir}/README.html
 cat ${stats} >> ${dir}/README.html

@@ -1,10 +1,14 @@
 #!/bin/bash
 # This script respects EINFO_QUIET=1 etc to silence stdout
+# Always puts a summary in $1/README.html.
 # Arguments:
 # $1: output directory. Defaults to eapi-usage.
-
+# $2: file to place stats in within $1.
+set -x
 . /lib/gentoo/functions.sh
+
 dir=${1}
+
 if [[ -n ${1} && -e ${dir} && ! -d ${dir} ]] ; then
 	eerror "Output directory given (${dir}) is not a directory! Exiting."
 	exit 1
@@ -13,13 +17,14 @@ elif [[ -z ${dir} ]] ; then
 	dir=eapi-usage
 fi
 
-REPO_PATH=$(portageq get_repo_path ${EROOT:-/} gentoo || exit 1)
-
-shopt -s nullglob
+stats=${2:-$dir/STATS.txt}
 
 mkdir -p ${dir} || exit 1
 
+REPO_PATH=$(portageq get_repo_path ${EROOT:-/} gentoo || exit 1)
 TMPDIR="$(mktemp -d || exit 1)"
+
+shopt -s nullglob
 
 einfo "Working in TMPDIR=${TMPDIR}"
 pushd "${TMPDIR}" &>/dev/null || exit 1
@@ -45,7 +50,8 @@ done || { eend $? || exit 1; }
 eend $?
 
 popd &>/dev/null || exit 1
-rm ${dir}/*.txt || exit 1
+# No exit here because it's fine if we removed nothing
+rm ${dir}/*.txt
 mv ${TMPDIR}/eapi-usage/*.txt ${dir}/ || exit 1
 
 rm -r "${TMPDIR}" || exit 1
@@ -57,7 +63,6 @@ rm -r "${TMPDIR}" || exit 1
 #[[ $(type pinspect 2> /dev/null) ]] || exit 1
 #
 #pinspect eapi_usage /usr/portage
-echo "<pre>"
 find "${REPO_PATH}"/metadata/md5-cache -type f ! -name '*.gz' \
   -exec grep -h '^EAPI=' '{}' + \
   | awk '
@@ -70,8 +75,12 @@ find "${REPO_PATH}"/metadata/md5-cache -type f ! -name '*.gz' \
                i, eapi[i], eapi[i]*100.0/NR, s
        }
        printf "total:  %7d ebuilds\n", NR
-    }'
+    }' > ${stats}
 
-echo
-echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')"
-echo "</pre>"
+echo > ${stats}
+echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')" > ${stats}
+echo "</pre>" > ${stats}
+
+echo "<pre>" > ${dir}/README.html
+cat ${stats} >> ${dir}/README.html
+echo "</pre>" >> ${dir}/README.html

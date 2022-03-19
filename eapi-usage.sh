@@ -4,7 +4,6 @@
 # Arguments:
 # $1: output directory. Defaults to eapi-usage.
 # $2: file to place stats in within $1.
-set -x
 . /lib/gentoo/functions.sh
 
 dir=${1}

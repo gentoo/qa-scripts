@@ -65,7 +65,7 @@ rm -r "${TMPDIR}" || exit 1
 #
 #pinspect eapi_usage /usr/portage
 echo "<pre>"
-find /usr/portage/metadata/md5-cache -type f ! -name '*.gz' \
+find "${REPO_PATH}"/metadata/md5-cache -type f ! -name '*.gz' \
   -exec grep -h '^EAPI=' '{}' + \
   | awk '
     { sub("EAPI=",""); eapi[$1]++ }

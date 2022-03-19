@@ -7,6 +7,7 @@
 #
 #pinspect eapi_usage /usr/portage
 
+echo "<pre>"
 find /usr/portage/metadata/md5-cache -type f ! -name '*.gz' \
   -exec grep -h '^EAPI=' '{}' + \
   | awk '
@@ -23,3 +24,4 @@ find /usr/portage/metadata/md5-cache -type f ! -name '*.gz' \
 
 echo
 echo "Date generated: $(date -u '+%Y-%m-%d %H:%M:%S %Z')"
+echo "</pre>"

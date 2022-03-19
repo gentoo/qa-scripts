@@ -15,12 +15,9 @@ fi
 
 REPO_PATH=$(portageq get_repo_path ${EROOT:-/} gentoo || exit 1)
 
-mkdir -p ${dir} || exit 1
+shopt -s nullglob
 
-ebegin "Getting list of supported EAPIs"
-eapi_list=$(python3 -c 'import portage.repository.config; print("\n".join(list(portage._supported_eapis)))' || exit 1)
-eend $?
-einfo "EAPI list:" ${eapi_list}
+mkdir -p ${dir} || exit 1
 
 TMPDIR="$(mktemp -d || exit 1)"
 
@@ -28,11 +25,6 @@ einfo "Working in TMPDIR=${TMPDIR}"
 pushd "${TMPDIR}" &>/dev/null || exit 1
 mkdir -p eapi-usage || exit 1
 cd eapi-usage || exit 1
-
-for eapi in ${eapi_list[@]} ; do
-	[[ -f ${eapi}.txt ]] && rm -r ${eapi}.txt
-	touch ${eapi}.txt
-done
 
 ebegin "Finding ebuilds"
 (
@@ -46,9 +38,9 @@ ebegin "Finding ebuilds"
 eend ${?}
 
 ebegin "Sorting EAPI files"
-for eapi in ${eapi_list[@]} ; do
-	sort -u ${eapi}.txt > ${eapi}.txt.sorted
-	mv ${eapi}.txt.sorted ${eapi}.txt
+for eapi in *.txt ; do
+	sort -u ${eapi} > ${eapi}.sorted
+	mv ${eapi}.sorted ${eapi}
 done || { eend $? || exit 1; }
 eend $?
 

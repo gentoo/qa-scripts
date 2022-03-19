@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script respects EINFO_QUIET=1 etc to silence stdout
 # Arguments:
 # $1: output directory. Defaults to eapi-usage.
 

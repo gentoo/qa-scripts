@@ -7,7 +7,9 @@ DEBUG=${DEBUG:=0}
 source "${BASEDIR}"/keyrings.inc.bash
 
 set -e
-export_ldap_data_to_env
+
+# export_ldap_data_to_env
+# TODO: for unclear reason this does not populate correctly inside a function
 export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_RULE}") )
 export -a INFRA_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${INFRA_RULE}") )
 export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )

@@ -39,6 +39,11 @@ $(outdir)/depcheck.txt: $(timestamp)
 	gpy-depcheck > $@.new
 	mv $@.new $@
 
+$(outdir)/310-to-311.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -m python3_10 python3_11 > $@.new
+	mv $@.new $@
+
 $(outdir)/39-to-310.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -m python3_9 python3_10 > $@.new

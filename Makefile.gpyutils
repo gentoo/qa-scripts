@@ -44,7 +44,7 @@ $(outdir)/310-to-311.txt: $(timestamp)
 	gpy-upgrade-impl -m python3_10 python3_11 > $@.new
 	mv $@.new $@
 
-$(outdir)/39-to-310-stablereq.txt: $(timestamp)
+$(outdir)/310-to-311-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -m -s python3_10 python3_11 > $@.new
 	mv $@.new $@

@@ -6,14 +6,15 @@ timestamp = $(PORTDIR)/metadata/timestamp.commit
 outdir = /dev/null
 
 # upgrades for stable impls
-upgr_base = $(outdir)/310-to-311.txt $(outdir)/39-to-310.txt $(outdir)/38-to-39.txt
+upgr_base = $(outdir)/39-to-310.txt $(outdir)/38-to-39.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
 upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/py2.txt
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
-upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
+# add new impls here if not stable yet, to avoid insanely huge generation times
+upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg) $(outdir)/310-to-311.txt
 
 all = $(upgr_all)
 

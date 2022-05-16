@@ -1,19 +1,17 @@
 certificate version 0.1
-pusher Sam James <sam@gentoo.org> 1652301304 +0000
-pushee git+ssh://git.gentoo.org/proj/qa-scripts.git
-nonce 1652301304-6f31e4949494c84dae6ee1698b89e4830aaf9bc9
+pusher DF84256885283521 1652705203 +0200
+pushee git.gentoo.org:proj/qa-scripts
+nonce 1652705203-99c4b3dc2f8277f31a879de82cd7f42c551fcf1c
 
-76acb7896fcf400c444456decd170f398a75c6b2 6b72ba0ea772a4437b1e8ff962efe5fc389fbc1f refs/heads/master
+6b72ba0ea772a4437b1e8ff962efe5fc389fbc1f 1cb8a117d3d5ae81e73398b0ab5b28fe7fc64e88 refs/heads/master
 -----BEGIN PGP SIGNATURE-----
 
-iQGjBAABCgCNFiEEYOpPv/uDUzOcqtTy9JIoEO6gSDsFAmJ8HfhfFIAAAAAALgAo
-aXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5maWZ0aGhvcnNlbWFuLm5ldDYw
-RUE0RkJGRkI4MzUzMzM5Q0FBRDRGMkY0OTIyODEwRUVBMDQ4M0IPHHNhbUBnZW50
-b28ub3JnAAoJEPSSKBDuoEg7rPoH/j5sYkiTvdLy5VJrx8B/x8DgCS0poh7qcDB+
-qx9zvNREDrqjPm6nHvHv1Y0Ehy3GELnKe8hwZ0A+QfAcSsPQhAW6k3bdPk2z8O8V
-3RmXC4FQCyGHiZuzHExtDA3thxwn8IWK01d+rwfkEZsTF7A1VQczotswWTcrmuul
-cbnByhsS/bnimKMmLGsjjwrWX0p7lh106WA+maWuuMl9BURMu+nKJr0H9d7lLlwe
-cjDcmeGKYJsb38+KnKtdcRZtvl3nYw69BkdCwkHfRNHJsE87kwlVjiZmbAWWm0Es
-Lg3lBQ06qGgX1qvZyrEk/oNjbLmZYmaFVEKfFZIjDk9kEgntp6c=
-=w5ma
+iQEzBAABCAAdFiEEx2qEUJQJjSjMiybFY5ra4jKeJA4FAmKCR7MACgkQY5ra4jKe
+JA6UoAgAtLr4hC4KNQOllaM3rH4I/T5Qqcl6ALQ0cFZjRUoBj+YN8q/s0et0mgl1
+10cN2DtuV9D9TwmwMx1dSB9vBwTeo+BK3/TzAif66mOERVIz6AOl0OGK6ujxEwU5
+BnHnZumrGP8cRiCqM+0RDfqxDqh1aoOBbv9qYY0byLFA8VDVK6SSEHiMoxMG6b25
+SA/hQ0f8Usslr+Lk4kEclrheb+8jAqSecbavbutoN+hoz6lu6UvxjCK8u/xu2Tbw
+FuXJjfnb31Tdokt68yWQb/AwvDjHTHCtfJOQVsqA8hb6k8zvcHdWglzYDFlUJN6+
+H6iv0xi70jsbcfxeIWoq4Psl9Vjs5A==
+=QtiL
 -----END PGP SIGNATURE-----

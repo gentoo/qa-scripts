@@ -17,24 +17,24 @@ export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONC
 export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 
-export_keys "${OUTPUT_DIR}"/service-keys.gpg \
+export_keys "${OUTPUT_DIR}"/keys/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"
 
-export_keys "${OUTPUT_DIR}"/committing-devs.gpg \
+export_keys "${OUTPUT_DIR}"/keys/committing-devs.gpg \
 	"${COMMITTING_DEVS[@]}"
 
-export_keys "${OUTPUT_DIR}"/active-devs.gpg \
+export_keys "${OUTPUT_DIR}"/keys/active-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}"
 
-export_keys "${OUTPUT_DIR}"/infra-devs.gpg \
+export_keys "${OUTPUT_DIR}"/keys/infra-devs.gpg \
 	"${INFRA_DEVS[@]}"
 
-export_keys "${OUTPUT_DIR}"/retired-devs.gpg \
+export_keys "${OUTPUT_DIR}"/keys/retired-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
 # Everybody together now
-export_keys "${OUTPUT_DIR}"/all-devs.gpg \
+export_keys "${OUTPUT_DIR}"/keys/all-devs.gpg \
 	"${SYSTEM_KEYS[@]}" \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
@@ -42,6 +42,11 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
 for key in service-keys committing-devs active-devs infra-devs retired-devs all-devs ; do
+	if [[ ! -L keys/${key}.gpg ]] ; then
+		# Compatibility symlink
+		ln -s keys/${key}.gpg ${key}.gpg
+	fi
+
 	timestamp=$(date -u +%Y%m%d -d "monday")
 
 	# Don't clobber existing timestamped keys for this period (weekly)

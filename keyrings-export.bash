@@ -46,11 +46,13 @@ for key in service-keys committing-devs active-devs infra-devs retired-devs all-
 
 	# Don't clobber existing timestamped keys for this period (weekly)
 	# if we're running several times a day.
-	if [[ -f "${OUTPUT_DIR}"/${key}-${timestamp}.gpg ]] ; then
+	if [[ -f "${OUTPUT_DIR}"/keys/${key}-${timestamp}.gpg ]] ; then
 		continue
 	fi
 
-	cp "${OUTPUT_DIR}"/${key}.gpg "${OUTPUT_DIR}"/${key}-${timestamp}.gpg
+	mkdir -p "${OUTPUT_DIR}"/keys
+
+	cp "${OUTPUT_DIR}"/${key}.gpg "${OUTPUT_DIR}"/keys/${key}-${timestamp}.gpg
 done
 
 clean_tmp

@@ -42,7 +42,7 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
 for key in service-keys committing-devs active-devs infra-devs retired-devs all-devs ; do
-	timestamp=$(date +%Y%m%d)
+	timestamp=$(date -u +%Y%m%d -d "next monday")
 
 	# Don't clobber existing timestamped keys for this period (weekly)
 	# if we're running several times a day.

@@ -41,4 +41,16 @@ export_keys "${OUTPUT_DIR}"/all-devs.gpg \
 	"${INFRA_DEVS[@]}" \
 	"${RETIRED_DEVS[@]}"
 
+for key in service-keys committing-devs active-devs infra-devs retired-devs all-devs ; do
+	timestamp=$(date +%Y%m%d)
+
+	# Don't clobber existing timestamped keys for this period (weekly)
+	# if we're running several times a day.
+	if [[ -f "${OUTPUT_DIR}"/${key}-${timestamp}.gpg ]] ; then
+		continue
+	fi
+
+	cp "${OUTPUT_DIR}"/${key}.gpg "${OUTPUT_DIR}"/${key}-${timestamp}.gpg
+done
+
 clean_tmp

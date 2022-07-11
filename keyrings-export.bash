@@ -42,9 +42,9 @@ export_keys "${OUTPUT_DIR}"/keys/all-devs.gpg \
 	"${RETIRED_DEVS[@]}"
 
 for key in service-keys committing-devs active-devs infra-devs retired-devs all-devs ; do
-	if [[ ! -L keys/${key}.gpg ]] ; then
+	if [[ ! -L "${OUTPUT_DIR}"/keys/${key}.gpg ]] ; then
 		# Compatibility symlink
-		ln -s keys/${key}.gpg ${key}.gpg
+		ln -s "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg
 	fi
 
 	timestamp=$(date -u +%Y%m%d -d "monday")

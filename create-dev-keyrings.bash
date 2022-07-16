@@ -19,7 +19,8 @@ export_keys "${OUTPUT_DIR}"/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"
 
 grab_keys "${INFRA_SYSTEM_KEYS[@]}"
-export_keys "${OUTPUT_DIR}"/infra-service-keys.gpg
+export_keys "${OUTPUT_DIR}"/infra-service-keys.gpg \
+	"${INFRA_SYSTEM_KEYS[@]}"
 
 grab_keys "${COMMITTING_DEVS[@]}"
 export_keys "${OUTPUT_DIR}"/committing-devs.gpg \

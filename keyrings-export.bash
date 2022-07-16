@@ -16,9 +16,14 @@ export -a COMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${COMMIT_
 export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONCOMMIT_RULE}") )
 export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
+export -a INFRA_SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${INFRA_SYSTEM_RULE}") )
 
 export_keys "${OUTPUT_DIR}"/keys/service-keys.gpg \
 	"${SYSTEM_KEYS[@]}"
+
+grab_keys "${INFRA_SYSTEM_KEYS[@]}"
+export_keys "${OUTPUT_DIR}"/infra-service-keys.gpg \
+    "${INFRA_SYSTEM_KEYS[@]}"
 
 export_keys "${OUTPUT_DIR}"/keys/committing-devs.gpg \
 	"${COMMITTING_DEVS[@]}"

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # From Leo3418's GSoC 2021 work
 # https://leo3418.github.io/2021/07/18/find-leaf-packages.html
 

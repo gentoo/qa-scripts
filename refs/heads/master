@@ -1,15 +1,15 @@
 certificate version 0.1
-pusher Sam James <sam@gentoo.org> 1659231271 +0100
+pusher Sam James <sam@gentoo.org> 1662168256 +0100
 pushee git+ssh://git.gentoo.org/proj/qa-scripts.git
-nonce 1659231271-8547127fa2997531344a2d62ea8712bb153519dc
+nonce 1662168256-b3a02d81ed47ace2367239fa88e4671a22ca9d0d
 
-2ab0c90eb31aeed1a4a95d79181d2dbcb42dbe7d 162f84200d5c5d8c19c5d61a769b0cea694e7d7a refs/heads/master
+e2bd072dd9f8c58c3211cacd1a526d4af09b2cc2 0d01497249a825e1d39862fd9d9ed6edde9a92bf refs/heads/master
 -----BEGIN PGP SIGNATURE-----
 
-iOUEABYKAI0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCYuXcJ18UgAAAAAAuAChp
+iOUEABYKAI0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCYxKswF8UgAAAAAAuAChp
 c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
 NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MA8cc2FtQGdlbnRv
-by5vcmcACgkQc4QJ9SDfkZDqcgEA1BYqLx7MQkhY+uKy2nEbhuD8Wt4kOq+4D2IP
-cEqu58EBAMutJJDww2G9N13eDRUqQw2Kfse+2SGuTVzAc04mui8N
-=78yg
+by5vcmcACgkQc4QJ9SDfkZCQKwEA6JBQCYt4uWKIFsslYSbOYYUe+qt3AmfEY63n
+oOpj0CIA/1e0kU791Lt+/3FadBeudK69zusqVKZv5AmnC/OALzkI
+=h5EU
 -----END PGP SIGNATURE-----

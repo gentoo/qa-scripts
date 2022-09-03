@@ -53,7 +53,7 @@ for key in service-keys committing-devs active-devs infra-devs retired-devs all-
 
 	timestamp=$(date -u +%Y%m%d-%A -d "monday")
 
-	if [[ ${timestamp} != *-Monday ]] ;
+	if [[ ${timestamp} != *-Monday ]] ; then
 		break
 	fi
 

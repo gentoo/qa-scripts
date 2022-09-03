@@ -51,7 +51,13 @@ for key in service-keys committing-devs active-devs infra-devs retired-devs all-
 		ln -s "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg
 	fi
 
-	timestamp=$(date -u +%Y%m%d -d "monday")
+	timestamp=$(date -u +%Y%m%d-%A -d "monday")
+
+	if [[ ${timestamp} != *-Monday ]] ;
+		break
+	fi
+
+	timestamp=${timestamp/-Monday/}
 
 	# Don't clobber existing timestamped keys for this period (weekly)
 	# if we're running several times a day.

@@ -81,7 +81,7 @@ push_keys() {
 export GPG_TMPDIR=''
 clean_tmp() {
 	# Ensure any agent is closed down
-	gpgconf --kill gpg-agent
+	gpgconf --kill all
 	[ -n "$GPG_TMPDIR" ] && [ -d "$GPG_TMPDIR" ] && rm -rf "$GPG_TMPDIR"
 }
 setup_tmp() {

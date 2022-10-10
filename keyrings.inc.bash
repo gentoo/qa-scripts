@@ -11,8 +11,8 @@ INFRA_SYSTEM_RULE='(&(gentooAccess=infra-system.group)(gentooStatus=active))'
 
 export KS_GENTOO=hkps://keys.gentoo.org/
 # Use local keyserver for speedup
-KS_GENTOO_LOCAL=${HOSTNAME%.gentoo.org}.keys.gentoo.org
-dig $KS_GENTOO_LOCAL +short |grep -sq . && export KS_GENTOO=hkps://${KS_GENTOO_LOCAL}
+# KS_GENTOO_LOCAL=${HOSTNAME%.gentoo.org}.keys.gentoo.org
+# dig $KS_GENTOO_LOCAL +short |grep -sq . && export KS_GENTOO=hkps://${KS_GENTOO_LOCAL}
 
 #export KS_SKS=hkps://hkps.pool.sks-keyservers.net/ # Disabled pending security announcement
 export KS_OPENPGP=hkps://keys.openpgp.org/ # runs Hagrid

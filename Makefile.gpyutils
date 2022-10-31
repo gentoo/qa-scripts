@@ -50,11 +50,6 @@ $(outdir)/38-to-39-stablereq.txt: $(timestamp)
 	gpy-upgrade-impl -m -s python3_8 python3_9 > $@.new
 	mv $@.new $@
 
-$(outdir)/py2.txt: $(timestamp)
-	mkdir -p $(outdir)
-	gpy-py2 > $@.new
-	mv $@.new $@
-
 %.dot: %.txt
 	gpy-depgraph -m python@gentoo.org $< > $@.new
 	mv $@.new $@

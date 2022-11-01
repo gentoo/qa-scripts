@@ -51,7 +51,12 @@ for key in service-keys committing-devs active-devs infra-devs retired-devs all-
 		ln -s "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg
 	fi
 
-	timestamp=$(date -u +%Y%m%d-%A -d "monday")
+	if [[ $(date -u +%A) == Monday ]] ; then
+		# We don't want to run on Mondays to avoid last/next week confusion
+		break
+	fi
+
+	timestamp=$(date -u +%Y%m%d-%A -d "last monday")
 
 	if [[ ${timestamp} != *-Monday ]] ; then
 		break

@@ -32,12 +32,12 @@ cd eapi-usage || exit 1
 
 ebegin "Finding ebuilds"
 (
-	for ebuild in $(find "${REPO_PATH}/metadata/md5-cache" -mindepth 2 -maxdepth 2 -type f -name '*-[0-9]*') ; do
-		cpf=$(echo ${ebuild} | rev | cut -d/ -f1-2 | rev)
-		eapi=$(grep -oi "eapi=.*" ${ebuild} | sed -e 's:EAPI=::')
-
+	while IFS= read -r ebuild ; do
+		cpf_eapi="${ebuild#${REPO_PATH}/metadata/md5-cache/}"
+		cpf="${cpf_eapi%%:*}"
+		eapi="${cpf_eapi##*:EAPI=}"
 		echo "${cpf}" >> ${eapi}.txt
-	done
+	done < <(find "${REPO_PATH}/metadata/md5-cache" -mindepth 2 -maxdepth 2 -type f -name '*-[0-9]*' -exec grep '^EAPI=' {} +)
 ) || { eend $? || exit 1; }
 eend ${?}
 

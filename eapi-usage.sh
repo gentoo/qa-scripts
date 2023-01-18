@@ -56,12 +56,14 @@ mv ${TMPDIR}/eapi-usage/*.txt ${dir}/ || exit 1
 rm -r "${TMPDIR}" || exit 1
 
 # Now generate the numbers/summary (copied in from previous eapi_usage.sh script)
-# Boring 'script' that just uses pkgcore's pinspect command. Someday it would be
-# nice to graph this output, or maybe keep some running history?
-
+# Someday it would be nice to graph this output, or maybe keep some running history?
+# TODO: We used pinspect in the past which is cleaner but it's slower than the
+# awk method used below (we also stopped using it because at the time, pkgcore
+# lacked newer EAPI support).
 #[[ $(type pinspect 2> /dev/null) ]] || exit 1
 #
 #pinspect eapi_usage /usr/portage
+
 find "${REPO_PATH}"/metadata/md5-cache -type f ! -name '*.gz' \
   -exec grep -h '^EAPI=' '{}' + \
   | awk '

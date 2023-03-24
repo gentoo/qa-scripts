@@ -64,7 +64,7 @@ def main():
     args = argp.parse_args()
 
     c = pkgcore.config.load_config()
-    repo = c.repo['gentoo']
+    repo = c.objects.repo['gentoo']
 
     rindex = {}
     for g, gi in GROUPS:

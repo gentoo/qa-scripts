@@ -9,6 +9,7 @@ import subprocess
 import sys
 
 METHOD="pkgcore"
+VERBOSE=int(os.getenv('VERBOSE') or os.getenv('V') or 0) # V=1..N to use
 
 def main() -> None:
     if len(sys.argv) > 1:
@@ -38,7 +39,9 @@ def update_for(ebuild: str, zero_in_degree: dict, repo: str) -> None:
     Reverse dependencies of the ebuild will be searched in the specified
     repository only.
     """
-    print(f"Processing {ebuild} ...", file=sys.stderr)
+    # This spams infra cronjobs, only enable if there is a problem
+    if VERBOSE >= 1:
+        print(f"Processing {ebuild} ...", file=sys.stderr)
     proc = subprocess.run(f'pquery --first --restrict-revdep ={ebuild} '
                           f'--repo {repo} --raw --unfiltered',
                           capture_output=True, text=True, shell=True)
@@ -89,7 +92,8 @@ def update_for_deps_of(ebuild: str, zero_in_degree: dict) -> None:
                               capture_output=True, text=True, shell=True)
         return proc.stdout.splitlines()
 
-    #print(f"Processing {ebuild} ...", file=sys.stderr)
+    if VERBOSE >= 2:
+        print(f"Processing {ebuild} ...", file=sys.stderr)
 
     # Get dependency specifications in the ebuild;
     # equivalent to dep_graph[ebuild] in the examples above

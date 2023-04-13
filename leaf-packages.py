@@ -8,7 +8,7 @@ import re
 import subprocess
 import sys
 
-method="pkgcore"
+METHOD="pkgcore"
 
 def main() -> None:
     if len(sys.argv) > 1:
@@ -21,7 +21,7 @@ def main() -> None:
         for ebuild in zero_in_degree:
             # Let the executor run function call
             # update_for_deps_of(ebuild, zero_in_degree)
-            if method == "pkgcore":
+            if METHOD == "pkgcore":
                 executor.submit(update_for, ebuild, zero_in_degree, repo)
             else:
                 executor.submit(update_for_deps_of, ebuild, zero_in_degree)

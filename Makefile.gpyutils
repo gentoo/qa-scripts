@@ -6,7 +6,7 @@ timestamp = $(PORTDIR)/metadata/timestamp.commit
 outdir = /dev/null
 
 # Adding new implementations:
-# 1. Add to upgr_all
+# 1. Create rules below & add to upgr_all
 # 2. Later, when dot doesn't take too long for it, move to upgr_txt
 # 3. Once the impl is stable, move to upgr_base
 
@@ -15,11 +15,11 @@ upgr_base = $(outdir)/310-to-311.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
-upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/311-to-312.txt
+upgr_txt = $(upgr_base) $(upgr_streq)
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 # add new impls here if not stable yet, to avoid insanely huge generation times
-upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg) #$(outdir)/311-to-312.txt
+upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg) $(outdir)/311-to-312.txt
 
 all = $(upgr_all)
 

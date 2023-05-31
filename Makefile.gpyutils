@@ -15,11 +15,11 @@ upgr_base = $(outdir)/310-to-311.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
-upgr_txt = $(upgr_base) $(upgr_streq)
+upgr_txt = $(upgr_base) $(upgr_streq) $(outdir)/311-to-312.txt
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 # add new impls here if not stable yet, to avoid insanely huge generation times
-upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg) $(outdir)/311-to-312.txt $(outdir)/311-to-312.dot
+upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
 
 all = $(upgr_all)
 

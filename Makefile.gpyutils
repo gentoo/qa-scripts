@@ -9,6 +9,9 @@ outdir = /dev/null
 # 1. Create rules below & add to upgr_all
 # 2. Later, when dot doesn't take too long for it, move to upgr_txt
 # 3. Once the impl is stable, move to upgr_base
+#
+# Please prioritize edges like python-any-r1 consumers to speed up getting
+# from 1->2. Especially e.g. git, ninja, meson, doxygen.
 
 # upgrades for stable impls
 upgr_base = $(outdir)/310-to-311.txt

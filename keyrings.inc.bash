@@ -123,14 +123,15 @@ export_keys() {
 
 	# Check if the textual format has changed at all, and emit the new version
 	# if there are ANY changes at all.
-	if ! cmp -s "${DST}.packets.txt" "${TMP}.packets.txt"; then
-		chmod a+r "${TMP}"
-		mv -f "${TMP}" "${DST}"
-		mv -f "${TMP}.packets.txt" "${DST}.packets.txt"
-		mv -f "${TMP}.DIGESTS" "${DST}.DIGESTS"
-	fi
-	# Cleanup anyway
-	rm -f "${TMP}.packets.txt" "${TMP}"
+	cmp -s "${DST}.packets.txt" "${TMP}.packets.txt"
+	cmp_rc=$?
+	chmod a+r "${TMP}" "${TMP}.packets.txt" "${TMP}.DIGESTS"
+	for suffix in '' '.packets.txt' '.DIGESTS'; do
+		# If these file do not exist, or the cmp was different, move them.
+		[ ! -f "${DST}${suffix}" -o $cmp_rc -ne 0 ] && mv -f "${TMP}${suffix}" "${DST}${suffix}"
+		# Cleanup anyway
+		rm -f "${TMP}${suffix}"
+	done
 }
 
 # populate common variables

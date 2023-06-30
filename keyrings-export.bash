@@ -6,6 +6,8 @@
 # - requires keeping state to detect changes in keys, there is no usable mtime data in a key itself
 
 OUTPUT_DIR=${1:-.}
+# Ensure output is absolute
+OUTPUT_DIR=$(readlink -f "${OUTPUT_DIR}")
 BASEDIR="$(dirname "$0")"
 # shellcheck source=./keyrings.inc.bash
 source "${BASEDIR}"/keyrings.inc.bash
@@ -57,7 +59,7 @@ export_keys "${OUTPUT_DIR}"/keys/all-devs.gpg \
 for key in "${KEYRINGS[@]}" ; do
 	if [[ ! -L "${OUTPUT_DIR}"/${key}.gpg ]] ; then
 		# Compatibility symlink
-		ln -s "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg
+		ln -sf "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg
 	fi
 
 	if [[ $(date -u +%A) == Monday ]] ; then

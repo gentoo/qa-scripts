@@ -96,7 +96,8 @@ export_keys() {
 	DST="$1"
 	shift
 	setup_tmp
-	TMP="${GPG_TMPDIR}"/$(basename "${DST}")
+	BASENAME=$(basename "${DST}")
+	TMP="${GPG_TMPDIR}/${BASENAME}"
 	# Must not exist, otherwise GPG will give error
 	[[ -f "${TMP}" ]] && rm -f "${TMP}"
 	# 'gpg --export' returns zero if there was no error with the command itself
@@ -116,12 +117,17 @@ export_keys() {
 		echo "Unable to export keys to $DST: GPG failed to list packets"
 		exit 1
 	fi
+
+	# Ensure we have a checksum to verify the file.
+	rhash --bsd --sha256 --sha512 --blake2b "${TMP}" |sed "s,${TMP},${BASENAME},g" >"${TMP}.DIGESTS"
+
 	# Check if the textual format has changed at all, and emit the new version
 	# if there are ANY changes at all.
 	if ! cmp -s "${DST}.packets.txt" "${TMP}.packets.txt"; then
 		chmod a+r "${TMP}"
 		mv -f "${TMP}" "${DST}"
 		mv -f "${TMP}.packets.txt" "${DST}.packets.txt"
+		mv -f "${TMP}.DIGESTS" "${DST}.DIGESTS"
 	fi
 	# Cleanup anyway
 	rm -f "${TMP}.packets.txt" "${TMP}"

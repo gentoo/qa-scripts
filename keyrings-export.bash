@@ -17,35 +17,44 @@ export -a NONCOMMITTING_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${NONC
 export -a RETIRED_DEVS=( $(grab_ldap_fingerprints -b "${DEV_BASE}" "${RETIRED_RULE}") )
 export -a SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${NONCOMMIT_RULE}") )
 export -a INFRA_SYSTEM_KEYS=( $(grab_ldap_fingerprints -b "${SYSTEM_BASE}" "${INFRA_SYSTEM_RULE}") )
+export -a KEYRINGS=( )
 
 export_keys "${OUTPUT_DIR}"/keys/service-keys.gpg \
-	"${SYSTEM_KEYS[@]}"
+	"${SYSTEM_KEYS[@]}" \
+&& KEYRINGS+=( service-keys )
 
 export_keys "${OUTPUT_DIR}"/keys/infra-service-keys.gpg \
-    "${INFRA_SYSTEM_KEYS[@]}"
+    "${INFRA_SYSTEM_KEYS[@]}" \
+&& KEYRINGS+=( infra-service-keys )
 
 export_keys "${OUTPUT_DIR}"/keys/committing-devs.gpg \
-	"${COMMITTING_DEVS[@]}"
+	"${COMMITTING_DEVS[@]}" \
+&& KEYRINGS+=( committing-devs )
 
 export_keys "${OUTPUT_DIR}"/keys/active-devs.gpg \
 	"${COMMITTING_DEVS[@]}" \
-	"${NONCOMMITTING_DEVS[@]}"
+	"${NONCOMMITTING_DEVS[@]}" \
+&& KEYRINGS+=( active-devs )
 
 export_keys "${OUTPUT_DIR}"/keys/infra-devs.gpg \
-	"${INFRA_DEVS[@]}"
+	"${INFRA_DEVS[@]}" \
+&& KEYRINGS+=( infra-devs )
 
 export_keys "${OUTPUT_DIR}"/keys/retired-devs.gpg \
-	"${RETIRED_DEVS[@]}"
+	"${RETIRED_DEVS[@]}" \
+&& KEYRINGS+=( retired-devs )
 
 # Everybody together now
 export_keys "${OUTPUT_DIR}"/keys/all-devs.gpg \
 	"${SYSTEM_KEYS[@]}" \
+	"${INFRA_SYSTEM_KEYS[@]}" \
 	"${COMMITTING_DEVS[@]}" \
 	"${NONCOMMITTING_DEVS[@]}" \
 	"${INFRA_DEVS[@]}" \
-	"${RETIRED_DEVS[@]}"
+	"${RETIRED_DEVS[@]}" \
+&& KEYRINGS+=( all-devs )
 
-for key in service-keys committing-devs active-devs infra-devs retired-devs all-devs ; do
+for key in "${KEYRINGS[@]}" ; do
 	if [[ ! -L "${OUTPUT_DIR}"/${key}.gpg ]] ; then
 		# Compatibility symlink
 		ln -s "${OUTPUT_DIR}"/keys/${key}.gpg "${OUTPUT_DIR}"/${key}.gpg

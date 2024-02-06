@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014-2022 Ulrich Müller
+# Copyright 2014-2024 Ulrich Müller
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -47,3 +47,6 @@ done < <(find \( -path ./distfiles -o -path ./local -o -path ./metadata \
         -exec file -ih '{}' + | sort)
 
 [[ ${count} -gt 0 ]] || echo "No binary files found. :-)"
+
+# Output the file version for debugging of false positives/negatives
+echo; file --version | head -n1

@@ -1,17 +1,17 @@
 certificate version 0.1
-pusher DF84256885283521 1705073940 +0100
-pushee git.gentoo.org:proj/qa-scripts
-nonce 1705073940-6e891ae0cafb8af6deb3bba35ae29b34c4d27d51
+pusher 5188335088415E2E! 1707211731 +0100
+pushee git+ssh://git.gentoo.org/proj/qa-scripts.git
+nonce 1707211731-36991126ef98345d8a25c93e13afa051dc66cef7
 
-d1dda423e1285e94fade299209e58f4434db35ee bded6252da7b96e5030b1a7fcc6b0558d43312fb refs/heads/master
+bded6252da7b96e5030b1a7fcc6b0558d43312fb c866c85ae4475535a83ca24cdda93ed0f61ddcb0 refs/heads/master
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEEx2qEUJQJjSjMiybFY5ra4jKeJA4FAmWhXRQACgkQY5ra4jKe
-JA6udwgAxRc5QaKf/eEbxHMJxVx4ahY8enslIpTSRfxA91vsSacTHrb7RlLEqkl7
-Fex0XMn0JiLkcFhFHT4RYBNK4/zp1xG+sCcxeReuLhqZEPDlFJq2qdM3F/34sT9Z
-VY9WDYLjxIxmhbrNYRPoxJsmcLEtN1HQAabTeem2ztSHIoQ1B3PEXwP7A87NexRL
-i2iV0jnur3P/xULIbl5dHwPxDw//VCIvBTo0rGmKLwskTPLZ8ob6XGZqCfjtY3kH
-mBbRZ/0HPFubgJtxtHwc9DlSIdC3PGCtkfXCjqhKO5eecgIse9VzmpQAc4/EFHCn
-FYRIK6n+OYVksNrV4W90S8mZ8sJL+Q==
-=KCua
+iQEzBAABCAAdFiEEtDnZ1O9xIP68rzDbUYgzUIhBXi4FAmXB+9MACgkQUYgzUIhB
+Xi6qyggAgjjQLDojpDSoTYfqRoKQoOH4AEu3JeX5+dznga2Q4ouoVTTNCb39sF2H
+QBhAmSbjQSTZ6jqe5p6QQ0YNguEHMSdC3wtMYDUuhDnSGqnIngQFjQFyhJnnm6Fg
+AkmUEAwLrLa76P85c/XvZURJiaEeEYGe3fH2xKKBROzZOM2KprUxZVL0+bgGLr+y
++cnt2cHsbjCNmuEGn+mlT4cOSTC+zKNIGoPGDrtKhan5K7yVLq4bS5zchEawA23J
+smGdjSmUAm29+3zD1ZYz9fkfVt1WpF8F+yaCzjGWef423V4WIlrwqojpDfHl0CIR
+OLZIgjfIJHSyzR2zIMbtJNGhLf3qJw==
+=znoP
 -----END PGP SIGNATURE-----

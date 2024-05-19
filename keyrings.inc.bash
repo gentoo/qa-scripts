@@ -103,7 +103,7 @@ export_keys() {
 	# 'gpg --export' returns zero if there was no error with the command itself
 	# If there are no keys in the export set, then it ALSO does not write the destination file
 	# and prints 'gpg: WARNING: nothing exported' to stderr
-	if ! gpg --output "$TMP" --export "${@}"; then
+	if ! gpg "${GPG_EXPORT_OPTS[@]}" --output "$TMP" --export "${@}"; then
 		echo "Unable to export keys to $DST: GPG returned non-zero"
 		exit 1
 	fi

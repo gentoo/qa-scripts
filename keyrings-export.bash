@@ -56,6 +56,48 @@ export_keys "${OUTPUT_DIR}"/keys/all-devs.gpg \
 	"${RETIRED_DEVS[@]}" \
 && KEYRINGS+=( all-devs )
 
+# TEMPORARY:
+# Verify export-clean vs stock export options.
+export GPG_EXPORT_OPTS=( --export-options export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/service-keys.export-clean.gpg \
+	"${SYSTEM_KEYS[@]}" \
+&& KEYRINGS+=( service-keys.export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/infra-service-keys.export-clean.gpg \
+    "${INFRA_SYSTEM_KEYS[@]}" \
+&& KEYRINGS+=( infra-service-keys.export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/committing-devs.export-clean.gpg \
+	"${COMMITTING_DEVS[@]}" \
+&& KEYRINGS+=( committing-devs.export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/active-devs.export-clean.gpg \
+	"${COMMITTING_DEVS[@]}" \
+	"${NONCOMMITTING_DEVS[@]}" \
+&& KEYRINGS+=( active-devs.export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/infra-devs.export-clean.gpg \
+	"${INFRA_DEVS[@]}" \
+&& KEYRINGS+=( infra-devs.export-clean )
+
+export_keys "${OUTPUT_DIR}"/keys/retired-devs.export-clean.gpg \
+	"${RETIRED_DEVS[@]}" \
+&& KEYRINGS+=( retired-devs.export-clean )
+
+# Everybody together now
+export_keys "${OUTPUT_DIR}"/keys/all-devs.export-clean.gpg \
+	"${SYSTEM_KEYS[@]}" \
+	"${INFRA_SYSTEM_KEYS[@]}" \
+	"${COMMITTING_DEVS[@]}" \
+	"${NONCOMMITTING_DEVS[@]}" \
+	"${INFRA_DEVS[@]}" \
+	"${RETIRED_DEVS[@]}" \
+&& KEYRINGS+=( all-devs.export-clean )
+
+unset GPG_EXPORT_OPTS
+# END TEMPORARY
+
 for key in "${KEYRINGS[@]}" ; do
 	if [[ ! -L "${OUTPUT_DIR}"/${key}.gpg ]] ; then
 		# Compatibility symlink

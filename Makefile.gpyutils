@@ -59,7 +59,7 @@ $(outdir)/310-to-311-stablereq.txt: $(timestamp)
 	mv $@.new $@
 
 %.dot: %.txt
-	gpy-depgraph -m python@gentoo.org $< > $@.new
+	gpy-depgraph -d -m python@gentoo.org $< > $@.new
 	mv $@.new $@
 
 %.svg: %.dot

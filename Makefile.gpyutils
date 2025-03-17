@@ -26,7 +26,10 @@ upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
 
 all = $(upgr_all)
 
-all: $(all)
+all: $(all) prune-old
+
+prune-old:
+	rm -f $(outdir)/39-to-310.*
 
 $(outdir)/312-to-313.txt: $(timestamp)
 	mkdir -p $(outdir)
@@ -76,4 +79,4 @@ $(outdir)/pypy310-to-pypy311-stablereq.txt: $(timestamp)
 	dot -Tsvg $< > $@.new
 	mv $@.new $@
 
-.PHONY: all
+.PHONY: all prune-old

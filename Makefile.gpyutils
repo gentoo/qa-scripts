@@ -14,7 +14,7 @@ outdir = /dev/null
 # from 1->2. Especially e.g. git, ninja, meson, doxygen.
 
 # upgrades for stable impls
-upgr_base = $(outdir)/310-to-311.txt $(outdir)/311-to-312.txt $(outdir)/312-to-313.txt
+upgr_base = $(outdir)/310-to-311.txt $(outdir)/311-to-312.txt $(outdir)/312-to-313.txt $(outdir)/pypy310-to-pypy311.txt
 # related stabilizations
 upgr_streq = $(patsubst %.txt,%-stablereq.txt,$(upgr_base))
 # all upgrade stuff
@@ -56,6 +56,16 @@ $(outdir)/310-to-311.txt: $(timestamp)
 $(outdir)/310-to-311-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -m -s python3_10 python3_11 > $@.new
+	mv $@.new $@
+
+$(outdir)/pypy310-to-pypy311.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -m pypy3 pypy3_11 > $@.new
+	mv $@.new $@
+
+$(outdir)/pypy310-to-pypy311-stablereq.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -m -s pypy3 pypy3_11 > $@.new
 	mv $@.new $@
 
 %.dot: %.txt

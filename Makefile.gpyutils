@@ -22,7 +22,7 @@ upgr_txt = $(upgr_base) $(upgr_streq)
 upgr_dot = $(patsubst %.txt,%.dot,$(upgr_txt))
 upgr_svg = $(patsubst %.dot,%.svg,$(upgr_dot))
 # add new impls here if not stable yet, to avoid insanely huge generation times
-upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg)
+upgr_all = $(upgr_txt) $(upgr_dot) $(upgr_svg) $(outdir)/313-to-314.txt
 
 all = $(upgr_all)
 
@@ -30,6 +30,16 @@ all: $(all) prune-old
 
 prune-old:
 	rm -f $(outdir)/39-to-310.*
+
+$(outdir)/313-to-314.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -m python3_13 python3_14 > $@.new
+	mv $@.new $@+
+
+$(outdir)/313-to-314-stablereq.txt: $(timestamp)
+	mkdir -p $(outdir)
+	gpy-upgrade-impl -m -s python3_13 python3_14 > $@.new
+	mv $@.new $@
 
 $(outdir)/312-to-313.txt: $(timestamp)
 	mkdir -p $(outdir)

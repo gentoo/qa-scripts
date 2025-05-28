@@ -34,7 +34,7 @@ prune-old:
 $(outdir)/313-to-314.txt: $(timestamp)
 	mkdir -p $(outdir)
 	gpy-upgrade-impl -m python3_13 python3_14 > $@.new
-	mv $@.new $@+
+	mv $@.new $@
 
 $(outdir)/313-to-314-stablereq.txt: $(timestamp)
 	mkdir -p $(outdir)

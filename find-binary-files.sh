@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2014-2024 Ulrich Müller
+# Copyright 2014-2025 Ulrich Müller
 # Distributed under the terms of the GNU GPL version 2 or later
 # Author: Ulrich Müller <ulm@gentoo.org>
 
@@ -30,6 +30,8 @@ while read line; do
         text/*) ;;                            # text file
         application/*"; charset=us-ascii") ;;
         application/*"; charset=utf-8") ;;
+        "application/mbox; charset=iso-8859-1") ;;
+        "application/mbox; charset=unknown-8bit") ;;
         "image/svg; charset=us-ascii") ;;     # SVG image
         "image/svg+xml; charset=us-ascii") ;; # SVG image
         "image/x-xpmi; charset=us-ascii") ;;  # XPM image

@@ -20,6 +20,7 @@ GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com")
 @dataclass
 class Workflow:
     repo: str
+    path: str
     state: Literal[
         "active", "disabled_inactivity", "disabled_manually", "n/a", "none", "unknown"
     ]
@@ -128,27 +129,15 @@ def normalize(s: str | None) -> str:
     return (s or "").strip().lower()
 
 
-def matches_workflow(wf: dict[str, Any], wf_file_lc: str) -> bool:
-    """
-    Match by file path/basename (case-insensitive).
-    """
-    path = normalize(wf.get("path"))
-    base = os.path.basename(path)
-
-    return path == wf_file_lc or normalize(base) == wf_file_lc
-
-
 def audit_workflow(
     org: str,
     token: str,
-    wf_file: str,
 ) -> Iterable[Workflow]:
     """
     Returns rows with: full_name, workflow_name, workflow_path, state.
     If workflow not found in a repo: state = "n/a"
     If no workflows at all: state = "none"
     """
-    wf_file_lc = normalize(wf_file)
 
     for repo in list_org_repos(org, token):
         owner = repo["owner"]["login"]
@@ -157,9 +146,10 @@ def audit_workflow(
 
         try:
             for wf in list_repo_workflows(owner, name, token):
-                if matches_workflow(wf, wf_file_lc):
-                    yield Workflow(repo=full, state=wf.get("state", "unknown"))
-                    break
+                if path := normalize(wf.get("path")):
+                    yield Workflow(
+                        repo=full, state=wf.get("state", "unknown"), path=path
+                    )
         except SystemExit:
             raise
         except Exception as e:
@@ -193,7 +183,6 @@ def main():
         rows = audit_workflow(
             org=args.org,
             token=token,
-            wf_file=".github/workflows/mirror.yml",
         )
     except SystemExit:
         raise
@@ -208,11 +197,12 @@ def main():
     if disabled := [w for w in rows if w.state == "disabled_inactivity"]:
         message = f"{pings}Found {len(disabled)} repos with the workflow DISABLED due to inactivity."
         for workflow in disabled:
-            message += f"\n  - {workflow.repo} (https://github.com/{workflow.repo}/actions/workflows/mirror.yml)"
+            actions_path = workflow.path.removeprefix(".github/workflows/")
+            message += f"\n  - {workflow.repo} (https://github.com/{workflow.repo}/actions/workflows/{actions_path})"
 
     if not args.irc:
         print(message or "No disabled workflows found.")
-    elif message: # send over irker, if not empty
+    elif message:  # send over irker, if not empty
         irc_host = os.environ.get("IRKER_HOST", "localhost")
         irc_port = int(os.environ.get("IRKER_PORT", "6659"))
         try:

@@ -10,7 +10,9 @@ fi
 IRC='ircs://irc.libera.chat/#gentoo-python'
 
 irk "${IRC}" - <<<$'\0'
-gpy-list-pkg-impls > "${OUTDIR}"/python-pkg-impls.txt.new || exit 1
+
+pkgcheck scan -c PythonCompatCheck -R JsonStream > "${OUTDIR}"/pkgcheck-python-compat-update.json
+gpy-list-pkg-impls --mirc-color --pkgcheck-output "${OUTDIR}"/pkgcheck-python-compat-update.json > "${OUTDIR}"/python-pkg-impls.txt.new || exit 1
 while read -r x; do
 	irk "${IRC}" "${x}"
 done < <(git diff --no-index -s --word-diff -U0 "${OUTDIR}"/python-pkg-impls.txt{,.new} | tail -n +5 | grep -v '^@@')

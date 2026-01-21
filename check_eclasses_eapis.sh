@@ -46,6 +46,7 @@ KNOWN_EAPIS=$(gawk '
 
 pushd ${DIR} > /dev/null
 rm -rf *.eclass
+rm -f *.txt
 for x in ${ECLASSES}; do
 	echo "Processing eclass \"${x}\""
 	rm -rf "${x}"

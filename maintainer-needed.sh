@@ -35,7 +35,7 @@ echo """
 while read pkg; do
 	echo """
 			<tr>
-				<td>${pkg}</td>
+				<td><a href=\"https://packages.gentoo.org/packages/${pkg}\">${pkg}</a></td>
 				<td>$(pquery --unfiltered --no-version --one-attr description ${pkg})</td>
 				<td><a href=\"https://bugs.gentoo.org/buglist.cgi?quicksearch=${pkg}\">Open Bugs</a></td>
 				<td><a href=\"genrdeps/rindex/${pkg}\">$(cat ${rdepdir}/rindex/${pkg} 2>/dev/null | wc -l)</a></td>

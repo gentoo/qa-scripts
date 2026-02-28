@@ -16,6 +16,7 @@ fi
 gpg -q --keyid-format=long --keyring "${1}/active-devs.gpg" --list-sigs | \
 	/usr/bin/sig2dot -q -t "Gentoo Dev WoT" -s wot-stats.html \
 	> keys.dot
+gpgconf --kill all
 
 dot -Gcharset=UTF-8 -Tsvg keys.dot > "${1}/wot-graph.svg"
 

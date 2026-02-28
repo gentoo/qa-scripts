@@ -128,4 +128,5 @@ for key in "${KEYRINGS[@]}" ; do
 	cp "${OUTPUT_DIR}"/${key}.gpg "${OUTPUT_DIR}"/keys/${key}-${timestamp}.gpg
 done
 
+gpgconf --kill all
 clean_tmp

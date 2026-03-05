@@ -24,7 +24,7 @@
 						<th>Bugs</th>
 						<th>Description</th>
 					</tr>
-					<xsl:apply-templates select="projects/project[not(member)]"/>
+					<xsl:apply-templates select="projects/project[not(member) and not(subproject)]"/>
 				</table>
 			</body>
 		</html>

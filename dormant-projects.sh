@@ -16,7 +16,7 @@ cleanup () {
         [[ -e ${tmpfile} ]] && rm ${tmpfile}
 }
 
-wcurl --curl-options="--clobber" -O ${tmpfile} https://api.gentoo.org/metastructure/projects.xml || { cleanup; exit 1; }
+wcurl --curl-options="--silent --clobber" -O ${tmpfile} https://api.gentoo.org/metastructure/projects.xml || { cleanup; exit 1; }
 
 xsltproc --novalid --stringparam now "$(date)" -o dormant-projects.html dormant-projects.xsl ${tmpfile}
 

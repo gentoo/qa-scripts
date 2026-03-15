@@ -18,7 +18,7 @@ cleanup () {
 
 wcurl --curl-options="--silent --clobber" -O ${tmpfile} https://api.gentoo.org/metastructure/projects.xml || { cleanup; exit 1; }
 
-xsltproc --novalid --stringparam now "$(date)" -o - dormant-projects.xsl ${tmpfile}
+xsltproc --novalid --stringparam now "$(date)" -o - ${BASH_SOURCE%/*}/dormant-projects.xsl ${tmpfile}
 
 cleanup
 

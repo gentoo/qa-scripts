@@ -4,3 +4,6 @@
 [submodule "dev-timeline"]
 	path = dev-timeline
 	url = https://github.com/mgorny/dev-timeline
+[submodule "glsa-overview"]
+	path = glsa-overview
+	url = https://codeberg.org/csfore/glsa-overview.git

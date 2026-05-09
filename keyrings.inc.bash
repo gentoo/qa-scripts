@@ -25,7 +25,9 @@ export SYSTEM_KEYS=( )
 
 # grab_ldap_fingerprints <ldap-rule>
 grab_ldap_fingerprints() {
-	ldapsearch "${@}" -x -Z gpgfingerprint -LLL |
+	# Note: this rotates between LDAP servers specified in
+	# /etc/openldap/ldap.conf URI
+	timeout 30 ldapsearch "${@}" -x -Z gpgfingerprint -LLL |
 		sed -n -e '/: undefined/d' -e '/^gpgfingerprint: /{s/^.*://;s/ //g;p}' |
 		sort -u
 }

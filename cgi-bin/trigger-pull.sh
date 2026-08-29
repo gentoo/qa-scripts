@@ -11,6 +11,14 @@ main() {
 		echo "DANGER! DANGER! DON'T TALK TO STRANGERS!" >&2
 		exit 1
 	fi
+	case ${repo} in
+		gentoo-ci)
+			;;
+		*)
+			echo "DANGER! UNKNOWN REPO!" >&2
+			exit 1
+			;;
+	esac
 
 	local topdir=$(dirname "${0}")/..
 

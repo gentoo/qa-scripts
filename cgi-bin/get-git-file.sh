@@ -37,6 +37,16 @@ main() {
 		exit 1
 	fi
 
+	case ${repo} in
+		gentoo-ci)
+			;;
+		*)
+			echo "DANGER! UNKNOWN REPO!" >&2
+			exit 1
+			;;
+	esac
+
+
 	local topdir=$(dirname "${0}")/..
 
 	if ! cd "${topdir}/htdocs/output/${repo}" 2>/dev/null; then

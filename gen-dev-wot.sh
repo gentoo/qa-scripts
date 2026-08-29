@@ -21,3 +21,5 @@ gpgconf --kill all
 dot -Gcharset=UTF-8 -Tsvg keys.dot > "${1}/wot-graph.svg"
 
 mv wot-stats.html "${1}"
+
+gpgconf --kill all

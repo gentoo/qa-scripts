@@ -14,7 +14,7 @@ main() {
 
 	local topdir=$(dirname "${0}")/..
 
-	if ! cd "${topdir}/htdocs/output/${repo}" 2>/dev/null; then
+	if ! cd -- "${topdir}/htdocs/output/${repo}" 2>/dev/null; then
 		echo "Status: 404 Not Found"
 		echo
 		echo "404 Not Found"

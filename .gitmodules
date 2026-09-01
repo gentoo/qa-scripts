@@ -6,4 +6,4 @@
 	url = https://github.com/mgorny/dev-timeline
 [submodule "glsa-overview"]
 	path = glsa-overview
-	url = https://codeberg.org/csfore/glsa-overview.git
+	url = https://anongit.gentoo.org/git/proj/glsa-overview.git

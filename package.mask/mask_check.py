@@ -1,343 +1,240 @@
-#!/usr/bin/env python
-# Copyright 1999-2018 Gentoo Foundation
+#!/usr/bin/env python3
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # python mask_check.py $(find /usr/portage/profiles -type f -name '*.mask' -not -regex '.*/prefix/.*')
 
 import re
+from pathlib import Path
+from sys import argv, stderr
+from time import gmtime, strftime
 
-from lxml import etree
-from os.path import join, isfile, isdir, basename
-from os import listdir
-from sys import stderr, argv
-from time import strftime, gmtime
-
+from lxml.etree import parse
 from portage import settings
 from portage.versions import pkgsplit, vercmp
 
 OPERATORS = (">", "=", "<", "~")
 
-def strip_atoms(pkg):
-	# strip slots
-	if pkg.find(":") != -1:
-		pkg = pkg[0:pkg.find(":")]
 
-	while pkg.startswith( OPERATORS ) and len(pkg) > 1:
-		pkg = pkg[1:]
-	while pkg.endswith( ("*", ".") ):
-		pkg = pkg[0:-1]
+def strip_atoms(pkg: str) -> str:
+    # strip slots
+    if ":" in pkg:
+        pkg = pkg[: pkg.find(":")]
 
-	return pkg
+    while pkg.startswith(OPERATORS) and len(pkg) > 1:
+        pkg = pkg[1:]
+    while pkg.endswith(("*", ".")):
+        pkg = pkg[:-1]
 
-def pkgcmp_atom(pkgdir, pkg):
-	ebuilds = []
-
-	for ent in listdir(pkgdir):
-		if ent.endswith(".ebuild"):
-			ebuilds.append(ent)
-
-	ppkg = basename(strip_atoms(pkg))
-
-	revre = re.compile( ("^" + re.escape(ppkg) + "(-r\d+)?.ebuild$") )
-
-#	print("DBG: checking for %s" % pkg)
-#	print("DBG: Got %i ebuilds:" % len(ebuilds))
-#	print(ebuilds)
-
-	for ebuild in ebuilds:
-		# workaround? for - prefix
-		if pkg.startswith( "-" ):
-			pkg = pkg[1:]
-
-		if pkg.startswith( ("=", "~") ):
-			if pkg.startswith("~"):
-				if revre.match(ebuild):
-#					print("DBG: revmatch '%s' '%s'" % (pkg, ebuild))
-					return 1
-				else:
-#					print("DBG: revmatch continue")
-					continue
-			if pkg.endswith("*"):
-				if ebuild.startswith(ppkg):
-#					print("DBG: startswith '%s' '%s'" % (pkg, ebuild))
-					return 1
-				else:
-#					print("DBG: startswith continue")
-					continue
-			else:
-				if ebuild == (ppkg + ".ebuild"):
-#					print("DBG: '%s' == '%s'" % (ppkg, ppkg))
-					return 1
-				else:
-#					print("DBG: == continue")
-					continue
-
-		if pkg.startswith( (">=", ">", "<=", "<") ):
-			plain = strip_atoms(pkg)
-
-			mypkg = pkgsplit(plain)
-			ourpkg = pkgsplit(ebuild.rstrip(".ebuild"))
-
-			mypkgv = mypkg[1]
-			if mypkg[2] != "r0":
-				mypkgv = mypkgv + "-" + mypkg[2]
-
-			ourpkgv = ourpkg[1]
-			if ourpkg[2] != "r0":
-				ourpkgv = ourpkgv + "-" + ourpkg[2]
-
-#			print("MYPKGV:", mypkgv, "OURPKGV:", ourpkgv, "RESULT 'vercmp('%s', '%s'): %i" % (mypkgv, ourpkgv, vercmp(mypkgv, ourpkgv)))
-
-			if pkg.startswith(">="):
-				if vercmp(mypkgv, ourpkgv) <= 0:
-#					print("HIT: '%s' >= '%s'" % (ourpkg, mypkg))
-					return 1
-				else:
-#					print(">= continue")
-					continue
-			if pkg.startswith(">") and not pkg.startswith(">="):
-				if vercmp(mypkgv, ourpkgv) < 0:
-#					print("HIT: '%s' > '%s'" % (ourpkg, mypkg))
-					return 1
-				else:
-#					print("> continue")
-					continue
-			if pkg.startswith("<="):
-				if vercmp(mypkgv, ourpkgv) >= 0:
-#					print("HIT: '%s' <= '%s'" % (ourpkg, mypkg))
-					return 1
-				else:
-#					print("<= continue"
-					continue
-			if pkg.startswith("<") and not pkg.startswith("<="):
-				if vercmp(mypkgv, ourpkgv) > 0:
-#					print("HIT: '%s' < '%s'" % (ourpkg, mypkg))
-					return 1
-				else:
-#					print("< continue")
-					continue
-
-#	print("Nothing found... '%s' is invalid" % pkg)
-	return 0
-
-def check_locuse(portdir, pkg, invalid):
-	locuse = []
-
-	ppkg = pkgsplit(strip_atoms(pkg))
-
-	if ppkg:
-		ppkg = ppkg[0]
-	else:
-		ppkg = strip_atoms(pkg)
-
-	metadata = join(portdir, ppkg, "metadata.xml")
-
-	tree = etree.parse(metadata)
-	root = tree.getroot()
-	for elem in root:
-		if elem.tag == "use":
-			for use in elem:
-				locuse.append(use.get("name"))
-
-	# create a _NEW_ list
-	oldinvalid = [foo for foo in invalid]
-	for iuse in oldinvalid:
-		if iuse in locuse:
-			invalid.remove(iuse)
-
-	return invalid
-
-def check_use(portdir, line):
-	# use.desc
-	# <flag> - <description>
-	usedescs = [join(portdir, "profiles/use.desc")]
-	globuse = []
-	invalid = []
-	useflags = []
-
-	for useflag in line.split(" ")[1:]:
-		# get a rid of malformed stuff e.g.:
-		# app-text/enchant        zemberek
-		if len(useflag) > 0:
-			if useflag.startswith("-"):
-				useflag = useflag[1:]
-			useflags.append(useflag)
-
-	pkg = line.split(" ")[0]
-
-	# Add other description file
-	for entry in listdir(join(portdir, "profiles/desc")):
-		entry = join(portdir, "profiles/desc", entry)
-		if isfile(entry) and entry.endswith(".desc"):
-			usedescs.append(entry)
-
-	for usedesc_f in usedescs:
-		usedesc_fd = open(usedesc_f, "r")
-
-		for line in usedesc_fd:
-			line = line.rstrip()
-			line = line.replace("\t", " ")
-
-			if len(line) == 0:
-				continue
-
-			while line[0].isspace():
-				if len(line) > 1:
-					line = line[1:]
-				else:
-					break
-
-			if line.startswith("#"):
-				continue
-			_flag = line.split(" - ")[0]
-
-			if usedesc_f == join(portdir, "profiles/use.desc"):
-				globuse.append(line.split(" - ")[0])
-			else:
-				_flag = "%s_%s" % (basename(usedesc_f).replace(".desc", ""), _flag)
-				globuse.append(_flag)
-#				print("GLOB: ", _flag)
-
-		usedesc_fd.close()
-
-#	print(globuse)
-#	exit(1)
-
-	for flag in useflags:
-		if not flag in globuse:
-			# nothing found
-			invalid.append(flag)
-#			print("Add useflag %s" %flag)
-
-	# check metadata.xml
-	if invalid:
-		invalid = check_locuse(portdir, pkg, invalid)
+    return pkg
 
 
-#	print(portdir, pkg, useflags)
-#	print(globuse)
+def pkgcmp_atom(pkgdir: Path, pkg: str) -> bool:
+    ebuilds = [ent.name for ent in pkgdir.iterdir() if ent.name.endswith(".ebuild")]
 
-	if invalid:
-		return (pkg, invalid)
-	else:
-		return None
+    ppkg = Path(strip_atoms(pkg)).name
+
+    revre = re.compile(f"^{re.escape(ppkg)}(-r\\d+)?.ebuild$")
+
+    for ebuild in ebuilds:
+        # workaround? for - prefix
+        pkg = pkg.removeprefix("-")
+
+        if pkg.startswith(("=", "~")):
+            if pkg.startswith("~"):
+                if revre.match(ebuild):
+                    return True
+                continue
+            if pkg.endswith("*"):
+                if ebuild.startswith(ppkg):
+                    return True
+                continue
+            if ebuild == (ppkg + ".ebuild"):
+                return True
+            continue
+
+        if pkg.startswith((">=", ">", "<=", "<")):
+            plain = strip_atoms(pkg)
+
+            mypkg = pkgsplit(plain)
+            ourpkg = pkgsplit(ebuild.removesuffix(".ebuild"))
+
+            mypkgv = mypkg[1]
+            if mypkg[2] != "r0":
+                mypkgv = f"{mypkgv}-{mypkg[2]}"
+
+            ourpkgv = ourpkg[1]
+            if ourpkg[2] != "r0":
+                ourpkgv = f"{ourpkgv}-{ourpkg[2]}"
+
+            if pkg.startswith(">="):
+                if vercmp(mypkgv, ourpkgv) <= 0:
+                    return True
+            elif pkg.startswith(">"):
+                if vercmp(mypkgv, ourpkgv) < 0:
+                    return True
+            elif pkg.startswith("<="):
+                if vercmp(mypkgv, ourpkgv) >= 0:
+                    return True
+            elif pkg.startswith("<"):
+                if vercmp(mypkgv, ourpkgv) > 0:
+                    return True
+                continue
+
+    return False
+
+
+def check_locuse(portdir: Path, pkg: str, invalid: list[str]) -> list[str]:
+    ppkg = pkgsplit(strip_atoms(pkg))
+    ppkg = ppkg[0] if ppkg else strip_atoms(pkg)
+
+    tree = parse(portdir / ppkg / "metadata.xml")
+    root = tree.getroot()
+    locuse = [use.get("name") for elem in root if elem.tag == "use" for use in elem]
+
+    return [iuse for iuse in invalid if iuse not in locuse]
+
+
+def check_use(portdir: Path, line: str):
+    # use.desc
+    # <flag> - <description>
+    useflags = [
+        useflag.removeprefix("-")
+        for useflag in line.split(" ")[1:]
+        # get a rid of malformed stuff e.g.:
+        # app-text/enchant        zemberek
+        if useflag
+    ]
+
+    pkg = line.split(" ")[0]
+
+    usedescs = [portdir / "profiles/use.desc"]
+    usedescs.extend(
+        entry
+        for entry in (portdir / "profiles/desc").iterdir()
+        if entry.is_file() and entry.suffix == ".desc"
+    )
+
+    globuse = set()
+    for usedesc_f in usedescs:
+        with usedesc_f.open() as usedesc_fd:
+            for desc_line in usedesc_fd:
+                desc_line = desc_line.rstrip().replace("\t", " ").lstrip()
+
+                if not desc_line or desc_line.startswith("#"):
+                    continue
+
+                flag = desc_line.split(" - ")[0]
+                if usedesc_f.name != "use.desc":
+                    flag = f"{usedesc_f.stem}_{flag}"
+                globuse.add(flag)
+
+    invalid = [flag for flag in useflags if flag not in globuse]
+
+    # check metadata.xml
+    if invalid:
+        invalid = check_locuse(portdir, pkg, invalid)
+
+    return (pkg, invalid) if invalid else None
+
 
 # <cat>/<pkg> <use> ...
-def check_pkg(portdir, line):
-#	print("PKGM1:", line)
-	pkgm = line.split(" ")[0]
-#	print("PKGM2:", pkgm)
-#	print("DBG:", line.split(" "))
+def check_pkg(portdir: Path, line: str) -> bool:
+    pkgm = line.split(" ")[0].removeprefix("-")
 
-	if pkgm.startswith("-"):
-		pkgm = pkgm[1:]
+    if pkgm.startswith(OPERATORS):
+        plain_pkg = strip_atoms(pkgm)
 
-	if pkgm.startswith(OPERATORS):
-		pkg = []
-#		print("DBG1: %s" % pkgm)
-		plain_pkg = strip_atoms(pkgm)
-#		print("DBG2: %s" % plain_pkg)
+        pkg = pkgsplit(plain_pkg)
+        if not pkg:
+            print(
+                "Error encountered during pkgsplit(), please contact idl0r@gentoo.org including the whole output!",
+                file=stderr,
+            )
+            print(f"1: {pkgm}; 2: {plain_pkg}", file=stderr)
+            return False
 
-		pkg = pkgsplit(plain_pkg)
-		if not pkg:
-			print("Error encountered during pkgsplit(), please contact idl0r@gentoo.org including the whole output!", file=stderr)
-			print("1: %s; 2: %s" % (pkgm, plain_pkg), file=stderr)
-			return 0
+        plain_pkg = strip_atoms(pkg[0])
+        pkgdir = portdir / plain_pkg
 
-		plain_pkg = strip_atoms(pkg[0])
+        if not pkgdir.is_dir():
+            return False
 
-		if not isdir(join(portdir, plain_pkg)):
-			return 0
+        return pkgcmp_atom(pkgdir, pkgm)
 
-		if not pkgcmp_atom(join(portdir, plain_pkg), pkgm):
-			return 0
+    if ":" in pkgm:
+        pkgm = strip_atoms(pkgm)
+    return (portdir / pkgm).is_dir()
 
-		return 1
-	else:
-		if pkgm.find(":") != -1:
-			pkgm = strip_atoms(pkgm)
-		if isdir(join(portdir, pkgm)):
-			return 1
-		else:
-			return 0
 
-	return 0
+def get_timestamp() -> str:
+    timestamp_f = Path(settings["PORTDIR"]) / "metadata/timestamp.chk"
+    try:
+        timestamp = timestamp_f.read_text().splitlines()[0].rstrip()
+    except (OSError, IndexError):
+        return "Unknown"
 
-def get_timestamp():
-	timestamp_f = join(settings["PORTDIR"],	"metadata/timestamp.chk")
-	try:
-		timestamp = open(timestamp_f).readline().rstrip()
-	except:
-		return "Unknown"
-	if len(timestamp) < 1:
-		return "Unknown"
+    return timestamp or "Unknown"
 
-	return timestamp
 
-def obsolete_pmask(portdir = None, package_mask=None):
-	invalid_entries = []
+def obsolete_pmask(
+    portdir: Path | str | None = None, package_mask: Path | str | None = None
+) -> None:
+    invalid_entries = []
 
-	if not portdir:
-		portdir = settings["PORTDIR"]
+    portdir = Path(portdir or settings["PORTDIR"])
+    package_mask = (
+        Path(package_mask) if package_mask else portdir / "profiles/package.mask"
+    )
 
-	if not package_mask:
-		package_mask = join(portdir, "profiles/package.mask")
+    with package_mask.open() as pmask:
+        for line in pmask:
+            line = line.strip()
 
-	pmask = open(package_mask, "r")
+            if not line or line.startswith("#"):
+                continue
 
-	for line in pmask:
-		line = line.rstrip()
+            # Skip sys-freebsd
+            if "sys-freebsd" in line:
+                continue
 
-		if len(line) == 0:
-			continue
+            line = line.replace("\t", " ")
 
-		while line[0].isspace():
-			if len(line) > 1:
-				line = line[1:]
-			else:
-				break
+            # don't check useflags with check_pkg
+            if "/" in line and not check_pkg(portdir, line):
+                invalid_entries.append(line)
+            else:
+                invalid_use = check_use(portdir, line)
+                if invalid_use:
+                    invalid_entries.append(invalid_use)
 
-		if line.startswith("#"):
-			continue
+    if invalid_entries:
+        print(
+            f"Found {len(invalid_entries)} invalid/obsolete entries in {package_mask}:"
+        )
+        for invalid in invalid_entries:
+            if isinstance(invalid, tuple):
+                print(invalid[0], invalid[1])
+            else:
+                print(invalid)
+        print()
 
-		# Skip sys-freebsd
-		if line.find("sys-freebsd") != -1:
-			continue
-
-		line = line.replace("\t", " ")
-
-		# don't check useflags with check_pkg
-		if line.find("/") != -1 and not check_pkg(portdir, line):
-#			print("Add whole entry: '%s'" % line)
-			invalid_entries.append(line)
-		else:
-			invalid_use = check_use(portdir, line)
-			if invalid_use:
-#				print("Add useflags: '%s %s'" % (invalid_use[0], invalid_use[1]))
-				invalid_entries.append(invalid_use)
-
-	pmask.close()
-
-	if invalid_entries:
-		print("Found %i invalid/obsolete entries in %s:" % (len(invalid_entries), package_mask))
-		for invalid in invalid_entries:
-			if isinstance(invalid, tuple):
-				print(invalid[0], invalid[1])
-			else:
-				print(invalid)
-		print("")
 
 if __name__ == "__main__":
-	print("A list of invalid/obsolete package.mask entries in gentoo repository, see bug 105016")
-	print("Generated on: %s" % strftime( "%a %b %d %H:%M:%S %Z %Y", gmtime() ))
-	print("Timestamp of tree: %s" % get_timestamp())
-	print("NOTE: if a package is listed as <category>/<package> <flag> ...")
-	print("	or <category>/<package> then the whole entry is invalid/obsolete.")
-	print("NOTE: if a package is listed as <category>/<package> [ <flag>, ... ] then the listed useflags are invalid.")
-	print("")
+    print(
+        "A list of invalid/obsolete package.mask entries in gentoo repository, see bug 105016"
+    )
+    print(f"Generated on: {strftime('%a %b %d %H:%M:%S %Z %Y', gmtime())}")
+    print(f"Timestamp of tree: {get_timestamp()}")
+    print("NOTE: if a package is listed as <category>/<package> <flag> ...")
+    print("\tor <category>/<package> then the whole entry is invalid/obsolete.")
+    print(
+        "NOTE: if a package is listed as <category>/<package> [ <flag>, ... ] then the listed useflags are invalid."
+    )
+    print()
 
-	if len(argv) > 1:
-		for _pmask in argv[1:]:
-			obsolete_pmask(package_mask=_pmask)
-	else:
-		obsolete_pmask()
+    if len(argv) > 1:
+        for _pmask in argv[1:]:
+            obsolete_pmask(package_mask=_pmask)
+    else:
+        obsolete_pmask()

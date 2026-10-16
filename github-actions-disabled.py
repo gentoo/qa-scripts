@@ -9,8 +9,9 @@ import socket
 import sys
 import time
 from argparse import ArgumentParser
+from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Any, Generator, Iterable, Literal
+from typing import Any, Literal
 
 import requests
 
@@ -113,6 +114,22 @@ def list_org_repos(org: str, token: str) -> Iterable[dict[str, Any]]:
         yield from resp
 
 
+def repo_actions_enabled(owner: str, repo: str, token: str) -> bool:
+    """
+    Returns False if GitHub Actions are disabled for the repo.
+    If the permissions can't be read (e.g. token lacks admin scope), assume enabled.
+    """
+    url = f"{GITHUB_API}/repos/{owner}/{repo}/actions/permissions"
+    r = gh_get(url, token)
+    if r.status_code != 200:
+        print(
+            f"[warn] {owner}/{repo}: can't read actions permissions ({r.status_code})",
+            file=sys.stderr,
+        )
+        return True
+    return bool(r.json().get("enabled", True))
+
+
 def list_repo_workflows(owner: str, repo: str, token: str) -> Iterable[dict[str, Any]]:
     """
     Yields workflow objects for a given repo.
@@ -145,6 +162,8 @@ def audit_workflow(
         full = repo["full_name"]
 
         try:
+            if not repo_actions_enabled(owner, name, token):
+                continue
             for wf in list_repo_workflows(owner, name, token):
                 if path := normalize(wf.get("path")):
                     yield Workflow(
@@ -152,7 +171,7 @@ def audit_workflow(
                     )
         except SystemExit:
             raise
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             # If a repo errors (e.g., permissions), note unknown and continue
             print(f"[error] {full}: {e}", file=sys.stderr)
 
@@ -186,7 +205,7 @@ def main():
         )
     except SystemExit:
         raise
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         sys.exit(f"Error: {e}")
 
     pings = ""
@@ -210,7 +229,7 @@ def main():
             with socket.create_connection((irc_host, irc_port), timeout=10) as s:
                 data = json.dumps({"to": to, "privmsg": message}).encode("utf8")
                 s.sendall(data)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             sys.exit(f"Error sending to irker at {irc_host}:{irc_port}: {e}")
 
 

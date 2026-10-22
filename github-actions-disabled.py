@@ -23,7 +23,14 @@ class Workflow:
     repo: str
     path: str
     state: Literal[
-        "active", "disabled_inactivity", "disabled_manually", "n/a", "none", "unknown"
+        "active",
+        "actions_disabled",
+        "disabled_fork",
+        "disabled_inactivity",
+        "disabled_manually",
+        "n/a",
+        "none",
+        "unknown",
     ]
 
 
@@ -149,11 +156,14 @@ def normalize(s: str | None) -> str:
 def audit_workflow(
     org: str,
     token: str,
+    skip: frozenset[str] = frozenset(),
 ) -> Iterable[Workflow]:
     """
     Returns rows with: full_name, workflow_name, workflow_path, state.
     If workflow not found in a repo: state = "n/a"
     If no workflows at all: state = "none"
+    If GitHub Actions are disabled for the whole repo: state = "actions_disabled"
+    Repos listed in skip (by name or full name) are ignored.
     """
 
     for repo in list_org_repos(org, token):
@@ -161,14 +171,19 @@ def audit_workflow(
         name = repo["name"]
         full = repo["full_name"]
 
+        if name in skip or full in skip:
+            continue
+
         try:
-            if not repo_actions_enabled(owner, name, token):
-                continue
+            # GitHub can disable Actions on forks by itself, which looks the
+            # same as disabling them manually, so report it unless skipped.
+            actions_enabled = repo_actions_enabled(owner, name, token)
             for wf in list_repo_workflows(owner, name, token):
                 if path := normalize(wf.get("path")):
-                    yield Workflow(
-                        repo=full, state=wf.get("state", "unknown"), path=path
-                    )
+                    state = wf.get("state", "unknown")
+                    if not actions_enabled:
+                        state = "actions_disabled"
+                    yield Workflow(repo=full, state=state, path=path)
         except SystemExit:
             raise
         except Exception as e:  # noqa: BLE001
@@ -191,6 +206,14 @@ def main():
     parser.add_argument(
         "--pings", help="Usernames to ping in IRC message", nargs="*", metavar="USER"
     )
+    parser.add_argument(
+        "--skip-repo",
+        help="Repos to skip, e.g. ones with GitHub Actions disabled on purpose",
+        action="extend",
+        nargs="+",
+        default=[],
+        metavar="REPO",
+    )
     args = parser.parse_args()
 
     with open(args.token_file) as f:
@@ -202,6 +225,7 @@ def main():
         rows = audit_workflow(
             org=args.org,
             token=token,
+            skip=frozenset(args.skip_repo),
         )
     except SystemExit:
         raise
@@ -212,12 +236,23 @@ def main():
     if args.pings:
         pings = ": ".join(args.pings) + ": "
 
-    message = ""
-    if disabled := [w for w in rows if w.state == "disabled_inactivity"]:
-        message = f"{pings}Found {len(disabled)} repos with the workflow DISABLED due to inactivity."
-        for workflow in disabled:
+    disabled = []
+    for workflow in rows:
+        if workflow.state == "disabled_inactivity":
             actions_path = workflow.path.removeprefix(".github/workflows/")
-            message += f"\n  - {workflow.repo} (https://github.com/{workflow.repo}/actions/workflows/{actions_path})"
+            url = f"https://github.com/{workflow.repo}/actions/workflows/{actions_path}"
+        elif workflow.state in ("actions_disabled", "disabled_fork"):
+            url = f"https://github.com/{workflow.repo}/actions"
+        else:
+            continue
+        entry = f"  - {workflow.repo} ({url})"
+        if entry not in disabled:
+            disabled.append(entry)
+
+    message = ""
+    if disabled:
+        message = f"{pings}Found {len(disabled)} repos with the workflow DISABLED."
+        message += "".join(f"\n{entry}" for entry in disabled)
 
     if not args.irc:
         print(message or "No disabled workflows found.")

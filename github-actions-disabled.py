@@ -11,6 +11,7 @@ import time
 from argparse import ArgumentParser
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone, UTC
 from typing import Any, Literal
 
 import requests
@@ -30,6 +31,7 @@ class Workflow:
         "disabled_manually",
         "n/a",
         "none",
+        "schedule_stale",
         "unknown",
     ]
 
@@ -149,6 +151,22 @@ def list_repo_workflows(owner: str, repo: str, token: str) -> Iterable[dict[str,
         yield from resp.get("workflows", [])
 
 
+def last_scheduled_run(
+    owner: str, repo: str, token: str
+) -> tuple[datetime, str] | None:
+    """
+    Returns (created_at, workflow path) of the latest scheduled run in the repo,
+    or None if the repo never had a scheduled run.
+    """
+    url = f"{GITHUB_API}/repos/{owner}/{repo}/actions/runs"
+    r = gh_get(url, token, params={"event": "schedule", "per_page": 1})
+    r.raise_for_status()
+    if not (runs := r.json().get("workflow_runs")):
+        return None
+    created = datetime.fromisoformat(runs[0]["created_at"])
+    return created, normalize(runs[0].get("path"))
+
+
 def normalize(s: str | None) -> str:
     return (s or "").strip().lower()
 
@@ -157,14 +175,18 @@ def audit_workflow(
     org: str,
     token: str,
     skip: frozenset[str] = frozenset(),
+    stale_after: timedelta | None = None,
 ) -> Iterable[Workflow]:
     """
     Returns rows with: full_name, workflow_name, workflow_path, state.
     If workflow not found in a repo: state = "n/a"
     If no workflows at all: state = "none"
     If GitHub Actions are disabled for the whole repo: state = "actions_disabled"
+    If stale_after is set and an active workflow's scheduled runs stopped for
+    longer than it: state = "schedule_stale"
     Repos listed in skip (by name or full name) are ignored.
     """
+    now = datetime.now(UTC)
 
     for repo in list_org_repos(org, token):
         owner = repo["owner"]["login"]
@@ -178,12 +200,27 @@ def audit_workflow(
             # GitHub can disable Actions on forks by itself, which looks the
             # same as disabling them manually, so report it unless skipped.
             actions_enabled = repo_actions_enabled(owner, name, token)
+            active = set()
             for wf in list_repo_workflows(owner, name, token):
                 if path := normalize(wf.get("path")):
                     state = wf.get("state", "unknown")
                     if not actions_enabled:
                         state = "actions_disabled"
+                    elif state == "active":
+                        active.add(path)
                     yield Workflow(repo=full, state=state, path=path)
+
+            # The "Workflows on this fork have been disabled" block isn't
+            # exposed in the API: the workflows stay "active" and Actions stay
+            # enabled. The only trace is that scheduled runs stop happening.
+            if (
+                stale_after is not None
+                and active
+                and (last := last_scheduled_run(owner, name, token))
+            ):
+                created, path = last
+                if path in active and now - created > stale_after:
+                    yield Workflow(repo=full, state="schedule_stale", path=path)
         except SystemExit:
             raise
         except Exception as e:  # noqa: BLE001
@@ -214,6 +251,14 @@ def main():
         default=[],
         metavar="REPO",
     )
+    parser.add_argument(
+        "--stale-days",
+        help="Report repos whose last scheduled run is older than DAYS "
+        "(catches forks GitHub silently stopped running workflows on). "
+        "Only useful for orgs where every repo runs a frequent schedule.",
+        type=float,
+        metavar="DAYS",
+    )
     args = parser.parse_args()
 
     with open(args.token_file) as f:
@@ -226,6 +271,9 @@ def main():
             org=args.org,
             token=token,
             skip=frozenset(args.skip_repo),
+            stale_after=(
+                timedelta(days=args.stale_days) if args.stale_days is not None else None
+            ),
         )
     except SystemExit:
         raise
@@ -241,7 +289,7 @@ def main():
         if workflow.state == "disabled_inactivity":
             actions_path = workflow.path.removeprefix(".github/workflows/")
             url = f"https://github.com/{workflow.repo}/actions/workflows/{actions_path}"
-        elif workflow.state in ("actions_disabled", "disabled_fork"):
+        elif workflow.state in ("actions_disabled", "disabled_fork", "schedule_stale"):
             url = f"https://github.com/{workflow.repo}/actions"
         else:
             continue
